@@ -43,7 +43,7 @@ public class SecurityConfig {
 
                 // Panel administrativo - HU-17 separacion estricta
                 .requestMatchers("/admin/usuarios/**", "/admin/bitacora/**", "/admin/sistema/**").hasRole(TECNICO)
-                .requestMatchers("/admin/contenidos/**", "/admin/rutas/**", "/admin/cuestionarios/**",
+                .requestMatchers("/admin/recursos/**", "/admin/categorias/**", "/admin/cuestionarios/**",
                         "/admin/parametros/**", "/admin/analitica/**").hasRole(FUNCIONAL)
                 .requestMatchers("/admin", "/admin/").hasAnyRole(FUNCIONAL, TECNICO)
 

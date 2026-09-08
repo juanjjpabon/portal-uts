@@ -17,9 +17,12 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h2 class="h5">Gestion de contenido</h2>
-                    <p class="small text-muted mb-0">
-                        Contenidos, categorias, rutas, cuestionarios, parametros y analitica.
-                    </p>
+                    <ul class="small mb-0 ps-3">
+                        <li><a th:href="@{/admin/recursos/contenidos}">Contenidos</a></li>
+                        <li><a th:href="@{/admin/recursos/rutas}">Rutas institucionales</a></li>
+                        <li><a th:href="@{/admin/recursos/contactos}">Contactos</a></li>
+                        <li><a th:href="@{/admin/categorias}">Categorias</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

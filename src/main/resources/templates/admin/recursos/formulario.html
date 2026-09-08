@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head(${tipo.etiquetaSingular})}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 780px;">
+    <p class="mb-1">
+        <a th:href="@{|/admin/recursos/${seccion}|}">&larr; <span th:text="${tipo.etiquetaPlural}">Recursos</span></a>
+    </p>
+    <h1 class="h3" th:text="${form.id == null} ? |Nuevo: ${tipo.etiquetaSingular}| : |Editar ${tipo.etiquetaSingular}|">
+        Formulario</h1>
+
+    <form method="post" th:object="${form}"
+          th:action="${form.id == null}
+                     ? @{|/admin/recursos/${seccion}|}
+                     : @{|/admin/recursos/${seccion}/${form.id}|}">
+
+        <input type="hidden" th:field="*{tipo}">
+
+        <div class="mb-3">
+            <label class="form-label" th:text="${tipo.esContenido()} ? 'Titulo' : 'Nombre'">Titulo</label>
+            <input type="text" class="form-control" th:field="*{titulo}"
+                   th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{titulo}"></div>
+        </div>
+
+        <!-- ===== CONTENIDO (HU-04) ===== -->
+        <div th:if="${tipo.esContenido()}">
+            <div class="mb-3">
+                <label class="form-label">Resumen</label>
+                <textarea class="form-control" rows="2" th:field="*{resumen}"
+                          th:classappend="${#fields.hasErrors('resumen')} ? 'is-invalid'"></textarea>
+                <div class="invalid-feedback" th:errors="*{resumen}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cuerpo</label>
+                <textarea class="form-control" rows="8" th:field="*{cuerpo}"
+                          th:classappend="${#fields.hasErrors('cuerpo')} ? 'is-invalid'"></textarea>
+                <div class="invalid-feedback" th:errors="*{cuerpo}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fuente <span class="text-muted">(opcional)</span></label>
+                <input type="text" class="form-control" th:field="*{fuente}">
+            </div>
+        </div>
+
+        <!-- ===== RUTA / CONTACTO (HU-05, HU-07) ===== -->
+        <div th:unless="${tipo.esContenido()}">
+            <div class="mb-3">
+                <label class="form-label">Dependencia</label>
+                <input type="text" class="form-control" th:field="*{dependencia}"
+                       th:classappend="${#fields.hasErrors('dependencia')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{dependencia}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">
+                    Horario <span th:if="${tipo.name() == 'CONTACTO'}" class="text-muted">(opcional)</span>
+                </label>
+                <input type="text" class="form-control" th:field="*{horario}"
+                       th:classappend="${#fields.hasErrors('horario')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{horario}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Canal <span class="text-muted">(texto: linea, correo, oficina...)</span></label>
+                <input type="text" class="form-control" th:field="*{canal}"
+                       th:classappend="${#fields.hasErrors('canal')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{canal}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">URL del canal <span class="text-muted">(opcional, habilita el boton directo)</span></label>
+                <input type="url" class="form-control" th:field="*{urlCanal}" placeholder="https://...">
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="urgente" th:field="*{urgente}">
+                <label class="form-check-label" for="urgente">Informacion para situaciones urgentes</label>
+            </div>
+        </div>
+
+        <!-- ===== Categorias (HU-02) ===== -->
+        <div class="mb-3">
+            <label class="form-label">
+                Categorias
+                <span th:if="${tipo.esContenido()}" class="text-danger">*</span>
+                <span th:unless="${tipo.esContenido()}" class="text-muted">(opcional)</span>
+            </label>
+            <div class="border rounded p-2" th:classappend="${#fields.hasErrors('categoriaIds')} ? 'border-danger'">
+                <div class="form-check" th:each="c : ${categorias}">
+                    <input type="checkbox" class="form-check-input" th:field="*{categoriaIds}" th:value="${c.id}"
+                           th:id="${'cat-' + c.id}">
+                    <label class="form-check-label" th:for="${'cat-' + c.id}" th:text="${c.nombre}"></label>
+                </div>
+                <p th:if="${categorias.isEmpty()}" class="text-muted small mb-0">
+                    No hay categorias. <a th:href="@{/admin/categorias/nueva}">Crear una</a>.
+                </p>
+            </div>
+            <div class="text-danger small" th:if="${#fields.hasErrors('categoriaIds')}" th:errors="*{categoriaIds}"></div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <label class="form-label">Estado</label>
+                <select class="form-select" th:field="*{estado}">
+                    <option th:each="e : ${estados}" th:value="${e}" th:text="${e.etiqueta}"></option>
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <label class="form-label">Orden</label>
+                <input type="number" class="form-control" th:field="*{orden}">
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-link" th:href="@{|/admin/recursos/${seccion}|}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

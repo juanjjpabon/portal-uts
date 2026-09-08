@@ -28,10 +28,16 @@
             <ul class="navbar-nav me-auto">
                 <!-- HU-17: cada seccion solo se muestra al rol autorizado -->
                 <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
-                    <a class="nav-link" th:href="@{/admin/contenidos}">Contenidos</a>
+                    <a class="nav-link" th:href="@{/admin/recursos/contenidos}">Contenidos</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
-                    <a class="nav-link" th:href="@{/admin/rutas}">Rutas y contactos</a>
+                    <a class="nav-link" th:href="@{/admin/recursos/rutas}">Rutas</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
+                    <a class="nav-link" th:href="@{/admin/recursos/contactos}">Contactos</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
+                    <a class="nav-link" th:href="@{/admin/categorias}">Categorias</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
                     <a class="nav-link" th:href="@{/admin/cuestionarios}">Cuestionarios</a>
@@ -60,6 +66,11 @@
         </div>
     </div>
 </nav>
+
+<div th:fragment="alerts" class="mt-3">
+    <div th:if="${ok}" class="alert alert-success py-2" role="alert" th:text="${ok}"></div>
+    <div th:if="${error}" class="alert alert-danger py-2" role="alert" th:text="${error}"></div>
+</div>
 
 <footer th:fragment="footer" class="text-center text-muted py-4 mt-5 border-top">
     <small>Portal de orientacion psicosocial UTS &middot; Proyecto 65-2026-015</small>

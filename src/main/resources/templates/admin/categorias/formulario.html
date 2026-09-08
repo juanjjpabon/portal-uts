@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Categoria')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 620px;">
+    <p class="mb-1"><a th:href="@{/admin/categorias}">&larr; Categorias</a></p>
+    <h1 class="h3" th:text="${form.id == null} ? 'Nueva categoria' : 'Editar categoria'">Categoria</h1>
+
+    <form method="post" th:object="${form}"
+          th:action="${form.id == null} ? @{/admin/categorias} : @{|/admin/categorias/${form.id}|}">
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}"
+                   th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{nombre}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripcion <span class="text-muted">(opcional)</span></label>
+            <textarea class="form-control" rows="2" th:field="*{descripcion}"></textarea>
+        </div>
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <label class="form-label">Orden</label>
+                <input type="number" class="form-control" th:field="*{orden}">
+            </div>
+            <div class="col-sm-6 d-flex align-items-end">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="activa" th:field="*{activa}">
+                    <label class="form-check-label" for="activa">Activa (visible en el portal)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-link" th:href="@{/admin/categorias}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

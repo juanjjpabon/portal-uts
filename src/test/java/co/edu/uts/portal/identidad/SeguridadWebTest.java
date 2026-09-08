@@ -1,6 +1,8 @@
 package co.edu.uts.portal.identidad;
 
 import co.edu.uts.portal.config.SecurityConfig;
+import co.edu.uts.portal.contenido.service.CategoriaService;
+import co.edu.uts.portal.contenido.service.RecursoService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,12 @@ class SeguridadWebTest {
     @MockitoBean
     DetalleUsuarioService detalleUsuarioService;
 
+    @MockitoBean
+    RecursoService recursoService;
+
+    @MockitoBean
+    CategoriaService categoriaService;
+
     @Test
     void loginEsPublico() throws Exception {
         mockMvc.perform(get("/login"))
@@ -57,7 +65,7 @@ class SeguridadWebTest {
     @Test
     @WithMockUser(roles = "ADMIN_TECNICO")
     void tecnicoNoAccedeAGestionDeContenido() throws Exception {
-        mockMvc.perform(get("/admin/contenidos"))
+        mockMvc.perform(get("/admin/recursos/contenidos"))
                 .andExpect(status().isForbidden());
     }
 
