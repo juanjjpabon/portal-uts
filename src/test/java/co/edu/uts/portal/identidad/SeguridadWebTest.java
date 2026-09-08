@@ -3,6 +3,7 @@ package co.edu.uts.portal.identidad;
 import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.contenido.service.CategoriaService;
 import co.edu.uts.portal.contenido.service.RecursoService;
+import co.edu.uts.portal.parametros.service.ParametroService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,9 @@ class SeguridadWebTest {
 
     @MockitoBean
     CategoriaService categoriaService;
+
+    @MockitoBean
+    ParametroService parametroService;
 
     @Test
     void loginEsPublico() throws Exception {

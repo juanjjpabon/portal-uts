@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Parametros operativos')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 820px;">
+    <h1 class="h3">Parametros operativos</h1>
+    <p class="text-muted">
+        Avisos, mensajes de urgencia y datos del canal institucional. Estos textos los
+        usa el portal publico y la autoorientacion.
+    </p>
+
+    <div th:replace="~{fragments/comunes :: alerts}"></div>
+
+    <form method="post" th:action="@{/admin/parametros}">
+        <div class="card mb-3" th:each="grupo : ${grupos}">
+            <div class="card-header fw-semibold" th:text="${grupo.key}">Grupo</div>
+            <div class="card-body">
+                <div class="mb-3" th:each="p : ${grupo.value}">
+                    <label class="form-label" th:for="${'p-' + p.id}" th:text="${p.descripcion}">Parametro</label>
+                    <code class="d-block small text-muted mb-1" th:text="${p.clave}">clave</code>
+
+                    <textarea th:if="${p.tipo.name() == 'TEXTO_LARGO'}" rows="3" class="form-control"
+                              th:id="${'p-' + p.id}" th:name="${'valores[' + p.id + ']'}"
+                              th:text="${p.valor}"></textarea>
+
+                    <input th:unless="${p.tipo.name() == 'TEXTO_LARGO'}" class="form-control"
+                           th:type="${p.tipo.name() == 'URL'} ? 'url' : 'text'"
+                           th:id="${'p-' + p.id}" th:name="${'valores[' + p.id + ']'}"
+                           th:value="${p.valor}">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

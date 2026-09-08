@@ -10,10 +10,16 @@ Proyecto 65-2026-015. Spring Boot + Spring Security + PostgreSQL + Thymeleaf/Boo
 | HU-17 | Permisos por rol (separación estricta funcional / técnico) | Implementada |
 | HU-18 | CRUD de contenidos y categorías | Implementada |
 | HU-19 | CRUD de rutas, contactos, horarios y mensajes de urgencia | Implementada |
+| HU-27 | Parámetros operativos (contactos, categorías, avisos) | Implementada |
 
 HU-18 y HU-19 comparten el modelo genérico `Recurso` (`tipo` ∈ CONTENIDO / RUTA /
 CONTACTO, F-DC-125): una entidad, un repositorio, un servicio y un par de plantillas.
 `Categoria` es entidad aparte, N:M con `Recurso`.
+
+HU-27: contactos y categorías ya quedan cubiertos por HU-18/HU-19; lo que añade es
+`Parametro` (catálogo fijo clave/valor, editable en `/admin/parametros`) para los
+avisos de autoorientación (HU-08/HU-11), el mensaje de urgencia (HU-06) y el canal
+institucional (HU-07). `ParametroService.valor(clave)` es el punto de consumo.
 
 El resto del backlog (M01–M08) se irá agregando módulo por módulo.
 
@@ -50,7 +56,7 @@ El resto del backlog (M01–M08) se irá agregando módulo por módulo.
    ./mvnw spring-boot:run
    ```
 
-   Flyway crea el esquema (`V1`–`V3`) y siembra los roles (`V2`). `SeedAdminInicial`
+   Flyway crea el esquema (`V1`–`V4`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
    crea el usuario `admin.tecnico@uts.edu.co` con rol `ADMIN_TECNICO` usando
    `PORTAL_ADMIN_INICIAL_PASSWORD`.
 
