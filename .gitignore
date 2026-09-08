@@ -1,0 +1,15 @@
+target/
+
+### IDE ###
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+
+### Local / secretos ###
+application-local.yml
+*.env
+.env

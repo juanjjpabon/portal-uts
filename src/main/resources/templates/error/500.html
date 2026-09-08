@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Error del sistema')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5 text-center">
+    <h1 class="display-6">Ocurrio un error</h1>
+    <p class="text-muted">
+        No pudimos completar la operacion. El detalle tecnico quedo registrado de forma
+        segura (HU-26); intenta de nuevo mas tarde.
+    </p>
+    <a class="btn btn-outline-primary" th:href="@{/}">Ir al inicio</a>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+</body>
+</html>

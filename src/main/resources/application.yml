@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: portal-uts
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+  web:
+    resources:
+      cache:
+        period: 0
+
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+
+portal:
+  seguridad:
+    # Se crea SOLO si la tabla usuario esta vacia al arrancar.
+    # La contrasena NO va en el codigo: se toma de la variable de entorno
+    # PORTAL_ADMIN_INICIAL_PASSWORD. Si no esta definida, no se crea el usuario.
+    admin-inicial:
+      correo: admin.tecnico@uts.edu.co
+      nombre: Administrador Tecnico
+      password: ${PORTAL_ADMIN_INICIAL_PASSWORD:}
+
+logging:
+  level:
+    org.springframework.security: INFO
+    co.edu.uts.portal: DEBUG

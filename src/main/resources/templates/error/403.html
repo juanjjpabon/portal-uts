@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Acceso denegado')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5 text-center">
+    <h1 class="display-6">Acceso denegado</h1>
+    <p class="text-muted">
+        Tu rol no tiene permiso para esta operacion (HU-17). Si crees que es un error,
+        contacta al administrador tecnico.
+    </p>
+    <a class="btn btn-outline-primary" th:href="@{/admin}">Volver al panel</a>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+</body>
+</html>

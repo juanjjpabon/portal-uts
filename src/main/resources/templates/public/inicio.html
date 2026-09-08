@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head(null)}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5">
+    <h1>Portal de orientacion psicosocial</h1>
+    <p class="lead">
+        Informacion preventiva y rutas institucionales de la UTS, de acceso libre.
+    </p>
+    <p class="text-muted">
+        Los contenidos publicos (M01-M04) y la autoorientacion (M03) se agregaran en las
+        siguientes historias. Por ahora esta disponible el acceso administrativo (HU-16 / HU-17).
+    </p>
+    <a class="btn btn-primary" th:href="@{/login}">Acceso administrativo</a>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>
