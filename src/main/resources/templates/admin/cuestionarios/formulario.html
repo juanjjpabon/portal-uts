@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Cuestionario')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 640px;">
+    <p class="mb-1"><a th:href="@{/admin/cuestionarios}">&larr; Cuestionarios</a></p>
+    <h1 class="h3" th:text="${form.id == null} ? 'Nuevo cuestionario' : 'Datos del cuestionario'">Cuestionario</h1>
+
+    <form method="post" th:object="${form}"
+          th:action="${form.id == null} ? @{/admin/cuestionarios} : @{|/admin/cuestionarios/${form.id}|}">
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}"
+                   th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{nombre}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripcion <span class="text-muted">(opcional)</span></label>
+            <textarea class="form-control" rows="2" th:field="*{descripcion}"></textarea>
+        </div>
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="activo" th:field="*{activo}">
+            <label class="form-check-label" for="activo">Activo (puede ofrecerse en el portal)</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a class="btn btn-link" th:href="@{/admin/cuestionarios}">Cancelar</a>
+        <p class="small text-muted mt-3" th:if="${form.id == null}">
+            Al crear el cuestionario se genera automaticamente su version 1 en borrador.
+        </p>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

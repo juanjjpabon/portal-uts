@@ -3,6 +3,9 @@ package co.edu.uts.portal.identidad;
 import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.contenido.service.CategoriaService;
 import co.edu.uts.portal.contenido.service.RecursoService;
+import co.edu.uts.portal.cuestionario.service.CuestionarioService;
+import co.edu.uts.portal.cuestionario.service.NivelService;
+import co.edu.uts.portal.cuestionario.service.PreguntaService;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
@@ -45,6 +48,15 @@ class SeguridadWebTest {
 
     @MockitoBean
     ParametroService parametroService;
+
+    @MockitoBean
+    CuestionarioService cuestionarioService;
+
+    @MockitoBean
+    PreguntaService preguntaService;
+
+    @MockitoBean
+    NivelService nivelService;
 
     @Test
     void loginEsPublico() throws Exception {

@@ -228,4 +228,20 @@ public class Recurso extends BaseAuditable {
     public Set<Categoria> getCategorias() {
         return categorias;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Recurso otro)) {
+            return false;
+        }
+        return id != null && id.equals(otro.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hashCode(id);
+    }
 }

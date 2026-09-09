@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head(${cuestionario.nombre})}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 820px;">
+    <p class="mb-1"><a th:href="@{/admin/cuestionarios}">&larr; Cuestionarios</a></p>
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h1 class="h3 mb-1" th:text="${cuestionario.nombre}">Nombre</h1>
+            <p class="text-muted mb-0" th:text="${cuestionario.descripcion}"></p>
+        </div>
+        <a class="btn btn-sm btn-outline-secondary" th:href="@{|/admin/cuestionarios/${cuestionario.id}/editar|}">
+            Editar datos</a>
+    </div>
+
+    <div th:replace="~{fragments/comunes :: alerts}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <h2 class="h5 mb-0">Versiones</h2>
+        <form method="post" th:action="@{|/admin/cuestionarios/${cuestionario.id}/versiones|}">
+            <button class="btn btn-outline-primary btn-sm"
+                    th:disabled="${cuestionario.ultimaVersion().isPresent()
+                                  and cuestionario.ultimaVersion().get().esEditable()}">
+                Nueva version (copiar de la ultima)
+            </button>
+        </form>
+    </div>
+    <p class="small text-muted"
+       th:if="${cuestionario.ultimaVersion().isPresent() and cuestionario.ultimaVersion().get().esEditable()}">
+        Ya hay una version en borrador (v<span th:text="${cuestionario.ultimaVersion().get().numero}">1</span>);
+        publicala o archivala antes de crear otra.
+    </p>
+
+    <div class="table-responsive mt-2">
+        <table class="table align-middle bg-white">
+            <thead>
+            <tr><th>Version</th><th>Estado</th><th>Publicada</th><th class="text-end">Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="v : ${versiones}">
+                <td th:text="|v${v.numero}|">v1</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${v.estado.name() == 'PUBLICADA'} ? 'text-bg-success'
+                                        : (${v.estado.name() == 'BORRADOR'} ? 'text-bg-secondary' : 'text-bg-warning')"
+                          th:text="${v.estado.etiqueta}">Estado</span>
+                </td>
+                <td class="small text-muted"
+                    th:text="${v.publicadaEn != null}
+                             ? ${#temporals.format(v.publicadaEn, 'dd/MM/yyyy HH:mm', 'America/Bogota')} : '—'">—</td>
+                <td class="text-end text-nowrap">
+                    <a class="btn btn-sm btn-outline-primary"
+                       th:href="@{|/admin/cuestionarios/${cuestionario.id}/v/${v.numero}|}"
+                       th:text="${v.esEditable()} ? 'Editar' : 'Ver'">Editar</a>
+                    <form class="d-inline" method="post" th:if="${v.estado.name() == 'BORRADOR'}"
+                          th:action="@{|/admin/cuestionarios/${cuestionario.id}/v/${v.numero}/publicar|}">
+                        <button class="btn btn-sm btn-outline-success">Publicar</button>
+                    </form>
+                    <form class="d-inline" method="post" th:if="${v.estado.name() == 'PUBLICADA'}"
+                          th:action="@{|/admin/cuestionarios/${cuestionario.id}/v/${v.numero}/archivar|}">
+                        <button class="btn btn-sm btn-outline-warning">Archivar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>
