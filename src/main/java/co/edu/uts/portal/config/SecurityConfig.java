@@ -39,7 +39,8 @@ public class SecurityConfig {
                 // Recursos estaticos y contenido publico del portal (M01-M04)
                 .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/webjars/**", "/favicon.ico").permitAll()
                 .requestMatchers("/login", "/error", "/error/**").permitAll()
-                .requestMatchers("/contenidos/**", "/rutas/**", "/autoorientacion/**", "/buscar").permitAll()
+                .requestMatchers("/contenidos/**", "/rutas/**", "/autoorientacion", "/autoorientacion/**",
+                        "/urgencia", "/buscar").permitAll()
 
                 // Panel administrativo - HU-17 separacion estricta
                 .requestMatchers("/admin/usuarios/**", "/admin/bitacora/**", "/admin/sistema/**").hasRole(TECNICO)

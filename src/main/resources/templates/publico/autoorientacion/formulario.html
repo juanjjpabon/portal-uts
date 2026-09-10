@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head(${cuestionario.nombre})}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-4" style="max-width: 720px;">
+    <p class="mb-1"><a th:href="@{|/autoorientacion/${cuestionario.slug}|}">&larr; Volver al aviso</a></p>
+    <h1 class="h3" th:text="${cuestionario.nombre}">Tema</h1>
+    <p class="text-muted" th:text="${cuestionario.descripcion}"></p>
+
+    <div th:if="${error}" class="alert alert-warning" th:text="${error}"></div>
+
+    <form method="post" th:object="${form}" th:action="@{|/autoorientacion/${cuestionario.slug}/resultado|}">
+        <input type="hidden" th:field="*{numeroVersion}">
+
+        <fieldset class="mb-4 p-3 rounded border"
+                  th:each="pr, it : ${cuestionario.preguntas}"
+                  th:classappend="${faltantes != null and faltantes.contains(pr.id)} ? 'border-danger' : ''">
+            <legend class="fs-6 fw-semibold">
+                <span th:text="${it.count}">1</span>.
+                <span th:text="${pr.enunciado}">Pregunta</span>
+            </legend>
+            <div class="form-check" th:each="op : ${pr.opciones}">
+                <input type="radio" class="form-check-input" required
+                       th:field="*{respuestas[__${pr.id}__]}" th:value="${op.id}"
+                       th:id="${'p' + pr.id + 'o' + op.id}">
+                <label class="form-check-label" th:for="${'p' + pr.id + 'o' + op.id}" th:text="${op.texto}">Opcion</label>
+            </div>
+            <p class="text-danger small mb-0" th:if="${faltantes != null and faltantes.contains(pr.id)}">
+                Selecciona una opcion.
+            </p>
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary btn-lg">Ver mi resultado</button>
+    </form>
+
+    <p class="mt-3">
+        <a th:href="@{/urgencia}">Necesito ayuda urgente &rarr;</a>
+    </p>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

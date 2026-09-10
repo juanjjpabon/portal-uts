@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Autoorientacion')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5" style="max-width: 760px;">
+    <h1 class="h2">Autoorientacion</h1>
+    <p class="lead">
+        Una herramienta breve, anonima y de reflexion personal. No guarda tus respuestas
+        ni genera un diagnostico.
+    </p>
+
+    <div th:if="${temas.isEmpty()}" class="alert alert-info mt-4">
+        La autoorientacion no esta disponible por ahora.
+    </div>
+
+    <div class="row g-3 mt-2">
+        <div class="col-md-6" th:each="t : ${temas}">
+            <div class="card h-100"><div class="card-body d-flex flex-column">
+                <h2 class="h5" th:text="${t.nombre}">Tema</h2>
+                <p class="text-muted small flex-grow-1" th:text="${t.descripcion}"></p>
+                <a class="btn btn-primary" th:href="@{|/autoorientacion/${t.slug}|}">Comenzar</a>
+            </div></div>
+        </div>
+    </div>
+
+    <p class="mt-4">
+        <a th:href="@{/urgencia}">Necesito ayuda urgente &rarr;</a>
+    </p>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

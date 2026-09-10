@@ -7,6 +7,7 @@ import co.edu.uts.portal.cuestionario.service.CuestionarioService;
 import co.edu.uts.portal.cuestionario.service.NivelService;
 import co.edu.uts.portal.cuestionario.service.PreguntaService;
 import co.edu.uts.portal.parametros.service.ParametroService;
+import co.edu.uts.portal.autoorientacion.service.AutoorientacionService;
 import co.edu.uts.portal.bitacora.service.BitacoraService;
 import co.edu.uts.portal.identidad.service.CuentaService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
@@ -70,6 +71,9 @@ class SeguridadWebTest {
 
     @MockitoBean
     BitacoraService bitacoraService;
+
+    @MockitoBean
+    AutoorientacionService autoorientacionService;
 
     @Test
     void loginEsPublico() throws Exception {

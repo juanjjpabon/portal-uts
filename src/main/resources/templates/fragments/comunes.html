@@ -14,7 +14,16 @@
 <nav th:fragment="navbarPublico" class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" th:href="@{/}">Portal UTS</a>
-        <a class="btn btn-outline-light btn-sm ms-auto" th:href="@{/login}">Ingresar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPublico">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuPublico">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/autoorientacion}">Autoorientacion</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/urgencia}">Urgencias</a></li>
+            </ul>
+            <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Ingresar</a>
+        </div>
     </div>
 </nav>
 

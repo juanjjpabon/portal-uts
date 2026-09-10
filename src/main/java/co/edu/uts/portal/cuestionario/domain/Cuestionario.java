@@ -32,6 +32,10 @@ public class Cuestionario extends BaseAuditable {
     @Column(name = "nombre", nullable = false, length = 120)
     private String nombre;
 
+    /** Identificador para la URL publica de autoorientacion (M03). Se fija al crear. */
+    @Column(name = "slug", nullable = false, unique = true, length = 140)
+    private String slug;
+
     @Column(name = "descripcion", length = 500)
     private String descripcion;
 
@@ -45,8 +49,14 @@ public class Cuestionario extends BaseAuditable {
     protected Cuestionario() {
     }
 
-    public Cuestionario(String nombre) {
+    public Cuestionario(String nombre, String slug) {
         this.nombre = nombre;
+        this.slug = slug;
+    }
+
+    /** Conveniencia (tests / usos internos): deriva el slug del nombre. */
+    public Cuestionario(String nombre) {
+        this(nombre, co.edu.uts.portal.common.Slugs.de(nombre));
     }
 
     public CuestionarioVersion nuevaVersionVacia() {
@@ -83,6 +93,10 @@ public class Cuestionario extends BaseAuditable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getSlug() {
+        return slug;
     }
 
     public String getDescripcion() {

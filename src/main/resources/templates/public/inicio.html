@@ -10,11 +10,32 @@
     <p class="lead">
         Informacion preventiva y rutas institucionales de la UTS, de acceso libre.
     </p>
-    <p class="text-muted">
-        Los contenidos publicos (M01-M04) y la autoorientacion (M03) se agregaran en las
-        siguientes historias. Por ahora esta disponible el acceso administrativo (HU-16 / HU-17).
+
+    <div class="row g-3 mt-2" style="max-width: 720px;">
+        <div class="col-sm-6">
+            <div class="card h-100"><div class="card-body d-flex flex-column">
+                <h2 class="h5">Autoorientacion</h2>
+                <p class="small text-muted flex-grow-1">
+                    Un ejercicio breve y anonimo de reflexion. No guarda tus respuestas.
+                </p>
+                <a class="btn btn-primary" th:href="@{/autoorientacion}">Comenzar</a>
+            </div></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card h-100 border-danger"><div class="card-body d-flex flex-column">
+                <h2 class="h5 text-danger">Ayuda urgente</h2>
+                <p class="small text-muted flex-grow-1">
+                    Que hacer y a quien acudir en una situacion urgente.
+                </p>
+                <a class="btn btn-outline-danger" th:href="@{/urgencia}">Ver informacion urgente</a>
+            </div></div>
+        </div>
+    </div>
+
+    <p class="text-muted small mt-4">
+        Los contenidos y rutas publicos (M01-M02) se agregan en las siguientes historias.
     </p>
-    <a class="btn btn-primary" th:href="@{/login}">Acceso administrativo</a>
+    <a class="btn btn-link px-0" th:href="@{/login}">Acceso administrativo</a>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>

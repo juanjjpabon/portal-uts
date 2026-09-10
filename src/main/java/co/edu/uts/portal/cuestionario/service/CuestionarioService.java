@@ -90,11 +90,24 @@ public class CuestionarioService {
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public Cuestionario crear(CuestionarioForm form) {
-        Cuestionario c = new Cuestionario(form.getNombre().trim());
+        Cuestionario c = new Cuestionario(form.getNombre().trim(), slugUnico(form.getNombre()));
         c.setDescripcion(form.getDescripcion());
         c.setActivo(form.isActivo());
         c.nuevaVersionVacia();               // version 1, BORRADOR
         return cuestionarioRepository.save(c);
+    }
+
+    private String slugUnico(String nombre) {
+        String base = co.edu.uts.portal.common.Slugs.de(nombre);
+        if (base.isBlank()) {
+            base = "cuestionario";
+        }
+        String slug = base;
+        int n = 2;
+        while (cuestionarioRepository.existsBySlug(slug)) {
+            slug = base + "-" + n++;
+        }
+        return slug;
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")

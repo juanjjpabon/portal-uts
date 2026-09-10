@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head(${tema.nombre})}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5" style="max-width: 680px;">
+    <p class="mb-1"><a th:href="@{/autoorientacion}">&larr; Autoorientacion</a></p>
+    <h1 class="h3" th:text="${tema.nombre}">Tema</h1>
+
+    <div th:if="${error}" class="alert alert-warning py-2" th:text="${error}"></div>
+
+    <div class="card mt-3"><div class="card-body">
+        <h2 class="h6 text-uppercase text-muted">Antes de comenzar</h2>
+        <p style="white-space: pre-line" th:text="${avisoPrevio}">Aviso previo</p>
+
+        <form method="get" th:action="@{|/autoorientacion/${tema.slug}/responder|}">
+            <input type="hidden" name="aviso" value="leido">
+            <div class="form-check my-3">
+                <input type="checkbox" class="form-check-input" id="leido" required>
+                <label class="form-check-label" for="leido">He leido y entiendo este aviso.</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Comenzar</button>
+            <a class="btn btn-link" th:href="@{/autoorientacion}">Cancelar</a>
+        </form>
+    </div></div>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

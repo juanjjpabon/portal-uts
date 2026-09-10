@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Informacion urgente')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5" style="max-width: 640px;">
+    <h1 class="h2 text-danger">Informacion urgente</h1>
+
+    <div class="alert alert-danger fs-5" style="white-space: pre-line" th:text="${mensaje}">
+        Mensaje de urgencia.
+    </div>
+
+    <a class="btn btn-primary btn-lg" th:href="${canalUrl}" target="_blank" rel="noopener"
+       th:text="${canalEtiqueta}">Contactar al canal institucional</a>
+
+    <p class="mt-4"><a th:href="@{/}">Volver al inicio</a></p>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>
