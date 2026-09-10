@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Usuarios')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0">Usuarios y roles</h1>
+        <a class="btn btn-primary" th:href="@{/admin/usuarios/nuevo}">Nuevo usuario</a>
+    </div>
+
+    <div th:replace="~{fragments/comunes :: alerts}"></div>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-hover align-middle bg-white">
+            <thead>
+            <tr><th>Nombre</th><th>Correo</th><th>Roles</th><th>Estado</th><th>Ultimo acceso</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="u : ${usuarios}">
+                <td th:text="${u.nombreCompleto}">Nombre</td>
+                <td th:text="${u.correo}">correo</td>
+                <td>
+                    <span class="badge text-bg-light me-1" th:each="r : ${u.roles}"
+                          th:text="${r.nombre.etiqueta}">rol</span>
+                    <span th:if="${u.roles.isEmpty()}" class="text-muted small">sin roles</span>
+                </td>
+                <td>
+                    <span class="badge" th:classappend="${u.activo} ? 'text-bg-success' : 'text-bg-secondary'"
+                          th:text="${u.activo} ? 'Activo' : 'Inactivo'"></span>
+                    <span th:if="${u.debeCambiarClave}" class="badge text-bg-warning" title="Debe cambiar la contrasena">clave inicial</span>
+                </td>
+                <td class="small text-muted"
+                    th:text="${u.ultimoAcceso != null}
+                             ? ${#temporals.format(u.ultimoAcceso, 'dd/MM/yyyy HH:mm', 'America/Bogota')} : 'nunca'">-</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-primary" th:href="@{|/admin/usuarios/${u.id}|}">Gestionar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

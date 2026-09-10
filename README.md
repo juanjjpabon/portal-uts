@@ -12,6 +12,8 @@ Proyecto 65-2026-015. Spring Boot + Spring Security + PostgreSQL + Thymeleaf/Boo
 | HU-19 | CRUD de rutas, contactos, horarios y mensajes de urgencia | Implementada |
 | HU-27 | Parámetros operativos (contactos, categorías, avisos) | Implementada |
 | HU-20 | Administración de cuestionarios con control de versiones | Implementada (panel) |
+| HU-21 | Gestión de usuarios y roles (exclusiva de `ADMIN_TECNICO`) | Implementada |
+| HU-22 | Bitácora de cambios | Parcial: entidad + servicio + historial por usuario; visor global pendiente |
 
 HU-18 y HU-19 comparten el modelo genérico `Recurso` (`tipo` ∈ CONTENIDO / RUTA /
 CONTACTO, F-DC-125): una entidad, un repositorio, un servicio y un par de plantillas.
@@ -21,6 +23,15 @@ HU-27: contactos y categorías ya quedan cubiertos por HU-18/HU-19; lo que añad
 `Parametro` (catálogo fijo clave/valor, editable en `/admin/parametros`) para los
 avisos de autoorientación (HU-08/HU-11), el mensaje de urgencia (HU-06) y el canal
 institucional (HU-07). `ParametroService.valor(clave)` es el punto de consumo.
+
+HU-21 (módulo `identidad` + `bitacora`): CRUD de usuarios en `/admin/usuarios` sólo para
+`ADMIN_TECNICO`. Crear pide nombre/correo/contraseña inicial y marca `debeCambiarClave`;
+un interceptor obliga a cambiarla en el primer ingreso (`/cuenta/contrasena`). Reglas
+anti-bloqueo: nadie se desactiva ni se quita `ADMIN_TECNICO` a sí mismo, y siempre debe
+quedar ≥1 `ADMIN_TECNICO` activo. Cada cambio (crear, editar, rol asignado/revocado,
+activar/desactivar, restablecer/cambiar contraseña) se registra en `registro_bitacora`
+(actor, acción, fecha, objeto — nunca la contraseña). El `admin.funcional` creado a mano
+por SQL ya se gestiona desde esta pantalla como cualquier otro. Migración `V6`.
 
 HU-20 (módulo `cuestionario`): `Cuestionario → CuestionarioVersion → Pregunta → Opcion`
 y `CuestionarioVersion → NivelResultado → Recomendacion`, con `NivelResultado ↔ Recurso(RUTA)`
@@ -66,26 +77,20 @@ El resto del backlog (M01–M08) se irá agregando módulo por módulo.
    ./mvnw spring-boot:run
    ```
 
-   Flyway crea el esquema (`V1`–`V5`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
+   Flyway crea el esquema (`V1`–`V6`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
    crea el usuario `admin.tecnico@uts.edu.co` con rol `ADMIN_TECNICO` usando
    `PORTAL_ADMIN_INICIAL_PASSWORD`.
 
 4. Abrir <http://localhost:8080> → **Ingresar**.
 
-### Usuario administrador funcional
+### Crear los demás usuarios
 
-HU-21 (gestión de usuarios) aún no existe, así que el `ADMIN_FUNCIONAL` que necesita
-HU-18/HU-19 se crea a mano una vez:
+Desde HU-21, el administrador técnico crea el resto de usuarios (incluido el
+`ADMIN_FUNCIONAL`) en **`/admin/usuarios` → Nuevo usuario**. Ya no hace falta SQL manual;
+cada usuario nuevo debe cambiar su contraseña inicial en el primer ingreso.
 
-```sql
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-INSERT INTO usuario (nombre_completo, correo, hash_contrasena, activo, creado_en, creado_por)
-VALUES ('Administrador Funcional', 'admin.funcional@uts.edu.co',
-        crypt('CAMBIA-ESTA-CLAVE', gen_salt('bf', 10)), true, now(), 'sistema');
-INSERT INTO usuario_rol (usuario_id, rol_id)
-SELECT u.id, r.id FROM usuario u, rol r
-WHERE u.correo = 'admin.funcional@uts.edu.co' AND r.nombre = 'ADMIN_FUNCIONAL';
-```
+*(En bases anteriores a la V6 el `admin.funcional@uts.edu.co` se había creado a mano por
+SQL; ya se administra como cualquier otro.)*
 
 ## Rutas
 
@@ -97,6 +102,7 @@ WHERE u.correo = 'admin.funcional@uts.edu.co' AND r.nombre = 'ADMIN_FUNCIONAL';
 | `/admin/recursos/{contenidos\|rutas\|contactos}/**`, `/admin/categorias/**` | Solo `ADMIN_FUNCIONAL` |
 | `/admin/cuestionarios`, `/parametros`, `/analitica` | Solo `ADMIN_FUNCIONAL` |
 | `/admin/usuarios`, `/bitacora`, `/sistema` | Solo `ADMIN_TECNICO` |
+| `/cuenta/contrasena` | Cualquier usuario autenticado (cambio de la propia contraseña) |
 
 ## Pruebas
 
@@ -107,7 +113,9 @@ WHERE u.correo = 'admin.funcional@uts.edu.co' AND r.nombre = 'ADMIN_FUNCIONAL';
 Sin base de datos: `SeguridadWebTest` (HU-16/HU-17 por URL), `RecursoAdminControllerTest`
 (HU-18/HU-19), `RecursoFormValidacionTest` (validación por tipo), `ParametroAdminControllerTest`
 y `ParametroServiceTest` (HU-27), `CuestionarioAdminControllerTest` y `ValidadorVersionTest`
-(HU-20: workflow y reglas de publicación), `SlugsTest`. 34 pruebas en total.
+(HU-20: workflow y reglas de publicación), `UsuarioServiceTest`, `UsuarioAdminControllerTest`
+y `BitacoraServiceTest` (HU-21/HU-22: anti-bloqueo, roles, auditoría), `SlugsTest`.
+47 pruebas en total.
 
 ## Contraseña de BD en archivo local (opcional)
 

@@ -7,8 +7,11 @@ import co.edu.uts.portal.cuestionario.service.CuestionarioService;
 import co.edu.uts.portal.cuestionario.service.NivelService;
 import co.edu.uts.portal.cuestionario.service.PreguntaService;
 import co.edu.uts.portal.parametros.service.ParametroService;
+import co.edu.uts.portal.bitacora.service.BitacoraService;
+import co.edu.uts.portal.identidad.service.CuentaService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
+import co.edu.uts.portal.identidad.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,6 +62,15 @@ class SeguridadWebTest {
     @MockitoBean
     NivelService nivelService;
 
+    @MockitoBean
+    UsuarioService usuarioService;
+
+    @MockitoBean
+    CuentaService cuentaService;
+
+    @MockitoBean
+    BitacoraService bitacoraService;
+
     @Test
     void loginEsPublico() throws Exception {
         mockMvc.perform(get("/login"))
@@ -88,9 +101,9 @@ class SeguridadWebTest {
     @Test
     @WithMockUser(roles = "ADMIN_TECNICO")
     void tecnicoAccedeAGestionDeUsuarios() throws Exception {
-        // No hay controlador aun: pasa la autorizacion y cae en 404, nunca en 403.
+        when(usuarioService.listar()).thenReturn(java.util.List.of());
         mockMvc.perform(get("/admin/usuarios"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test

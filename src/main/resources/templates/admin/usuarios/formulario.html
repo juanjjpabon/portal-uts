@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Nuevo usuario')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 620px;">
+    <p class="mb-1"><a th:href="@{/admin/usuarios}">&larr; Usuarios</a></p>
+    <h1 class="h3">Nuevo usuario</h1>
+
+    <div th:replace="~{fragments/comunes :: alerts}"></div>
+
+    <form method="post" th:object="${form}" th:action="@{/admin/usuarios}">
+        <div class="mb-3">
+            <label class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" th:field="*{nombreCompleto}"
+                   th:classappend="${#fields.hasErrors('nombreCompleto')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{nombreCompleto}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Correo institucional</label>
+            <input type="email" class="form-control" th:field="*{correo}"
+                   th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{correo}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Contrasena inicial</label>
+            <input type="text" class="form-control" th:field="*{contrasena}"
+                   th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'">
+            <div class="form-text">Minimo 8 caracteres. El usuario debera cambiarla al ingresar.</div>
+            <div class="invalid-feedback" th:errors="*{contrasena}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Roles</label>
+            <div class="form-check" th:each="r : ${todosLosRoles}">
+                <input type="checkbox" class="form-check-input" th:field="*{roles}" th:value="${r}"
+                       th:id="${'rol-' + r}">
+                <label class="form-check-label" th:for="${'rol-' + r}" th:text="${r.etiqueta}">rol</label>
+                <span class="text-muted small" th:text="' — ' + ${r.descripcion}"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear usuario</button>
+        <a class="btn btn-link" th:href="@{/admin/usuarios}">Cancelar</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

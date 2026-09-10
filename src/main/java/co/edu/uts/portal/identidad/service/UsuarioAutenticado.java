@@ -20,6 +20,7 @@ public class UsuarioAutenticado implements UserDetails {
     private final String correo;
     private final String hashContrasena;
     private final boolean activo;
+    private final boolean debeCambiarClave;
     private final Set<GrantedAuthority> authorities;
 
     public UsuarioAutenticado(Usuario usuario) {
@@ -27,6 +28,7 @@ public class UsuarioAutenticado implements UserDetails {
         this.correo = usuario.getCorreo();
         this.hashContrasena = usuario.getHashContrasena();
         this.activo = usuario.isActivo();
+        this.debeCambiarClave = usuario.isDebeCambiarClave();
         this.authorities = usuario.getRoles().stream()
                 .map(rol -> new SimpleGrantedAuthority(rol.authority()))
                 .collect(Collectors.toUnmodifiableSet());
@@ -38,6 +40,11 @@ public class UsuarioAutenticado implements UserDetails {
 
     public String getCorreo() {
         return correo;
+    }
+
+    /** HU-21: si es true, el interceptor obliga a cambiar la contrasena antes de seguir. */
+    public boolean debeCambiarClave() {
+        return debeCambiarClave;
     }
 
     @Override

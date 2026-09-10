@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Editar usuario')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 620px;">
+    <p class="mb-1"><a th:href="@{|/admin/usuarios/${usuarioId}|}">&larr; Volver</a></p>
+    <h1 class="h3">Editar datos</h1>
+
+    <form method="post" th:object="${form}" th:action="@{|/admin/usuarios/${usuarioId}|}">
+        <div class="mb-3">
+            <label class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" th:field="*{nombreCompleto}"
+                   th:classappend="${#fields.hasErrors('nombreCompleto')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{nombreCompleto}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Correo institucional</label>
+            <input type="email" class="form-control" th:field="*{correo}"
+                   th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{correo}"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a class="btn btn-link" th:href="@{|/admin/usuarios/${usuarioId}|}">Cancelar</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

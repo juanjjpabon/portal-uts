@@ -45,6 +45,10 @@ public class Usuario extends BaseAuditable {
     @Column(name = "activo", nullable = false)
     private boolean activo = true;
 
+    /** true tras crear o restablecer la contrasena: el usuario debe cambiarla al ingresar (HU-21). */
+    @Column(name = "debe_cambiar_clave", nullable = false)
+    private boolean debeCambiarClave = false;
+
     @Column(name = "ultimo_acceso")
     private Instant ultimoAcceso;
 
@@ -75,6 +79,16 @@ public class Usuario extends BaseAuditable {
 
     public void registrarAcceso(Instant momento) {
         this.ultimoAcceso = momento;
+    }
+
+    /** Fija una nueva contrasena (ya hasheada) e indica si el usuario debera cambiarla. */
+    public void establecerContrasena(String hash, boolean forzarCambio) {
+        this.hashContrasena = hash;
+        this.debeCambiarClave = forzarCambio;
+    }
+
+    public boolean tieneRol(NombreRol nombre) {
+        return roles.stream().anyMatch(r -> r.getNombre() == nombre);
     }
 
     public Long getId() {
@@ -111,6 +125,10 @@ public class Usuario extends BaseAuditable {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public boolean isDebeCambiarClave() {
+        return debeCambiarClave;
     }
 
     public Instant getUltimoAcceso() {
