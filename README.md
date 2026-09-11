@@ -16,6 +16,7 @@ Proyecto 65-2026-015. Spring Boot + Spring Security + PostgreSQL + Thymeleaf/Boo
 | HU-22 | Bitácora de cambios | Parcial: entidad + servicio + historial por usuario; visor global pendiente |
 | HU-08–HU-13 | Autoorientación pública (M03) | Implementada |
 | HU-06 / HU-07 | Información urgente / canal institucional | Implementada |
+| HU-01 a HU-05 | Contenidos y rutas públicos, búsqueda (M01/M02) | Implementada |
 
 HU-18 y HU-19 comparten el modelo genérico `Recurso` (`tipo` ∈ CONTENIDO / RUTA /
 CONTACTO, F-DC-125): una entidad, un repositorio, un servicio y un par de plantillas.
@@ -25,6 +26,15 @@ HU-27: contactos y categorías ya quedan cubiertos por HU-18/HU-19; lo que añad
 `Parametro` (catálogo fijo clave/valor, editable en `/admin/parametros`) para los
 avisos de autoorientación (HU-08/HU-11), el mensaje de urgencia (HU-06) y el canal
 institucional (HU-07). `ParametroService.valor(clave)` es el punto de consumo.
+
+M01/M02 (`PortalPublicoService`, dentro de `contenido`): capa de solo lectura sobre
+`Recurso`/`Categoria`, siempre filtrando `estado = PUBLICADO` — un `BORRADOR` o
+`ARCHIVADO` no aparece en ningún listado ni es accesible por su slug (404). `/contenidos`
+(chips de categoría, HU-02) y `/contenidos/{slug}` (HU-04, con fecha de actualización y
+fuente); `/rutas` combina `RUTA` y `CONTACTO` en una sola página (HU-05); `/buscar`
+(HU-03) es un único cuadro en el navbar que busca en título+resumen+cuerpo para
+contenidos y título+dependencia+canal para rutas/contactos, agrupado por tipo. Sin
+cambios de esquema ni de seguridad (ya estaba en `permitAll`).
 
 M03 (módulo `autoorientacion`): flujo público y **anónimo** — `/autoorientacion` (temas
 disponibles) → aviso previo con el parámetro `aviso.autoorientacion.previo` (HU-08) →
@@ -127,7 +137,9 @@ y `ParametroServiceTest` (HU-27), `CuestionarioAdminControllerTest` y `Validador
 (HU-20: workflow y reglas de publicación), `UsuarioServiceTest`, `UsuarioAdminControllerTest`
 y `BitacoraServiceTest` (HU-21/HU-22: anti-bloqueo, roles, auditoría),
 `CalculadoraNivelTest`, `AutoorientacionServiceTest` y `AutoorientacionControllerTest`
-(M03: cálculo del nivel, anonimato, flujo público), `SlugsTest`. 63 pruebas en total.
+(M03: cálculo del nivel, anonimato, flujo público), `PortalPublicoServiceTest` y
+`PortalPublicoControllerTest` (M01/M02: solo contenido publicado, búsqueda), `SlugsTest`.
+74 pruebas en total.
 
 ## Contraseña de BD en archivo local (opcional)
 

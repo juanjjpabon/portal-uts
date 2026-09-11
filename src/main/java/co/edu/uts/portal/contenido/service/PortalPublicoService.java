@@ -1,0 +1,85 @@
+package co.edu.uts.portal.contenido.service;
+
+import co.edu.uts.portal.contenido.domain.Categoria;
+import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
+import co.edu.uts.portal.contenido.domain.Recurso;
+import co.edu.uts.portal.contenido.domain.TipoRecurso;
+import co.edu.uts.portal.contenido.repository.CategoriaRepository;
+import co.edu.uts.portal.contenido.repository.RecursoRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+
+/**
+ * Capa de solo lectura para el portal publico (HU-01 a HU-05). Nunca expone un
+ * Recurso que no este en estado PUBLICADO, sin importar como se pida (listado,
+ * slug directo o busqueda).
+ */
+@Service
+public class PortalPublicoService {
+
+    private final RecursoRepository recursoRepository;
+    private final CategoriaRepository categoriaRepository;
+
+    public PortalPublicoService(RecursoRepository recursoRepository, CategoriaRepository categoriaRepository) {
+        this.recursoRepository = recursoRepository;
+        this.categoriaRepository = categoriaRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Categoria> categorias() {
+        return categoriaRepository.findByActivaTrueOrderByOrdenAscNombreAsc();
+    }
+
+    /** HU-01/HU-02: contenidos publicados, opcionalmente filtrados por categoria. */
+    @Transactional(readOnly = true)
+    public List<Recurso> contenidos(String categoriaSlug) {
+        if (StringUtils.hasText(categoriaSlug)) {
+            return recursoRepository.buscarPorCategoria(
+                    TipoRecurso.CONTENIDO, EstadoPublicacion.PUBLICADO, categoriaSlug);
+        }
+        return recursoRepository.findByTipoAndEstadoOrderByOrdenAscTituloAsc(
+                TipoRecurso.CONTENIDO, EstadoPublicacion.PUBLICADO);
+    }
+
+    /** Ultimos contenidos publicados, para la vitrina de la portada (HU-01). */
+    @Transactional(readOnly = true)
+    public List<Recurso> ultimosContenidos(int cantidad) {
+        return recursoRepository.findByTipoAndEstadoOrderByOrdenAscTituloAsc(
+                        TipoRecurso.CONTENIDO, EstadoPublicacion.PUBLICADO)
+                .stream().limit(cantidad).toList();
+    }
+
+    /** HU-04: detalle de un contenido publicado. Vacio si no existe o no esta publicado. */
+    @Transactional(readOnly = true)
+    public Recurso contenido(String slug) {
+        return recursoRepository.findBySlugAndEstado(slug, EstadoPublicacion.PUBLICADO)
+                .filter(r -> r.getTipo() == TipoRecurso.CONTENIDO)
+                .orElseThrow(() -> new ContenidoNoDisponible("Contenido no disponible: " + slug));
+    }
+
+    /** HU-05: rutas institucionales publicadas. */
+    @Transactional(readOnly = true)
+    public List<Recurso> rutas() {
+        return recursoRepository.findByTipoAndEstadoOrderByOrdenAscTituloAsc(
+                TipoRecurso.RUTA, EstadoPublicacion.PUBLICADO);
+    }
+
+    /** Contactos publicados, mostrados junto a las rutas en la misma pagina. */
+    @Transactional(readOnly = true)
+    public List<Recurso> contactos() {
+        return recursoRepository.findByTipoAndEstadoOrderByOrdenAscTituloAsc(
+                TipoRecurso.CONTACTO, EstadoPublicacion.PUBLICADO);
+    }
+
+    /** HU-03: busqueda publica. q en blanco -> lista vacia (el controlador no la ejecuta). */
+    @Transactional(readOnly = true)
+    public List<Recurso> buscar(String q) {
+        if (!StringUtils.hasText(q)) {
+            return List.of();
+        }
+        return recursoRepository.buscarPublico(EstadoPublicacion.PUBLICADO, TipoRecurso.CONTENIDO, q.trim());
+    }
+}

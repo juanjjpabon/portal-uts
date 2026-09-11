@@ -2,6 +2,7 @@ package co.edu.uts.portal.identidad;
 
 import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.contenido.service.CategoriaService;
+import co.edu.uts.portal.contenido.service.PortalPublicoService;
 import co.edu.uts.portal.contenido.service.RecursoService;
 import co.edu.uts.portal.cuestionario.service.CuestionarioService;
 import co.edu.uts.portal.cuestionario.service.NivelService;
@@ -50,6 +51,9 @@ class SeguridadWebTest {
 
     @MockitoBean
     CategoriaService categoriaService;
+
+    @MockitoBean
+    PortalPublicoService portalPublicoService;
 
     @MockitoBean
     ParametroService parametroService;

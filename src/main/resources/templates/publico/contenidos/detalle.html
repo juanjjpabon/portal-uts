@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head(${contenido.titulo})}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5" style="max-width: 760px;">
+    <p class="mb-1"><a th:href="@{/contenidos}">&larr; Contenidos</a></p>
+
+    <div class="mb-2">
+        <span class="badge text-bg-light me-1" th:each="c : ${contenido.categorias}"
+              th:text="${c.nombre}"></span>
+    </div>
+
+    <h1 class="h2" th:text="${contenido.titulo}">Titulo</h1>
+    <p class="lead" th:text="${contenido.resumen}">Resumen</p>
+
+    <p class="text-muted small">
+        <span th:if="${contenido.actualizadoEn != null}"
+              th:text="'Actualizado el ' + ${#temporals.format(contenido.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
+            Actualizado
+        </span>
+        <span th:if="${contenido.fuente}"> &middot; Fuente: <span th:text="${contenido.fuente}"></span></span>
+    </p>
+
+    <hr>
+    <div style="white-space: pre-line" th:text="${contenido.cuerpo}">Cuerpo del contenido.</div>
+
+    <hr class="mt-4">
+    <p>
+        <a th:href="@{/autoorientacion}">Hacer la autoorientación &rarr;</a> &middot;
+        <a th:href="@{/urgencia}">Necesito ayuda urgente &rarr;</a>
+    </p>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

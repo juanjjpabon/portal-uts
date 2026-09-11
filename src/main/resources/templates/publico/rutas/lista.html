@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Rutas institucionales')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5" style="max-width: 780px;">
+    <h1 class="h2">Rutas institucionales</h1>
+    <p class="text-muted">A quién acudir dentro de la institución.</p>
+
+    <div th:if="${rutas.isEmpty()}" class="alert alert-info">Aún no hay rutas publicadas.</div>
+    <th:block th:each="r : ${rutas}">
+        <div th:replace="~{fragments/tarjetas :: tarjetaRuta(${r})}"></div>
+    </th:block>
+
+    <h2 class="h3 mt-5">Otros contactos</h2>
+    <div th:if="${contactos.isEmpty()}" class="alert alert-info">Aún no hay contactos publicados.</div>
+    <th:block th:each="r : ${contactos}">
+        <div th:replace="~{fragments/tarjetas :: tarjetaRuta(${r})}"></div>
+    </th:block>
+
+    <hr class="mt-4">
+    <p><a th:href="@{/urgencia}">¿Es una situación urgente? Ver información urgente &rarr;</a></p>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

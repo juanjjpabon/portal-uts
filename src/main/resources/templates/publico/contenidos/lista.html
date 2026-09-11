@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Contenidos')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5">
+    <h1 class="h2">Contenidos</h1>
+    <p class="text-muted">Información preventiva sobre salud mental y bienestar.</p>
+
+    <div class="d-flex flex-wrap gap-2 my-3">
+        <a class="btn btn-sm" th:classappend="${categoriaActiva == null} ? 'btn-primary' : 'btn-outline-secondary'"
+           th:href="@{/contenidos}">Todas</a>
+        <a class="btn btn-sm" th:each="c : ${categorias}"
+           th:classappend="${c.slug == categoriaActiva} ? 'btn-primary' : 'btn-outline-secondary'"
+           th:href="@{/contenidos(categoria=${c.slug})}" th:text="${c.nombre}">Categoria</a>
+    </div>
+
+    <div th:if="${contenidos.isEmpty()}" class="alert alert-info">
+        No hay contenidos publicados en esta categoría todavía.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4" th:each="r : ${contenidos}">
+            <div th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>
