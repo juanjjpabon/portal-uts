@@ -1,5 +1,7 @@
 package co.edu.uts.portal.contenido.service;
 
+import co.edu.uts.portal.bitacora.domain.AccionBitacora;
+import co.edu.uts.portal.bitacora.service.BitacoraService;
 import co.edu.uts.portal.common.Slugs;
 import co.edu.uts.portal.contenido.domain.Categoria;
 import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
@@ -26,12 +28,17 @@ import java.util.Set;
 @Service
 public class RecursoService {
 
+    private static final String OBJ = "Recurso";
+
     private final RecursoRepository recursoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final BitacoraService bitacora;
 
-    public RecursoService(RecursoRepository recursoRepository, CategoriaRepository categoriaRepository) {
+    public RecursoService(RecursoRepository recursoRepository, CategoriaRepository categoriaRepository,
+                          BitacoraService bitacora) {
         this.recursoRepository = recursoRepository;
         this.categoriaRepository = categoriaRepository;
+        this.bitacora = bitacora;
     }
 
     @Transactional(readOnly = true)
@@ -60,7 +67,10 @@ public class RecursoService {
     public Recurso crear(RecursoForm form) {
         Recurso r = new Recurso(form.getTipo());
         aplicar(r, form);
-        return recursoRepository.save(r);
+        recursoRepository.save(r);
+        bitacora.registrar(AccionBitacora.RECURSO_CREADO, OBJ, r.getId(),
+                "Creo " + r.getTipo().getEtiquetaSingular().toLowerCase() + " \"" + r.getTitulo() + "\"");
+        return r;
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -68,24 +78,32 @@ public class RecursoService {
     public void actualizar(Long id, RecursoForm form) {
         Recurso r = obtenerDeTipo(id, form.getTipo());
         aplicar(r, form);
+        bitacora.registrar(AccionBitacora.RECURSO_ACTUALIZADO, OBJ, id,
+                "Actualizo " + r.getTipo().getEtiquetaSingular().toLowerCase() + " \"" + r.getTitulo() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public void publicar(Long id, TipoRecurso tipo) {
-        obtenerDeTipo(id, tipo).publicar(Instant.now());
+        Recurso r = obtenerDeTipo(id, tipo);
+        r.publicar(Instant.now());
+        bitacora.registrar(AccionBitacora.RECURSO_PUBLICADO, OBJ, id, "Publico \"" + r.getTitulo() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public void archivar(Long id, TipoRecurso tipo) {
-        obtenerDeTipo(id, tipo).archivar();
+        Recurso r = obtenerDeTipo(id, tipo);
+        r.archivar();
+        bitacora.registrar(AccionBitacora.RECURSO_ARCHIVADO, OBJ, id, "Archivo \"" + r.getTitulo() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public void eliminar(Long id, TipoRecurso tipo) {
-        recursoRepository.delete(obtenerDeTipo(id, tipo));
+        Recurso r = obtenerDeTipo(id, tipo);
+        recursoRepository.delete(r);
+        bitacora.registrar(AccionBitacora.RECURSO_ELIMINADO, OBJ, id, "Elimino \"" + r.getTitulo() + "\"");
     }
 
     private void aplicar(Recurso r, RecursoForm form) {

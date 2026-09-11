@@ -1,5 +1,7 @@
 package co.edu.uts.portal.parametros;
 
+import co.edu.uts.portal.bitacora.domain.AccionBitacora;
+import co.edu.uts.portal.bitacora.service.BitacoraService;
 import co.edu.uts.portal.parametros.domain.Parametro;
 import co.edu.uts.portal.parametros.repository.ParametroRepository;
 import co.edu.uts.portal.parametros.service.ParametroService;
@@ -12,14 +14,18 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 class ParametroServiceTest {
 
     private final ParametroRepository repo = mock(ParametroRepository.class);
-    private final ParametroService service = new ParametroService(repo);
+    private final BitacoraService bitacora = mock(BitacoraService.class);
+    private final ParametroService service = new ParametroService(repo, bitacora);
 
     private Parametro parametro(long id, String clave, String valor) {
         Parametro p = nuevo();
@@ -62,6 +68,8 @@ class ParametroServiceTest {
         assertThat(cambios).isEqualTo(1);
         assertThat(a.getValor()).isEqualTo("nuevo");
         assertThat(b.getValor()).isEqualTo("igual");
+        verify(bitacora).registrar(eq(AccionBitacora.PARAMETRO_ACTUALIZADO), eq("Parametro"), eq(1L), any());
+        verify(bitacora, never()).registrar(any(), any(), eq(2L), any());
     }
 
     @Test

@@ -25,6 +25,12 @@ server:
   error:
     whitelabel:
       enabled: false
+    # HU-26: nunca exponer detalle tecnico en la respuesta al usuario, sin importar
+    # el perfil. El detalle completo va solo al log interno (PortalErrorAttributes).
+    include-exception: false
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
 
 portal:
   seguridad:

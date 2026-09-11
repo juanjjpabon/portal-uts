@@ -13,10 +13,11 @@ Proyecto 65-2026-015. Spring Boot + Spring Security + PostgreSQL + Thymeleaf/Boo
 | HU-27 | Parámetros operativos (contactos, categorías, avisos) | Implementada |
 | HU-20 | Administración de cuestionarios con control de versiones | Implementada (panel) |
 | HU-21 | Gestión de usuarios y roles (exclusiva de `ADMIN_TECNICO`) | Implementada |
-| HU-22 | Bitácora de cambios | Parcial: entidad + servicio + historial por usuario; visor global pendiente |
 | HU-08–HU-13 | Autoorientación pública (M03) | Implementada |
 | HU-06 / HU-07 | Información urgente / canal institucional | Implementada |
 | HU-01 a HU-05 | Contenidos y rutas públicos, búsqueda (M01/M02) | Implementada |
+| HU-22 | Bitácora de cambios: visor global + todos los módulos conectados | Implementada |
+| HU-26 | Errores técnicos seguros | Implementada |
 
 HU-18 y HU-19 comparten el modelo genérico `Recurso` (`tipo` ∈ CONTENIDO / RUTA /
 CONTACTO, F-DC-125): una entidad, un repositorio, un servicio y un par de plantillas.
@@ -55,6 +56,31 @@ activar/desactivar, restablecer/cambiar contraseña) se registra en `registro_bi
 (actor, acción, fecha, objeto — nunca la contraseña). El `admin.funcional` creado a mano
 por SQL ya se gestiona desde esta pantalla como cualquier otro. Migración `V6`.
 
+HU-22 (pasada de pulido, módulo `bitacora`): visor global en `/admin/bitacora` (solo
+`ADMIN_TECNICO`; `BitacoraService.registrar` en sí queda sin restringir porque lo llaman
+también los servicios de `ADMIN_FUNCIONAL`), con filtro por tipo de objeto (dropdown
+poblado con `SELECT DISTINCT`, nunca hardcodeado) y rango de fecha, paginado. `Recurso`,
+`Categoria`, `Cuestionario`/versión y `Parametro` ya llaman a la bitácora en cada
+mutación (granularidad gruesa: preguntas/opciones/niveles/recomendaciones en un
+cuestionario `BORRADOR` no generan fila propia). El filtro combinado usa
+`Specification`/`JpaSpecificationExecutor` en vez de un `@Query` con `is null`: un
+`Instant` nulo que solo se compara contra `IS NULL` hace que Postgres no pueda inferirle
+tipo (misma familia del bug `lower(bytea)` de HU-18) — con `Specification` un filtro
+ausente simplemente no agrega parámetro.
+
+HU-26 (pasada de pulido, `common.web.PortalErrorAttributes`): `server.error.include-*`
+fijado en `never`/`false` en `application.yml` para que ninguna respuesta de `/error`
+lleve stack trace, excepción o mensaje interno, sea cual sea el `Accept` del cliente
+(HTML o JSON). Un componente que extiende `DefaultErrorAttributes` intercepta todo lo
+que pasa por `/error`; para un `status >= 500` genera un código de referencia corto,
+lo agrega al modelo (se muestra en `error/500.html`/`5xx.html`) y registra en el log a
+nivel `ERROR` la excepción completa con su stack trace, más método y ruta originales —
+nunca los parámetros de la petición, para no dejar contraseñas de `/login` o
+`/cuenta/contrasena` en el log. `error/4xx.html` y `5xx.html` son plantillas de
+respaldo para cualquier código sin plantilla propia. Verificado en vivo con un 500 real
+(bug de tipado de parámetros antes de la corrección con `Specification`): quedó el
+código de referencia en pantalla y el stack trace completo en el log.
+
 HU-20 (módulo `cuestionario`): `Cuestionario → CuestionarioVersion → Pregunta → Opcion`
 y `CuestionarioVersion → NivelResultado → Recomendacion`, con `NivelResultado ↔ Recurso(RUTA)`
 N:M. Una versión `BORRADOR` es editable; al publicarse queda inmutable y "un cambio
@@ -63,7 +89,8 @@ se calcula por bandas de puntaje `[min,max]` sobre la suma de las opciones elegi
 `ValidadorVersion` bloquea la publicación si faltan opciones, hay huecos/solapes de
 puntaje o algún nivel no tiene recomendación y ruta. Panel en `/admin/cuestionarios`.
 
-El resto del backlog (M01–M08) se irá agregando módulo por módulo.
+Pendiente del backlog: HU-14/HU-15 (contenido para docentes, M04), HU-23/HU-24
+(estadísticas agregadas y su exportación) y HU-25 (valoración de utilidad, M07).
 
 ## Requisitos
 
@@ -122,7 +149,7 @@ SQL; ya se administra como cualquier otro.)*
 | `/admin` | Cualquier administrador autenticado |
 | `/admin/recursos/{contenidos\|rutas\|contactos}/**`, `/admin/categorias/**` | Solo `ADMIN_FUNCIONAL` |
 | `/admin/cuestionarios`, `/parametros`, `/analitica` | Solo `ADMIN_FUNCIONAL` |
-| `/admin/usuarios`, `/bitacora`, `/sistema` | Solo `ADMIN_TECNICO` |
+| `/admin/usuarios`, `/admin/bitacora`, `/admin/sistema` | Solo `ADMIN_TECNICO` |
 | `/cuenta/contrasena` | Cualquier usuario autenticado (cambio de la propia contraseña) |
 
 ## Pruebas
@@ -138,8 +165,11 @@ y `ParametroServiceTest` (HU-27), `CuestionarioAdminControllerTest` y `Validador
 y `BitacoraServiceTest` (HU-21/HU-22: anti-bloqueo, roles, auditoría),
 `CalculadoraNivelTest`, `AutoorientacionServiceTest` y `AutoorientacionControllerTest`
 (M03: cálculo del nivel, anonimato, flujo público), `PortalPublicoServiceTest` y
-`PortalPublicoControllerTest` (M01/M02: solo contenido publicado, búsqueda), `SlugsTest`.
-74 pruebas en total.
+`PortalPublicoControllerTest` (M01/M02: solo contenido publicado, búsqueda),
+`RecursoServiceTest`, `CategoriaServiceTest`, `CuestionarioServiceTest` (HU-22: cada
+mutación audita la acción correcta), `BitacoraAdminControllerTest` (visor global y
+permisos), `PortalErrorAttributesTest` (HU-26: sin trace/exception/message, con
+referencia solo en `≥500`), `SlugsTest`. 96 pruebas en total.
 
 ## Contraseña de BD en archivo local (opcional)
 

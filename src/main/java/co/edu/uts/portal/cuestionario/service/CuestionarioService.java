@@ -1,5 +1,7 @@
 package co.edu.uts.portal.cuestionario.service;
 
+import co.edu.uts.portal.bitacora.domain.AccionBitacora;
+import co.edu.uts.portal.bitacora.service.BitacoraService;
 import co.edu.uts.portal.cuestionario.domain.Cuestionario;
 import co.edu.uts.portal.cuestionario.domain.CuestionarioVersion;
 import co.edu.uts.portal.cuestionario.domain.EstadoVersion;
@@ -24,12 +26,17 @@ import java.util.List;
 @Service
 public class CuestionarioService {
 
+    private static final String OBJ = "Cuestionario";
+
     private final CuestionarioRepository cuestionarioRepository;
     private final ValidadorVersion validador;
+    private final BitacoraService bitacora;
 
-    public CuestionarioService(CuestionarioRepository cuestionarioRepository, ValidadorVersion validador) {
+    public CuestionarioService(CuestionarioRepository cuestionarioRepository, ValidadorVersion validador,
+                               BitacoraService bitacora) {
         this.cuestionarioRepository = cuestionarioRepository;
         this.validador = validador;
+        this.bitacora = bitacora;
     }
 
     @Transactional(readOnly = true)
@@ -94,7 +101,10 @@ public class CuestionarioService {
         c.setDescripcion(form.getDescripcion());
         c.setActivo(form.isActivo());
         c.nuevaVersionVacia();               // version 1, BORRADOR
-        return cuestionarioRepository.save(c);
+        cuestionarioRepository.save(c);
+        bitacora.registrar(AccionBitacora.CUESTIONARIO_CREADO, OBJ, c.getId(),
+                "Creo el cuestionario \"" + c.getNombre() + "\"");
+        return c;
     }
 
     private String slugUnico(String nombre) {
@@ -117,6 +127,8 @@ public class CuestionarioService {
         c.setNombre(form.getNombre().trim());
         c.setDescripcion(form.getDescripcion());
         c.setActivo(form.isActivo());
+        bitacora.registrar(AccionBitacora.CUESTIONARIO_ACTUALIZADO, OBJ, id,
+                "Actualizo los datos de \"" + c.getNombre() + "\"");
     }
 
     /** "Un cambio genera una nueva version": copia la ultima version a un BORRADOR nuevo. */
@@ -132,6 +144,9 @@ public class CuestionarioService {
         CuestionarioVersion destino = c.nuevaVersionVacia();
         copiarContenido(origen, destino);
         cuestionarioRepository.save(c);
+        bitacora.registrar(AccionBitacora.VERSION_CREADA, OBJ, cuestionarioId,
+                "Creo la version " + destino.getNumero() + " de \"" + c.getNombre() + "\" (copia de la v"
+                        + origen.getNumero() + ")");
         return destino.getNumero();
     }
 
@@ -149,18 +164,29 @@ public class CuestionarioService {
             throw new VersionNoEditable("La version tiene " + problemas.size()
                     + " problema(s) sin resolver; corrige antes de publicar.");
         }
-        c.versionPublicada().ifPresent(CuestionarioVersion::archivar);
+        c.versionPublicada().ifPresent(anterior -> {
+            anterior.archivar();
+            bitacora.registrar(AccionBitacora.VERSION_ARCHIVADA, OBJ, cuestionarioId,
+                    "Archivo la version " + anterior.getNumero() + " de \"" + c.getNombre()
+                            + "\" al publicar la v" + numero);
+        });
         v.publicar(Instant.now());
+        bitacora.registrar(AccionBitacora.VERSION_PUBLICADA, OBJ, cuestionarioId,
+                "Publico la version " + numero + " de \"" + c.getNombre() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public void archivar(Long cuestionarioId, int numero) {
-        CuestionarioVersion v = obtenerVersion(cuestionarioId, numero);
+        Cuestionario c = obtener(cuestionarioId);
+        CuestionarioVersion v = c.version(numero)
+                .orElseThrow(() -> new CuestionarioNoEncontrado("Version inexistente"));
         if (v.getEstado() != EstadoVersion.PUBLICADA) {
             throw new VersionNoEditable("Solo se archiva la version publicada.");
         }
         v.archivar();
+        bitacora.registrar(AccionBitacora.VERSION_ARCHIVADA, OBJ, cuestionarioId,
+                "Archivo la version " + numero + " de \"" + c.getNombre() + "\"");
     }
 
     private void copiarContenido(CuestionarioVersion origen, CuestionarioVersion destino) {

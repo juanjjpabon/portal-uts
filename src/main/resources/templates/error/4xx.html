@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Solicitud no valida')}"></head>
+<body>
+
+<nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+
+<main class="container py-5 text-center">
+    <h1 class="display-6">No pudimos procesar tu solicitud</h1>
+    <p class="text-muted">
+        La direccion o los datos enviados no son validos. Revisa el enlace o intenta
+        nuevamente desde el inicio.
+    </p>
+    <a class="btn btn-outline-primary" th:href="@{/}">Ir al inicio</a>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+</body>
+</html>

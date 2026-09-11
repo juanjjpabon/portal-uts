@@ -1,5 +1,7 @@
 package co.edu.uts.portal.contenido.service;
 
+import co.edu.uts.portal.bitacora.domain.AccionBitacora;
+import co.edu.uts.portal.bitacora.service.BitacoraService;
 import co.edu.uts.portal.common.Slugs;
 import co.edu.uts.portal.contenido.domain.Categoria;
 import co.edu.uts.portal.contenido.repository.CategoriaRepository;
@@ -12,15 +14,19 @@ import java.util.List;
 
 /**
  * CRUD de categorias (HU-02, HU-18). Las mutaciones exigen ADMIN_FUNCIONAL (HU-17,
- * segunda capa sobre la regla de URL).
+ * segunda capa sobre la regla de URL). Cada cambio queda en la bitacora (HU-22).
  */
 @Service
 public class CategoriaService {
 
-    private final CategoriaRepository categoriaRepository;
+    private static final String OBJ = "Categoria";
 
-    public CategoriaService(CategoriaRepository categoriaRepository) {
+    private final CategoriaRepository categoriaRepository;
+    private final BitacoraService bitacora;
+
+    public CategoriaService(CategoriaRepository categoriaRepository, BitacoraService bitacora) {
         this.categoriaRepository = categoriaRepository;
+        this.bitacora = bitacora;
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +55,9 @@ public class CategoriaService {
     public Categoria crear(CategoriaForm form) {
         Categoria c = new Categoria(form.getNombre().trim(), slugUnico(form.getNombre(), null));
         aplicar(c, form);
-        return categoriaRepository.save(c);
+        categoriaRepository.save(c);
+        bitacora.registrar(AccionBitacora.CATEGORIA_CREADA, OBJ, c.getId(), "Creo la categoria \"" + c.getNombre() + "\"");
+        return c;
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -61,6 +69,8 @@ public class CategoriaService {
         }
         c.setNombre(form.getNombre().trim());
         aplicar(c, form);
+        bitacora.registrar(AccionBitacora.CATEGORIA_ACTUALIZADA, OBJ, id,
+                "Actualizo la categoria \"" + c.getNombre() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -73,6 +83,7 @@ public class CategoriaService {
                     "No se puede eliminar: la categoria tiene " + enUso + " recurso(s) asociado(s).");
         }
         categoriaRepository.delete(c);
+        bitacora.registrar(AccionBitacora.CATEGORIA_ELIMINADA, OBJ, id, "Elimino la categoria \"" + c.getNombre() + "\"");
     }
 
     private void aplicar(Categoria c, CategoriaForm form) {
