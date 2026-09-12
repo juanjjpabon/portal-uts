@@ -56,6 +56,15 @@ public class NivelResultado {
     @Column(name = "color", length = 20)
     private String color;
 
+    /**
+     * HU-23: cuantas veces la autoorientacion determino este nivel. Contador
+     * agregado, no un registro por persona (HU-13); se incrementa con un UPDATE
+     * atomico del repositorio, por eso no lleva setter. Una version nueva (copia)
+     * arranca siempre en 0 -- nunca se copia este valor entre versiones.
+     */
+    @Column(name = "veces_obtenido", nullable = false)
+    private int vecesObtenido = 0;
+
     @OneToMany(mappedBy = "nivel", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orden asc, id asc")
     private List<Recomendacion> recomendaciones = new ArrayList<>();
@@ -143,6 +152,10 @@ public class NivelResultado {
 
     public String getColor() {
         return color;
+    }
+
+    public int getVecesObtenido() {
+        return vecesObtenido;
     }
 
     public void setColor(String color) {

@@ -85,6 +85,18 @@ public class Recurso extends BaseAuditable {
     @Column(name = "publicado_en")
     private Instant publicadoEn;
 
+    // --- estadisticas agregadas (HU-23/HU-25): solo contadores, nunca un registro
+    // por visita o por voto. Se incrementan con un UPDATE atomico del repositorio;
+    // por eso no llevan setter.
+    @Column(name = "vistas", nullable = false)
+    private int vistas = 0;
+
+    @Column(name = "valoraciones_util", nullable = false)
+    private int valoracionesUtil = 0;
+
+    @Column(name = "valoraciones_no_util", nullable = false)
+    private int valoracionesNoUtil = 0;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "recurso_categoria",
@@ -227,6 +239,18 @@ public class Recurso extends BaseAuditable {
 
     public Set<Categoria> getCategorias() {
         return categorias;
+    }
+
+    public int getVistas() {
+        return vistas;
+    }
+
+    public int getValoracionesUtil() {
+        return valoracionesUtil;
+    }
+
+    public int getValoracionesNoUtil() {
+        return valoracionesNoUtil;
     }
 
     @Override

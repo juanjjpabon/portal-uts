@@ -8,6 +8,7 @@ import co.edu.uts.portal.cuestionario.domain.CuestionarioVersion;
 import co.edu.uts.portal.cuestionario.domain.EstadoVersion;
 import co.edu.uts.portal.cuestionario.domain.NivelResultado;
 import co.edu.uts.portal.cuestionario.repository.CuestionarioRepository;
+import co.edu.uts.portal.cuestionario.repository.NivelResultadoRepository;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,11 @@ import java.util.Map;
 
 /**
  * M03: sirve el contenido de la autoorientacion publica y calcula el resultado
- * usando la version PUBLICADA del cuestionario (HU-10). No persiste nada ni deja
- * rastro individual (HU-13): no toca BitacoraService ni guarda entidades.
+ * usando la version PUBLICADA del cuestionario (HU-10). No persiste ni deja rastro
+ * individual (HU-13): no toca BitacoraService ni guarda ninguna respuesta. La unica
+ * escritura es el contador agregado de HU-23 (NivelResultado.vecesObtenido), que no
+ * distingue quien respondio -- es una fila de configuracion compartida del
+ * cuestionario, no un registro por persona.
  */
 @Service
 public class AutoorientacionService {
@@ -28,12 +32,15 @@ public class AutoorientacionService {
             "Este resultado es orientativo y no constituye un diagnostico.";
 
     private final CuestionarioRepository cuestionarioRepository;
+    private final NivelResultadoRepository nivelResultadoRepository;
     private final CalculadoraNivel calculadora;
     private final ParametroService parametros;
 
     public AutoorientacionService(CuestionarioRepository cuestionarioRepository,
+                                  NivelResultadoRepository nivelResultadoRepository,
                                   CalculadoraNivel calculadora, ParametroService parametros) {
         this.cuestionarioRepository = cuestionarioRepository;
+        this.nivelResultadoRepository = nivelResultadoRepository;
         this.calculadora = calculadora;
         this.parametros = parametros;
     }
@@ -70,7 +77,7 @@ public class AutoorientacionService {
                 v.getNumero(), preguntas);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ResultadoAutoorientacion calcular(String slug, int numeroVersion, Map<Long, Long> respuestas) {
         CuestionarioVersion v = versionPublicada(slug);
         if (v.getNumero() != numeroVersion) {
@@ -79,6 +86,8 @@ public class AutoorientacionService {
         validar(v, respuestas);
 
         NivelResultado nivel = calculadora.nivelPara(v, respuestas);
+        nivelResultadoRepository.incrementarVecesObtenido(nivel.getId());   // HU-23: solo el contador agregado
+
         List<String> recomendaciones = nivel.getRecomendaciones().stream()
                 .map(r -> r.getTexto()).toList();
         List<ResultadoAutoorientacion.RutaVista> rutas = nivel.getRutas().stream()

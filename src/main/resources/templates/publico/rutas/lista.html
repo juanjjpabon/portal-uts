@@ -9,6 +9,8 @@
     <h1 class="h2">Rutas institucionales</h1>
     <p class="text-muted">A quién acudir dentro de la institución.</p>
 
+    <div class="alert alert-success py-2" th:if="${gracias}">¡Gracias por tu opinión!</div>
+
     <div th:if="${rutas.isEmpty()}" class="alert alert-info">Aún no hay rutas publicadas.</div>
     <th:block th:each="r : ${rutas}">
         <div th:replace="~{fragments/tarjetas :: tarjetaRuta(${r})}"></div>

@@ -4,6 +4,7 @@ import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
 import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -77,4 +78,36 @@ public interface RecursoRepository extends JpaRepository<Recurso, Long> {
     List<Recurso> buscarPublico(@Param("estado") EstadoPublicacion estado,
                                 @Param("contenido") TipoRecurso contenido,
                                 @Param("q") String q);
+
+    /** HU-23: contador de vista, atomico -- nunca se lee-modifica-escribe la entidad. */
+    @Modifying
+    @Query("update Recurso r set r.vistas = r.vistas + 1 where r.id = :id")
+    void incrementarVistas(@Param("id") Long id);
+
+    /** HU-25: voto de utilidad, atomico y sin ningun dato de quien vota. */
+    @Modifying
+    @Query("update Recurso r set r.valoracionesUtil = r.valoracionesUtil + 1 where r.id = :id")
+    void incrementarValoracionUtil(@Param("id") Long id);
+
+    @Modifying
+    @Query("update Recurso r set r.valoracionesNoUtil = r.valoracionesNoUtil + 1 where r.id = :id")
+    void incrementarValoracionNoUtil(@Param("id") Long id);
+
+    /** HU-23: contenidos publicados mas consultados, respetando el umbral anti-reidentificacion. */
+    @Query("""
+            select r from Recurso r
+            where r.tipo = :tipo and r.estado = :estado and r.vistas >= :minimo
+            order by r.vistas desc
+            """)
+    List<Recurso> masConsultados(@Param("tipo") TipoRecurso tipo, @Param("estado") EstadoPublicacion estado,
+                                 @Param("minimo") int minimo);
+
+    /** HU-23/HU-25: recursos con suficientes valoraciones para mostrarse (umbral anti-reidentificacion). */
+    @Query("""
+            select r from Recurso r
+            where r.estado = :estado and (r.valoracionesUtil + r.valoracionesNoUtil) >= :minimo
+            order by (r.valoracionesUtil + r.valoracionesNoUtil) desc
+            """)
+    List<Recurso> valoradosConSuficientesVotos(@Param("estado") EstadoPublicacion estado,
+                                               @Param("minimo") int minimo);
 }

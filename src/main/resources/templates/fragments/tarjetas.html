@@ -36,7 +36,21 @@
         </p>
         <a th:if="${r.urlCanal}" class="btn btn-sm btn-outline-primary" th:href="${r.urlCanal}"
            target="_blank" rel="noopener">Abrir canal</a>
+        <div th:replace="~{fragments/tarjetas :: valorar(${r})}"></div>
     </div>
+</div>
+
+<!-- HU-25: valoracion de utilidad, publica, sin dato personal, sin evitar el doble voto. -->
+<div th:fragment="valorar(r)" class="d-flex align-items-center gap-2 mt-2">
+    <span class="small text-muted">¿Te fue útil?</span>
+    <form method="post" th:action="@{|/valoraciones/${r.id}|}" class="d-inline mb-0">
+        <input type="hidden" name="util" value="true">
+        <button type="submit" class="btn btn-sm btn-outline-success">Sí</button>
+    </form>
+    <form method="post" th:action="@{|/valoraciones/${r.id}|}" class="d-inline mb-0">
+        <input type="hidden" name="util" value="false">
+        <button type="submit" class="btn btn-sm btn-outline-secondary">No</button>
+    </form>
 </div>
 
 </body>

@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,12 +60,17 @@ class PortalPublicoControllerTest {
     @Test
     void detalleDeContenidoPublicadoSeVe() throws Exception {
         Recurso r = new Recurso(TipoRecurso.CONTENIDO);
+        org.springframework.test.util.ReflectionTestUtils.setField(r, "id", 42L);
         r.setTitulo("Senales de alerta");
         r.setSlug("senales-de-alerta");
         r.setResumen("resumen");
         r.setCuerpo("cuerpo");
         when(servicio.contenido("senales-de-alerta")).thenReturn(r);
+
         mockMvc.perform(get("/contenidos/senales-de-alerta")).andExpect(status().isOk());
+
+        // HU-23: cada apertura del detalle cuenta como una vista (solo el contador agregado).
+        verify(servicio).registrarVista(eq(42L));
     }
 
     @Test

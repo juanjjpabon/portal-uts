@@ -10,6 +10,7 @@ import co.edu.uts.portal.cuestionario.domain.CuestionarioVersion;
 import co.edu.uts.portal.cuestionario.domain.NivelResultado;
 import co.edu.uts.portal.cuestionario.domain.Pregunta;
 import co.edu.uts.portal.cuestionario.repository.CuestionarioRepository;
+import co.edu.uts.portal.cuestionario.repository.NivelResultadoRepository;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,14 +26,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AutoorientacionServiceTest {
 
     private final CuestionarioRepository repo = mock(CuestionarioRepository.class);
+    private final NivelResultadoRepository nivelRepo = mock(NivelResultadoRepository.class);
     private final ParametroService parametros = mock(ParametroService.class);
     private final AutoorientacionService service =
-            new AutoorientacionService(repo, new CalculadoraNivel(), parametros);
+            new AutoorientacionService(repo, nivelRepo, new CalculadoraNivel(), parametros);
 
     private final AtomicLong seq = new AtomicLong(1);
     private Cuestionario cuestionario;
@@ -52,11 +55,13 @@ class AutoorientacionServiceTest {
         bajo.setPuntajeMax(1);
         bajo.setExplicacion("estas bien");
         bajo.agregarRecomendacion("Sigue asi");
+        id(bajo);
         NivelResultado alto = v.agregarNivel("Alto");
         alto.setPuntajeMin(2);
         alto.setPuntajeMax(3);
         alto.setExplicacion("busca apoyo");
         alto.agregarRecomendacion("Habla con bienestar");
+        id(alto);
         v.publicar(Instant.now());
 
         when(parametros.valor(any(), any())).thenReturn("aviso");
@@ -109,6 +114,11 @@ class AutoorientacionServiceTest {
         assertThat(r.nivelNombre()).isEqualTo("Alto");
         assertThat(r.explicacion()).isEqualTo("busca apoyo");
         assertThat(r.recomendaciones()).containsExactly("Habla con bienestar");
+
+        // HU-23: solo se incrementa el contador agregado del nivel obtenido, nada mas.
+        Long idNivelAlto = cuestionario.ultimaVersion().get().getNiveles().stream()
+                .filter(n -> n.getNombre().equals("Alto")).findFirst().orElseThrow().getId();
+        verify(nivelRepo).incrementarVecesObtenido(idNivelAlto);
     }
 
     @Test

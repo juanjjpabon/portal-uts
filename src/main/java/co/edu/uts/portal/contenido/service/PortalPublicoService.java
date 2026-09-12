@@ -60,6 +60,12 @@ public class PortalPublicoService {
                 .orElseThrow(() -> new ContenidoNoDisponible("Contenido no disponible: " + slug));
     }
 
+    /** HU-23: cuenta una vista. Contador agregado en el propio Recurso, sin registrar quien vio que. */
+    @Transactional
+    public void registrarVista(Long recursoId) {
+        recursoRepository.incrementarVistas(recursoId);
+    }
+
     /** HU-05: rutas institucionales publicadas. */
     @Transactional(readOnly = true)
     public List<Recurso> rutas() {

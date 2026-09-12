@@ -26,8 +26,12 @@ public class ContenidoPublicoController {
     }
 
     @GetMapping("/contenidos/{slug}")
-    public String detalle(@PathVariable String slug, Model model) {
-        model.addAttribute("contenido", servicio.contenido(slug));
+    public String detalle(@PathVariable String slug,
+                          @RequestParam(required = false) String gracias, Model model) {
+        var contenido = servicio.contenido(slug);
+        servicio.registrarVista(contenido.getId());   // HU-23: solo el contador, se cuenta cada apertura
+        model.addAttribute("contenido", contenido);
+        model.addAttribute("gracias", gracias != null);
         return "publico/contenidos/detalle";
     }
 }

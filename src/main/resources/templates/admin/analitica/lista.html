@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Analitica')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0">Estadísticas agregadas</h1>
+        <a class="btn btn-outline-secondary btn-sm" th:href="@{/admin/analitica/exportar.csv}">Exportar CSV</a>
+    </div>
+    <p class="text-muted">
+        Ninguna agrupación con menos de 5 registros se muestra aquí ni en el CSV
+        (umbral anti-reidentificación, HU-23/HU-24). No hay ningún registro individual
+        detrás de estos números: son contadores agregados, la autoorientación no
+        guarda intentos (HU-13).
+    </p>
+
+    <div th:if="${reporte.estaVacio()}" class="alert alert-info">
+        Aún no hay suficientes datos (mínimo 5 por grupo) para mostrar estadísticas.
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6" th:if="${!reporte.contenidosMasConsultados().isEmpty()}">
+            <h2 class="h5">Contenidos más consultados</h2>
+            <table class="table table-sm bg-white">
+                <thead><tr><th>Contenido</th><th class="text-end">Vistas</th></tr></thead>
+                <tbody>
+                <tr th:each="f : ${reporte.contenidosMasConsultados()}">
+                    <td th:text="${f.titulo()}">Título</td>
+                    <td class="text-end" th:text="${f.vistas()}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-6" th:if="${!reporte.autoorientacionPorNivel().isEmpty()}">
+            <h2 class="h5">Autoorientación por nivel de resultado</h2>
+            <table class="table table-sm bg-white">
+                <thead><tr><th>Cuestionario</th><th>Nivel</th><th class="text-end">Veces</th></tr></thead>
+                <tbody>
+                <tr th:each="f : ${reporte.autoorientacionPorNivel()}">
+                    <td th:text="${f.cuestionario()}">Cuestionario</td>
+                    <td th:text="${f.nivel()}">Nivel</td>
+                    <td class="text-end" th:text="${f.veces()}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-6" th:if="${!reporte.valoraciones().isEmpty()}">
+            <h2 class="h5">Valoraciones de utilidad</h2>
+            <table class="table table-sm bg-white">
+                <thead><tr><th>Recurso</th><th>Tipo</th><th class="text-end">Útil</th><th class="text-end">No útil</th></tr></thead>
+                <tbody>
+                <tr th:each="f : ${reporte.valoraciones()}">
+                    <td th:text="${f.titulo()}">Título</td>
+                    <td th:text="${f.tipo()}">Tipo</td>
+                    <td class="text-end" th:text="${f.util()}">0</td>
+                    <td class="text-end" th:text="${f.noUtil()}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

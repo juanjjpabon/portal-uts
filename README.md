@@ -18,6 +18,9 @@ Proyecto 65-2026-015. Spring Boot + Spring Security + PostgreSQL + Thymeleaf/Boo
 | HU-01 a HU-05 | Contenidos y rutas públicos, búsqueda (M01/M02) | Implementada |
 | HU-22 | Bitácora de cambios: visor global + todos los módulos conectados | Implementada |
 | HU-26 | Errores técnicos seguros | Implementada |
+| HU-14 / HU-15 | Contenido para docentes (M04, categoría de contenido) | Sin cambio de código; categoría **"Docentes"** creada e inactiva, a la espera del texto de la directora/CAE |
+| HU-23 / HU-24 | Estadísticas agregadas y exportación CSV (M07) | Implementada |
+| HU-25 | Valoración de utilidad (M07) | Implementada |
 
 HU-18 y HU-19 comparten el modelo genérico `Recurso` (`tipo` ∈ CONTENIDO / RUTA /
 CONTACTO, F-DC-125): una entidad, un repositorio, un servicio y un par de plantillas.
@@ -89,8 +92,24 @@ se calcula por bandas de puntaje `[min,max]` sobre la suma de las opciones elegi
 `ValidadorVersion` bloquea la publicación si faltan opciones, hay huecos/solapes de
 puntaje o algún nivel no tiene recomendación y ruta. Panel en `/admin/cuestionarios`.
 
-Pendiente del backlog: HU-14/HU-15 (contenido para docentes, M04), HU-23/HU-24
-(estadísticas agregadas y su exportación) y HU-25 (valoración de utilidad, M07).
+M07 (módulo `analitica`, + contadores en `contenido`/`cuestionario`): **sin ningún
+registro por evento** — todo son contadores `int` en entidades que ya existían,
+incrementados con un `UPDATE` atómico (nunca lectura-modificación-escritura):
+`Recurso.vistas` (cada apertura de `/contenidos/{slug}`), `Recurso.valoracionesUtil`/
+`.valoracionesNoUtil` (HU-25, botón "¿Te fue útil?" en el detalle de un contenido y en
+cada tarjeta de `/rutas`) y `NivelResultado.vecesObtenido` (HU-23, se suma cuando
+`AutoorientacionService.calcular` determina un nivel — sigue sin guardar la respuesta,
+HU-13). `AnaliticaService` arma el reporte de `/admin/analitica` y el CSV de
+`/admin/analitica/exportar.csv` (BOM UTF-8, formato "tidy" `seccion,nombre,indicador,valor`)
+con el **mismo filtro `>= 5`** en las tres secciones (contenidos más consultados,
+autoorientación por nivel, valoraciones) — una agrupación por debajo del umbral no
+sale ni en pantalla ni en el CSV, en ambos casos porque nunca se calcula, no porque se
+oculte después. El voto de HU-25 no identifica al visitante (sin cookie, sin sesión
+propia) y vuelve a la página de origen validando el header `Referer` contra una lista
+blanca de rutas propias, nunca redirigiendo a la URL cruda del encabezado. Migración `V8`.
+
+Pendiente del backlog: el **texto** de HU-14/HU-15 (la categoría y el resto de la
+infraestructura ya están listos, ver arriba).
 
 ## Requisitos
 
@@ -125,7 +144,7 @@ Pendiente del backlog: HU-14/HU-15 (contenido para docentes, M04), HU-23/HU-24
    ./mvnw spring-boot:run
    ```
 
-   Flyway crea el esquema (`V1`–`V7`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
+   Flyway crea el esquema (`V1`–`V8`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
    crea el usuario `admin.tecnico@uts.edu.co` con rol `ADMIN_TECNICO` usando
    `PORTAL_ADMIN_INICIAL_PASSWORD`.
 
@@ -144,7 +163,7 @@ SQL; ya se administra como cualquier otro.)*
 
 | Ruta | Acceso |
 |---|---|
-| `/`, `/contenidos/**`, `/rutas/**`, `/autoorientacion/**`, `/urgencia`, `/buscar` | Público |
+| `/`, `/contenidos/**`, `/rutas/**`, `/autoorientacion/**`, `/urgencia`, `/buscar`, `/valoraciones/**` | Público |
 | `/login`, `/logout` | Público |
 | `/admin` | Cualquier administrador autenticado |
 | `/admin/recursos/{contenidos\|rutas\|contactos}/**`, `/admin/categorias/**` | Solo `ADMIN_FUNCIONAL` |
@@ -169,7 +188,10 @@ y `BitacoraServiceTest` (HU-21/HU-22: anti-bloqueo, roles, auditoría),
 `RecursoServiceTest`, `CategoriaServiceTest`, `CuestionarioServiceTest` (HU-22: cada
 mutación audita la acción correcta), `BitacoraAdminControllerTest` (visor global y
 permisos), `PortalErrorAttributesTest` (HU-26: sin trace/exception/message, con
-referencia solo en `≥500`), `SlugsTest`. 96 pruebas en total.
+referencia solo en `≥500`), `AnaliticaServiceTest` y `AnaliticaAdminControllerTest`
+(HU-23/24: umbral `>=5`, CSV = mismas filas que el reporte), `ValoracionServiceTest`
+y `ValoracionPublicaControllerTest` (HU-25: solo en `PUBLICADO`, redirect por
+`Referer` con lista blanca), `SlugsTest`. 110 pruebas en total.
 
 ## Contraseña de BD en archivo local (opcional)
 
