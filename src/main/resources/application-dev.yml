@@ -12,6 +12,15 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
+  # Comodidad de desarrollo local (recargar plantillas/estaticos sin reiniciar).
+  # Antes estaba en application.yml y por eso tambien aplicaba en Render, donde
+  # solo cuesta memoria/CPU sin ningun beneficio (nadie edita plantillas ahi en caliente).
+  thymeleaf:
+    cache: false
+  web:
+    resources:
+      cache:
+        period: 0
 
 logging:
   level:

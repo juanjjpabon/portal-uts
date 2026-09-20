@@ -16,3 +16,17 @@ services:
           property: connectionString
       - key: PORTAL_ADMIN_INICIAL_PASSWORD
         sync: false
+      # Sin esto, application.yml activa "dev" tambien aqui (es el valor por
+      # defecto de spring.profiles.active cuando nada mas lo pisa): plantillas
+      # sin cache, SQL logueado dos veces (show-sql + logger DEBUG) y mas
+      # trabajo por request del necesario en un despliegue. "prod" solo hace
+      # que NO se active "dev"; usa los valores normales de application.yml.
+      - key: SPRING_PROFILES_ACTIVE
+        value: "prod"
+      # Limites acordes al plan free (512MB RAM, ~0.1 CPU compartida): los
+      # defaults de Spring (pool Hikari de 10 conexiones, 200 hilos de Tomcat)
+      # estan pensados para trafico real, no para esto.
+      - key: SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+        value: "3"
+      - key: SERVER_TOMCAT_THREADS_MAX
+        value: "20"
