@@ -21,30 +21,30 @@ EXPOSE 8080
 # contenedor sin aviso si se pasa), y muy poca CPU.
 # - MaxRAMPercentage en vez de -Xmx fijo: el JVM ve el limite del contenedor
 #   (cgroup) y calcula el heap sobre eso, no sobre la RAM del host.
-# - 45% de heap: con 60% Render reporto "Ran out of memory"; ya con "prod"
-#   activo (perfil corregido) y 50%, igual crasheo una vez mas (exit status 3,
-#   ExitOnOutOfMemoryError) unos 8 minutos despues de un arranque limpio. Lo de
-#   dev/thymeleaf ya estaba resuelto: lo que faltaba era margen para lo que
-#   vive FUERA del heap (ver los dos puntos siguientes), asi que se le quita
-#   mas espacio al heap para dárselo a eso.
-# - TieredStopAtLevel=1: usa solo el compilador JIT C1, nunca C2. C2 reserva
-#   memoria para codigo compilado (~240MB por defecto con tiered completo) y
-#   quema CPU compilando en caliente; con 0.1 CPU y trafico bajo esa
-#   optimizacion no se alcanza a aprovechar, solo cuesta memoria y arranque
-#   mas lento (posiblemente relacionado con el crash: mucha compilacion JIT
-#   de golpe justo cuando alguien empieza a navegar el portal).
-# - ReservedCodeCacheSize=64m: tope explicito al cache de codigo compilado,
-#   coherente con lo anterior.
-# - Xss256k: pila mas chica por hilo (default ~1MB). Entre Tomcat, Hikari y
-#   los hilos propios de la JVM son ~20-30 hilos; a 1MB c/u eso solo ya son
-#   20-30MB que esta app no necesita.
-# - MaxMetaspaceSize evita que el metaspace (fuera del heap: no lo cubre
-#   MaxRAMPercentage) crezca sin limite con las proxies/reflexion de Spring
-#   e Hibernate y empuje al contenedor por encima de los 512MB.
+# - Vamos en el tercer ajuste. Los dos anteriores fallaron distinto y eso
+#   dice algo: con 60% (y perfil "dev" + pools grandes) Render mataba el
+#   contenedor entero ("Ran out of memory"); ya con "prod" y pools chicos,
+#   con 50% crasheo a los ~8 min (exit status 3); con 45% crasheo MAS rapido,
+#   durante el arranque, y esta vez el log SI lo dice explicito: "Terminating
+#   due to java.lang.OutOfMemoryError: Java heap space". No es memoria del
+#   contenedor en general - es el heap mismo el que no alcanza. Bajarlo mas
+#   iba en la direccion equivocada. Ahora subimos el heap y en cambio le
+#   bajamos el tope a metaspace y code cache (que hasta ahora tenian mas
+#   margen del que parecen necesitar) para compensar sin volver a las 512MB
+#   totales del principio.
+# - MaxRAMPercentage=58: mas espacio de heap (~297MB) que en los dos intentos
+#   anteriores, para que la sesion de arranque (que es cuando esta cayendo)
+#   tenga margen real.
+# - MaxMetaspaceSize baja de 128m a 100m: sigue siendo suficiente para las
+#   proxies/reflexion de Spring e Hibernate, y libera heap.
+# - ReservedCodeCacheSize baja de 64m a 48m: con TieredStopAtLevel=1 (solo
+#   compilador C1) el codigo compilado ocupa bastante menos que eso.
+# - TieredStopAtLevel=1 y Xss256k: se mantienen del intento anterior, son
+#   ganancia neta pase lo que pase con el heap.
 # - UseSerialGC: recolector de una sola hebra, apropiado con poca CPU (los
 #   recolectores paralelos reservan hilos que aqui no hay para usar bien).
 # - ExitOnOutOfMemoryError: si igual se llega a quedar sin memoria, el JVM
 #   termina de una vez para que Render reinicie el contenedor limpio, en vez
 #   de quedar colgado en un estado a medias.
-ENV JAVA_OPTS="-XX:+UseSerialGC -XX:MaxRAMPercentage=45.0 -XX:MaxMetaspaceSize=128m -XX:TieredStopAtLevel=1 -XX:ReservedCodeCacheSize=64m -Xss256k -XX:+ExitOnOutOfMemoryError"
+ENV JAVA_OPTS="-XX:+UseSerialGC -XX:MaxRAMPercentage=58.0 -XX:MaxMetaspaceSize=100m -XX:TieredStopAtLevel=1 -XX:ReservedCodeCacheSize=48m -Xss256k -XX:+ExitOnOutOfMemoryError"
 CMD ["sh", "-c", "java $JAVA_OPTS -jar target/*.jar"]
