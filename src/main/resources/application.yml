@@ -3,6 +3,16 @@ spring:
     name: portal-uts
   profiles:
     active: dev
+  # Datasource generico, por variables de entorno independientes (host, puerto,
+  # nombre de base, usuario, contrasena). Se usa cuando el perfil "dev" NO esta
+  # activo (p. ej. despliegue), ya que application-dev.yml define los valores
+  # fijos de desarrollo local y los sobreescribe cuando "dev" si esta activo.
+  # En Render, DatabaseUrlEnvironmentPostProcessor arma esta URL solo a partir
+  # de la variable DATABASE_URL, sin necesitar host/puerto sueltos.
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:portal_uts}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
   thymeleaf:
     cache: false
   jpa:
@@ -21,7 +31,9 @@ spring:
         period: 0
 
 server:
-  port: 8080
+  # Render (y la mayoria de plataformas de hosting) asignan el puerto propio
+  # por la variable de entorno PORT; en local, sin esa variable, sigue siendo 8080.
+  port: ${PORT:8080}
   error:
     whitelabel:
       enabled: false

@@ -1,0 +1,18 @@
+databases:
+  - name: portal-uts-db
+    plan: free
+    databaseName: portal_uts
+    user: portal_uts
+
+services:
+  - type: web
+    name: portal-uts
+    runtime: docker
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: portal-uts-db
+          property: connectionString
+      - key: PORTAL_ADMIN_INICIAL_PASSWORD
+        sync: false
