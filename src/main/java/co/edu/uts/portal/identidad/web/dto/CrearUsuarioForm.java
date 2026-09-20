@@ -20,7 +20,7 @@ public class CrearUsuarioForm {
     private String correo;
 
     @NotBlank
-    @Size(min = 8, max = 72, message = "La contrasena inicial debe tener al menos 8 caracteres")
+    @Size(min = 8, max = 72, message = "La contraseña inicial debe tener al menos 8 caracteres")
     private String contrasena;
 
     private Set<NombreRol> roles = new LinkedHashSet<>();

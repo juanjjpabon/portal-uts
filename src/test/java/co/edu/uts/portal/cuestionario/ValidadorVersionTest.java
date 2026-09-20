@@ -80,7 +80,7 @@ class ValidadorVersionTest {
         nivel(v, "Alto", 3, 4, true, true);
 
         List<String> p = validador.problemas(v);
-        assertThat(p).anyMatch(s -> s.contains("recomendacion"));
+        assertThat(p).anyMatch(s -> s.contains("recomendación"));
         assertThat(p).anyMatch(s -> s.contains("ruta aplicable"));
     }
 

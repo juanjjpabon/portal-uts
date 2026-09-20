@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/comunes :: head('Autoorientacion')}"></head>
+<head th:replace="~{fragments/comunes :: head('Autoorientación')}"></head>
 <body>
 
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
 
 <main class="container py-5" style="max-width: 760px;">
-    <h1 class="h2">Autoorientacion</h1>
+    <h1 class="h2">Autoorientación</h1>
     <p class="lead">
-        Una herramienta breve, anonima y de reflexion personal. No guarda tus respuestas
-        ni genera un diagnostico.
+        Una herramienta breve, anónima y de reflexión personal. No guarda tus respuestas
+        ni genera un diagnóstico.
     </p>
 
     <div th:if="${temas.isEmpty()}" class="alert alert-info mt-4">
-        La autoorientacion no esta disponible por ahora.
+        La autoorientación no está disponible por ahora.
     </div>
 
     <div class="row g-3 mt-2">

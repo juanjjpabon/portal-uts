@@ -26,10 +26,10 @@
                 <input type="radio" class="form-check-input" required
                        th:field="*{respuestas[__${pr.id}__]}" th:value="${op.id}"
                        th:id="${'p' + pr.id + 'o' + op.id}">
-                <label class="form-check-label" th:for="${'p' + pr.id + 'o' + op.id}" th:text="${op.texto}">Opcion</label>
+                <label class="form-check-label" th:for="${'p' + pr.id + 'o' + op.id}" th:text="${op.texto}">Opción</label>
             </div>
             <p class="text-danger small mb-0" th:if="${faltantes != null and faltantes.contains(pr.id)}">
-                Selecciona una opcion.
+                Selecciona una opción.
             </p>
         </fieldset>
 

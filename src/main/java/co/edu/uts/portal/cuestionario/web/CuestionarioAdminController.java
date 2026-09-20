@@ -45,7 +45,7 @@ public class CuestionarioAdminController {
             return "admin/cuestionarios/formulario";
         }
         var c = cuestionarioService.crear(form);
-        ra.addFlashAttribute("ok", "Cuestionario creado. Ahora edita su version 1.");
+        ra.addFlashAttribute("ok", "Cuestionario creado. Ahora edita su versión 1.");
         return "redirect:/admin/cuestionarios/" + c.getId() + "/v/1";
     }
 
@@ -80,21 +80,21 @@ public class CuestionarioAdminController {
     @PostMapping("/{id}/versiones")
     public String nuevaVersion(@PathVariable Long id, RedirectAttributes ra) {
         int numero = cuestionarioService.crearNuevaVersion(id);
-        ra.addFlashAttribute("ok", "Version " + numero + " creada como copia de la anterior.");
+        ra.addFlashAttribute("ok", "Versión " + numero + " creada como copia de la anterior.");
         return "redirect:/admin/cuestionarios/" + id + "/v/" + numero;
     }
 
     @PostMapping("/{id}/v/{numero}/publicar")
     public String publicar(@PathVariable Long id, @PathVariable int numero, RedirectAttributes ra) {
         cuestionarioService.publicar(id, numero);
-        ra.addFlashAttribute("ok", "Version " + numero + " publicada.");
+        ra.addFlashAttribute("ok", "Versión " + numero + " publicada.");
         return "redirect:/admin/cuestionarios/" + id;
     }
 
     @PostMapping("/{id}/v/{numero}/archivar")
     public String archivar(@PathVariable Long id, @PathVariable int numero, RedirectAttributes ra) {
         cuestionarioService.archivar(id, numero);
-        ra.addFlashAttribute("ok", "Version " + numero + " archivada.");
+        ra.addFlashAttribute("ok", "Versión " + numero + " archivada.");
         return "redirect:/admin/cuestionarios/" + id;
     }
 }

@@ -20,7 +20,7 @@
         <input type="hidden" th:field="*{tipo}">
 
         <div class="mb-3">
-            <label class="form-label" th:text="${tipo.esContenido()} ? 'Titulo' : 'Nombre'">Titulo</label>
+            <label class="form-label" th:text="${tipo.esContenido()} ? 'Título' : 'Nombre'">Título</label>
             <input type="text" class="form-control" th:field="*{titulo}"
                    th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid'">
             <div class="invalid-feedback" th:errors="*{titulo}"></div>
@@ -63,25 +63,25 @@
                 <div class="invalid-feedback" th:errors="*{horario}"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Canal <span class="text-muted">(texto: linea, correo, oficina...)</span></label>
+                <label class="form-label">Canal <span class="text-muted">(texto: línea, correo, oficina...)</span></label>
                 <input type="text" class="form-control" th:field="*{canal}"
                        th:classappend="${#fields.hasErrors('canal')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{canal}"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label">URL del canal <span class="text-muted">(opcional, habilita el boton directo)</span></label>
+                <label class="form-label">URL del canal <span class="text-muted">(opcional, habilita el botón directo)</span></label>
                 <input type="url" class="form-control" th:field="*{urlCanal}" placeholder="https://...">
             </div>
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="urgente" th:field="*{urgente}">
-                <label class="form-check-label" for="urgente">Informacion para situaciones urgentes</label>
+                <label class="form-check-label" for="urgente">Información para situaciones urgentes</label>
             </div>
         </div>
 
         <!-- ===== Categorias (HU-02) ===== -->
         <div class="mb-3">
             <label class="form-label">
-                Categorias
+                Categorías
                 <span th:if="${tipo.esContenido()}" class="text-danger">*</span>
                 <span th:unless="${tipo.esContenido()}" class="text-muted">(opcional)</span>
             </label>
@@ -92,7 +92,7 @@
                     <label class="form-check-label" th:for="${'cat-' + c.id}" th:text="${c.nombre}"></label>
                 </div>
                 <p th:if="${categorias.isEmpty()}" class="text-muted small mb-0">
-                    No hay categorias. <a th:href="@{/admin/categorias/nueva}">Crear una</a>.
+                    No hay categorías. <a th:href="@{/admin/categorias/nueva}">Crear una</a>.
                 </p>
             </div>
             <div class="text-danger small" th:if="${#fields.hasErrors('categoriaIds')}" th:errors="*{categoriaIds}"></div>

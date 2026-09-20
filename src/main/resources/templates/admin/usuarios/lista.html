@@ -16,7 +16,7 @@
     <div class="table-responsive mt-3">
         <table class="table table-hover align-middle bg-white">
             <thead>
-            <tr><th>Nombre</th><th>Correo</th><th>Roles</th><th>Estado</th><th>Ultimo acceso</th><th></th></tr>
+            <tr><th>Nombre</th><th>Correo</th><th>Roles</th><th>Estado</th><th>Último acceso</th><th></th></tr>
             </thead>
             <tbody>
             <tr th:each="u : ${usuarios}">
@@ -30,7 +30,7 @@
                 <td>
                     <span class="badge" th:classappend="${u.activo} ? 'text-bg-success' : 'text-bg-secondary'"
                           th:text="${u.activo} ? 'Activo' : 'Inactivo'"></span>
-                    <span th:if="${u.debeCambiarClave}" class="badge text-bg-warning" title="Debe cambiar la contrasena">clave inicial</span>
+                    <span th:if="${u.debeCambiarClave}" class="badge text-bg-warning" title="Debe cambiar la contraseña">clave inicial</span>
                 </td>
                 <td class="small text-muted"
                     th:text="${u.ultimoAcceso != null}

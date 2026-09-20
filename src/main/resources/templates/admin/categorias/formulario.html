@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/comunes :: head('Categoria')}"></head>
+<head th:replace="~{fragments/comunes :: head('Categoría')}"></head>
 <body class="bg-light">
 
 <nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
 
 <main class="container py-4" style="max-width: 620px;">
-    <p class="mb-1"><a th:href="@{/admin/categorias}">&larr; Categorias</a></p>
-    <h1 class="h3" th:text="${form.id == null} ? 'Nueva categoria' : 'Editar categoria'">Categoria</h1>
+    <p class="mb-1"><a th:href="@{/admin/categorias}">&larr; Categorías</a></p>
+    <h1 class="h3" th:text="${form.id == null} ? 'Nueva categoría' : 'Editar categoría'">Categoría</h1>
 
     <form method="post" th:object="${form}"
           th:action="${form.id == null} ? @{/admin/categorias} : @{|/admin/categorias/${form.id}|}">
@@ -19,7 +19,7 @@
             <div class="invalid-feedback" th:errors="*{nombre}"></div>
         </div>
         <div class="mb-3">
-            <label class="form-label">Descripcion <span class="text-muted">(opcional)</span></label>
+            <label class="form-label">Descripción <span class="text-muted">(opcional)</span></label>
             <textarea class="form-control" rows="2" th:field="*{descripcion}"></textarea>
         </div>
         <div class="row g-3">

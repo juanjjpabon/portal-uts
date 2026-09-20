@@ -6,7 +6,7 @@
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
 
 <main class="container py-5" style="max-width: 680px;">
-    <p class="mb-1"><a th:href="@{/autoorientacion}">&larr; Autoorientacion</a></p>
+    <p class="mb-1"><a th:href="@{/autoorientacion}">&larr; Autoorientación</a></p>
     <h1 class="h3" th:text="${tema.nombre}">Tema</h1>
 
     <div th:if="${error}" class="alert alert-warning py-2" th:text="${error}"></div>
@@ -19,7 +19,7 @@
             <input type="hidden" name="aviso" value="leido">
             <div class="form-check my-3">
                 <input type="checkbox" class="form-check-input" id="leido" required>
-                <label class="form-check-label" for="leido">He leido y entiendo este aviso.</label>
+                <label class="form-check-label" for="leido">He leído y entiendo este aviso.</label>
             </div>
             <button type="submit" class="btn btn-primary">Comenzar</button>
             <a class="btn btn-link" th:href="@{/autoorientacion}">Cancelar</a>

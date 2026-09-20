@@ -24,8 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AutoorientacionController {
 
     private static final String AVISO_PREVIO_DEFAULT =
-            "La autoorientacion es una herramienta de reflexion personal y anonima. "
-                    + "No guarda tus respuestas, no genera un diagnostico y no reemplaza la atencion de un profesional.";
+            "La autoorientación es una herramienta de reflexión personal y anónima. "
+                    + "No guarda tus respuestas, no genera un diagnóstico y no reemplaza la atención de un profesional.";
 
     private final AutoorientacionService servicio;
     private final ParametroService parametros;

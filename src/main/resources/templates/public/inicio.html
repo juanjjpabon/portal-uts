@@ -6,31 +6,32 @@
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
 
 <main class="container py-5">
-    <h1>Portal de orientacion psicosocial</h1>
+    <h1>Portal de orientación psicosocial</h1>
     <p class="lead">
-        Informacion preventiva y rutas institucionales de la UTS, de acceso libre.
+        Información preventiva y rutas institucionales de la UTS, de acceso libre.
     </p>
 
-    <div class="row g-3 mt-2">
+    <p class="text-uppercase text-muted small fw-semibold mt-4 mb-2">¿Qué quieres hacer hoy?</p>
+    <div class="row g-3">
         <div class="col-sm-6 col-lg-3">
             <div class="card h-100"><div class="card-body d-flex flex-column">
                 <h2 class="h5">Contenidos</h2>
-                <p class="small text-muted flex-grow-1">Informacion preventiva por categorias.</p>
+                <p class="small text-muted flex-grow-1">Información preventiva por categorías.</p>
                 <a class="btn btn-outline-primary" th:href="@{/contenidos}">Explorar</a>
             </div></div>
         </div>
         <div class="col-sm-6 col-lg-3">
             <div class="card h-100"><div class="card-body d-flex flex-column">
                 <h2 class="h5">Rutas y contactos</h2>
-                <p class="small text-muted flex-grow-1">A quien acudir dentro de la institucion.</p>
+                <p class="small text-muted flex-grow-1">A quién acudir dentro de la institución.</p>
                 <a class="btn btn-outline-primary" th:href="@{/rutas}">Ver rutas</a>
             </div></div>
         </div>
         <div class="col-sm-6 col-lg-3">
             <div class="card h-100"><div class="card-body d-flex flex-column">
-                <h2 class="h5">Autoorientacion</h2>
+                <h2 class="h5">Autoorientación</h2>
                 <p class="small text-muted flex-grow-1">
-                    Un ejercicio breve y anonimo de reflexion. No guarda tus respuestas.
+                    Un ejercicio breve y anónimo de reflexión. No guarda tus respuestas.
                 </p>
                 <a class="btn btn-primary" th:href="@{/autoorientacion}">Comenzar</a>
             </div></div>
@@ -39,15 +40,15 @@
             <div class="card h-100 border-danger"><div class="card-body d-flex flex-column">
                 <h2 class="h5 text-danger">Ayuda urgente</h2>
                 <p class="small text-muted flex-grow-1">
-                    Que hacer y a quien acudir en una situacion urgente.
+                    Qué hacer y a quién acudir en una situación urgente.
                 </p>
-                <a class="btn btn-outline-danger" th:href="@{/urgencia}">Ver informacion urgente</a>
+                <a class="btn btn-outline-danger" th:href="@{/urgencia}">Ver información urgente</a>
             </div></div>
         </div>
     </div>
 
     <div th:if="${!ultimosContenidos.isEmpty()}">
-        <h2 class="h4 mt-5">Ultimos contenidos</h2>
+        <h2 class="h4 mt-5">Últimos contenidos</h2>
         <div class="row g-3">
             <div class="col-md-4" th:each="r : ${ultimosContenidos}">
                 <div th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></div>

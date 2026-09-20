@@ -35,7 +35,7 @@ public class ParametroAdminController {
         int cambios = parametroService.guardar(form.getValores());
         ra.addFlashAttribute("ok", cambios == 0
                 ? "Sin cambios."
-                : cambios + (cambios == 1 ? " parametro actualizado." : " parametros actualizados."));
+                : cambios + (cambios == 1 ? " parámetro actualizado." : " parámetros actualizados."));
         return "redirect:/admin/parametros";
     }
 }

@@ -18,7 +18,7 @@
             <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Version publicada</th>
+                <th>Versión publicada</th>
                 <th>Versiones</th>
                 <th>Activo</th>
                 <th class="text-end">Acciones</th>
@@ -26,7 +26,7 @@
             </thead>
             <tbody>
             <tr th:if="${cuestionarios.isEmpty()}">
-                <td colspan="5" class="text-center text-muted py-4">Aun no hay cuestionarios.</td>
+                <td colspan="5" class="text-center text-muted py-4">Aún no hay cuestionarios.</td>
             </tr>
             <tr th:each="c : ${cuestionarios}">
                 <td>
@@ -41,7 +41,7 @@
                 <td th:text="${c.versiones.size()}">0</td>
                 <td>
                     <span class="badge" th:classappend="${c.activo} ? 'text-bg-success' : 'text-bg-secondary'"
-                          th:text="${c.activo} ? 'Si' : 'No'"></span>
+                          th:text="${c.activo} ? 'Sí' : 'No'"></span>
                 </td>
                 <td class="text-end text-nowrap">
                     <a class="btn btn-sm btn-outline-secondary" th:href="@{|/admin/cuestionarios/${c.id}/editar|}">Datos</a>

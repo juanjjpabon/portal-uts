@@ -22,7 +22,7 @@
 <div th:fragment="tarjetaRuta(r)" class="card mb-2">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start">
-            <h3 class="h6 mb-1" th:text="${r.titulo}">Titulo</h3>
+            <h3 class="h6 mb-1" th:text="${r.titulo}">Título</h3>
             <span th:if="${r.urgente}" class="badge text-bg-danger">Urgente</span>
         </div>
         <p class="small mb-1">
@@ -31,8 +31,8 @@
             <strong>Canal:</strong> <span th:text="${r.canal}"></span>
         </p>
         <p class="text-muted small mb-2" th:if="${r.actualizadoEn != null}"
-           th:text="'Ultima revision: ' + ${#temporals.format(r.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
-            Ultima revision
+           th:text="'Última revisión: ' + ${#temporals.format(r.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
+            Última revisión
         </p>
         <a th:if="${r.urlCanal}" class="btn btn-sm btn-outline-primary" th:href="${r.urlCanal}"
            target="_blank" rel="noopener">Abrir canal</a>

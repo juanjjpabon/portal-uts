@@ -25,10 +25,10 @@
             <div class="invalid-feedback" th:errors="*{correo}"></div>
         </div>
         <div class="mb-3">
-            <label class="form-label">Contrasena inicial</label>
+            <label class="form-label">Contraseña inicial</label>
             <input type="text" class="form-control" th:field="*{contrasena}"
                    th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'">
-            <div class="form-text">Minimo 8 caracteres. El usuario debera cambiarla al ingresar.</div>
+            <div class="form-text">Mínimo 8 caracteres. El usuario deberá cambiarla al ingresar.</div>
             <div class="invalid-feedback" th:errors="*{contrasena}"></div>
         </div>
         <div class="mb-3">

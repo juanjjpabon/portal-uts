@@ -20,7 +20,7 @@ public class ValidadorVersion {
         List<String> p = new ArrayList<>();
 
         if (v.getPreguntas().isEmpty()) {
-            p.add("La version no tiene preguntas.");
+            p.add("La versión no tiene preguntas.");
         }
         for (Pregunta pr : v.getPreguntas()) {
             if (pr.getOpciones().size() < 2) {
@@ -33,13 +33,13 @@ public class ValidadorVersion {
         }
         for (NivelResultado n : v.getNiveles()) {
             if (n.getPuntajeMin() > n.getPuntajeMax()) {
-                p.add("El nivel \"" + n.getNombre() + "\" tiene el puntaje minimo mayor que el maximo.");
+                p.add("El nivel \"" + n.getNombre() + "\" tiene el puntaje mínimo mayor que el máximo.");
             }
             if (n.getExplicacion() == null || n.getExplicacion().isBlank()) {
-                p.add("El nivel \"" + n.getNombre() + "\" no tiene explicacion (HU-11).");
+                p.add("El nivel \"" + n.getNombre() + "\" no tiene explicación (HU-11).");
             }
             if (n.getRecomendaciones().isEmpty()) {
-                p.add("El nivel \"" + n.getNombre() + "\" necesita al menos una recomendacion (HU-12).");
+                p.add("El nivel \"" + n.getNombre() + "\" necesita al menos una recomendación (HU-12).");
             }
             if (n.getRutas().isEmpty()) {
                 p.add("El nivel \"" + n.getNombre() + "\" necesita al menos una ruta aplicable (HU-12).");
@@ -63,11 +63,11 @@ public class ValidadorVersion {
                 .toList();
 
         if (ordenados.get(0).getPuntajeMin() > 0) {
-            p.add("Ningun nivel cubre el puntaje 0.");
+            p.add("Ningún nivel cubre el puntaje 0.");
         }
         NivelResultado ultimo = ordenados.get(ordenados.size() - 1);
         if (ultimo.getPuntajeMax() < maxPosible) {
-            p.add("Ningun nivel cubre el puntaje maximo posible (" + maxPosible + ").");
+            p.add("Ningún nivel cubre el puntaje máximo posible (" + maxPosible + ").");
         }
         for (int i = 1; i < ordenados.size(); i++) {
             int finAnterior = ordenados.get(i - 1).getPuntajeMax();

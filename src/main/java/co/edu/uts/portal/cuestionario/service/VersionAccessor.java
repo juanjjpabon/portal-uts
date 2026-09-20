@@ -24,7 +24,7 @@ public class VersionAccessor {
                 .orElseThrow(() -> new CuestionarioNoEncontrado(
                         "Cuestionario " + cuestionarioId + " version " + numero + " no existe"));
         if (!v.esEditable()) {
-            throw new VersionNoEditable("La version " + numero + " esta "
+            throw new VersionNoEditable("La versión " + numero + " está "
                     + v.getEstado().getEtiqueta().toLowerCase() + " y no se puede modificar.");
         }
         return v;

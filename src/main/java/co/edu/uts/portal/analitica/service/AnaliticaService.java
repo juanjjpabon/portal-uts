@@ -57,10 +57,10 @@ public class AnaliticaService {
         csv.append("seccion,nombre,indicador,valor\r\n");
 
         for (var f : r.contenidosMasConsultados()) {
-            fila(csv, "Contenidos mas consultados", f.titulo(), "vistas", f.vistas());
+            fila(csv, "Contenidos más consultados", f.titulo(), "vistas", f.vistas());
         }
         for (var f : r.autoorientacionPorNivel()) {
-            fila(csv, "Autoorientacion por nivel", f.cuestionario() + " - " + f.nivel(), "veces", f.veces());
+            fila(csv, "Autoorientación por nivel", f.cuestionario() + " - " + f.nivel(), "veces", f.veces());
         }
         for (var f : r.valoraciones()) {
             fila(csv, "Valoraciones de utilidad", f.titulo(), "util", f.util());

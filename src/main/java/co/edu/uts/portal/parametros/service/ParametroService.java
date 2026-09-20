@@ -69,7 +69,7 @@ public class ParametroService {
                 p.setValor(nuevo);
                 cambios++;
                 bitacora.registrar(AccionBitacora.PARAMETRO_ACTUALIZADO, OBJ, p.getId(),
-                        "Actualizo el valor de \"" + p.getClave() + "\"");
+                        "Actualizó el valor de \"" + p.getClave() + "\"");
             }
         }
         return cambios;

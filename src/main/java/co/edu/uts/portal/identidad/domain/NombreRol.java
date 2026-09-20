@@ -9,10 +9,10 @@ package co.edu.uts.portal.identidad.domain;
 public enum NombreRol {
 
     ADMIN_FUNCIONAL("Administrador funcional",
-            "Gestiona contenidos, categorias, rutas, contactos, cuestionarios, parametros y analitica."),
+            "Gestiona contenidos, categorías, rutas, contactos, cuestionarios, parámetros y analítica."),
 
-    ADMIN_TECNICO("Administrador tecnico",
-            "Gestiona usuarios y roles, bitacora y configuracion tecnica del portal.");
+    ADMIN_TECNICO("Administrador técnico",
+            "Gestiona usuarios y roles, bitácora y configuración técnica del portal.");
 
     private final String etiqueta;
     private final String descripcion;

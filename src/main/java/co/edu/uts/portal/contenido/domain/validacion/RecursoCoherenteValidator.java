@@ -26,7 +26,7 @@ public class RecursoCoherenteValidator implements ConstraintValidator<RecursoCoh
                 ok &= exigir(ctx, r.getResumen(), "resumen", "El resumen es obligatorio para un contenido");
                 ok &= exigir(ctx, r.getCuerpo(), "cuerpo", "El cuerpo es obligatorio para un contenido");
                 if (!r.tieneCategorias()) {
-                    violacion(ctx, "categoriaIds", "Selecciona al menos una categoria");
+                    violacion(ctx, "categoriaIds", "Selecciona al menos una categoría");
                     ok = false;
                 }
             }

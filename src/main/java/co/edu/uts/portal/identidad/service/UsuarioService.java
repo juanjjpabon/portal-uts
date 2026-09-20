@@ -71,7 +71,7 @@ public class UsuarioService {
         usuarioRepository.save(u);
 
         bitacora.registrar(AccionBitacora.USUARIO_CREADO, OBJ, u.getId(),
-                "Creo el usuario " + correo
+                "Creó el usuario " + correo
                         + (form.getRoles().isEmpty() ? " sin roles" : " con rol(es) " + nombres(form.getRoles())));
         return u;
     }
@@ -88,7 +88,7 @@ public class UsuarioService {
         u.setNombreCompleto(form.getNombreCompleto().trim());
         u.setCorreo(correo);
         bitacora.registrar(AccionBitacora.USUARIO_ACTUALIZADO, OBJ, id,
-                "Actualizo los datos de " + correo);
+                "Actualizó los datos de " + correo);
     }
 
     @Transactional
@@ -107,22 +107,22 @@ public class UsuarioService {
 
         if (aQuitar.contains(NombreRol.ADMIN_TECNICO)) {
             if (esUsuarioActual(u)) {
-                throw new OperacionInvalida("No puedes quitarte a ti mismo el rol de administrador tecnico.");
+                throw new OperacionInvalida("No puedes quitarte a ti mismo el rol de administrador técnico.");
             }
             if (u.isActivo() && usuarioRepository.contarActivosConRol(NombreRol.ADMIN_TECNICO) <= 1) {
-                throw new OperacionInvalida("Debe quedar al menos un administrador tecnico activo.");
+                throw new OperacionInvalida("Debe quedar al menos un administrador técnico activo.");
             }
         }
 
         for (NombreRol nr : aAgregar) {
             u.agregarRol(rol(nr));
             bitacora.registrar(AccionBitacora.ROL_ASIGNADO, OBJ, id,
-                    "Asigno el rol " + nr.name() + " a " + u.getCorreo());
+                    "Asignó el rol " + nr.name() + " a " + u.getCorreo());
         }
         for (NombreRol nr : aQuitar) {
             rolRepository.findByNombre(nr).ifPresent(u::quitarRol);
             bitacora.registrar(AccionBitacora.ROL_REVOCADO, OBJ, id,
-                    "Revoco el rol " + nr.name() + " a " + u.getCorreo());
+                    "Revocó el rol " + nr.name() + " a " + u.getCorreo());
         }
     }
 
@@ -138,12 +138,12 @@ public class UsuarioService {
             }
             if (u.tieneRol(NombreRol.ADMIN_TECNICO)
                     && usuarioRepository.contarActivosConRol(NombreRol.ADMIN_TECNICO) <= 1) {
-                throw new OperacionInvalida("Debe quedar al menos un administrador tecnico activo.");
+                throw new OperacionInvalida("Debe quedar al menos un administrador técnico activo.");
             }
         }
         u.setActivo(activo);
         bitacora.registrar(activo ? AccionBitacora.USUARIO_ACTIVADO : AccionBitacora.USUARIO_DESACTIVADO,
-                OBJ, id, (activo ? "Activo" : "Desactivo") + " la cuenta de " + u.getCorreo());
+                OBJ, id, (activo ? "Activó" : "Desactivó") + " la cuenta de " + u.getCorreo());
     }
 
     @Transactional
@@ -151,12 +151,12 @@ public class UsuarioService {
         Usuario u = obtener(id);
         u.establecerContrasena(passwordEncoder.encode(nueva), true);
         bitacora.registrar(AccionBitacora.CONTRASENA_RESTABLECIDA, OBJ, id,
-                "Restablecio la contrasena de " + u.getCorreo());
+                "Restableció la contraseña de " + u.getCorreo());
     }
 
     private Rol rol(NombreRol nombre) {
         return rolRepository.findByNombre(nombre)
-                .orElseThrow(() -> new OperacionInvalida("El rol " + nombre + " no esta configurado."));
+                .orElseThrow(() -> new OperacionInvalida("El rol " + nombre + " no está configurado."));
     }
 
     private boolean esUsuarioActual(Usuario u) {

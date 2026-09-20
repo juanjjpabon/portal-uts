@@ -62,7 +62,7 @@ public class PreguntaAdminController {
     public String crearOpcion(@PathVariable Long id, @PathVariable int numero, @PathVariable Long preguntaId,
                               @Valid @ModelAttribute OpcionForm form, BindingResult errores, RedirectAttributes ra) {
         if (errores.hasErrors()) {
-            ra.addFlashAttribute("error", "Revisa el texto y el valor de la opcion.");
+            ra.addFlashAttribute("error", "Revisa el texto y el valor de la opción.");
         } else {
             preguntaService.agregarOpcion(id, numero, preguntaId, form);
             ra.addFlashAttribute("ok", "Opcion agregada.");
@@ -75,7 +75,7 @@ public class PreguntaAdminController {
                                    @PathVariable Long opcionId, @Valid @ModelAttribute OpcionForm form,
                                    BindingResult errores, RedirectAttributes ra) {
         if (errores.hasErrors()) {
-            ra.addFlashAttribute("error", "Revisa el texto y el valor de la opcion.");
+            ra.addFlashAttribute("error", "Revisa el texto y el valor de la opción.");
         } else {
             preguntaService.actualizarOpcion(id, numero, preguntaId, opcionId, form);
             ra.addFlashAttribute("ok", "Opcion actualizada.");

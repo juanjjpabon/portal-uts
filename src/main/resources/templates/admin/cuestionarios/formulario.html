@@ -18,7 +18,7 @@
             <div class="invalid-feedback" th:errors="*{nombre}"></div>
         </div>
         <div class="mb-3">
-            <label class="form-label">Descripcion <span class="text-muted">(opcional)</span></label>
+            <label class="form-label">Descripción <span class="text-muted">(opcional)</span></label>
             <textarea class="form-control" rows="2" th:field="*{descripcion}"></textarea>
         </div>
         <div class="form-check mb-3">
@@ -28,7 +28,7 @@
         <button type="submit" class="btn btn-primary">Guardar</button>
         <a class="btn btn-link" th:href="@{/admin/cuestionarios}">Cancelar</a>
         <p class="small text-muted mt-3" th:if="${form.id == null}">
-            Al crear el cuestionario se genera automaticamente su version 1 en borrador.
+            Al crear el cuestionario se genera automáticamente su versión 1 en borrador.
         </p>
     </form>
 </main>

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UrgenciaController {
 
     private static final String MENSAJE_DEFAULT =
-            "Si tu o alguien mas esta en peligro inmediato, comunicate con la linea de emergencias 123 "
-                    + "o acude al servicio de urgencias mas cercano.";
+            "Si tú o alguien más está en peligro inmediato, comunícate con la línea de emergencias 123 "
+                    + "o acude al servicio de urgencias más cercano.";
 
     private final ParametroService parametros;
 

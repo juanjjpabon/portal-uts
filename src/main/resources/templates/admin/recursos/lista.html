@@ -25,13 +25,13 @@
         </div>
         <div class="col-sm-3">
             <select name="categoria" class="form-select">
-                <option value="">Todas las categorias</option>
+                <option value="">Todas las categorías</option>
                 <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"
                         th:selected="${c.id == filtroCategoria}"></option>
             </select>
         </div>
         <div class="col-sm-4">
-            <input type="text" name="q" class="form-control" placeholder="Buscar por titulo o dependencia"
+            <input type="text" name="q" class="form-control" placeholder="Buscar por título o dependencia"
                    th:value="${filtroTexto}">
         </div>
         <div class="col-sm-2 d-grid">
@@ -43,8 +43,8 @@
         <table class="table table-hover align-middle bg-white">
             <thead>
             <tr>
-                <th>Titulo</th>
-                <th th:if="${tipo.esContenido()}">Categorias</th>
+                <th>Título</th>
+                <th th:if="${tipo.esContenido()}">Categorías</th>
                 <th th:unless="${tipo.esContenido()}">Dependencia</th>
                 <th th:unless="${tipo.esContenido()}">Canal</th>
                 <th th:unless="${tipo.esContenido()}">Urgente</th>
@@ -58,7 +58,7 @@
                 <td colspan="7" class="text-center text-muted py-4">Sin registros.</td>
             </tr>
             <tr th:each="r : ${recursos}">
-                <td th:text="${r.titulo}">Titulo</td>
+                <td th:text="${r.titulo}">Título</td>
                 <td th:if="${tipo.esContenido()}">
                     <span class="badge text-bg-light me-1" th:each="c : ${r.categorias}" th:text="${c.nombre}"></span>
                 </td>

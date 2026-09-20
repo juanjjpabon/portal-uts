@@ -29,7 +29,7 @@ import java.util.Map;
 public class AutoorientacionService {
 
     private static final String AVISO_NO_DIAGNOSTICO_DEFAULT =
-            "Este resultado es orientativo y no constituye un diagnostico.";
+            "Este resultado es orientativo y no constituye un diagnóstico.";
 
     private final CuestionarioRepository cuestionarioRepository;
     private final NivelResultadoRepository nivelResultadoRepository;

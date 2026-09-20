@@ -14,7 +14,7 @@
            th:href="@{/contenidos}">Todas</a>
         <a class="btn btn-sm" th:each="c : ${categorias}"
            th:classappend="${c.slug == categoriaActiva} ? 'btn-primary' : 'btn-outline-secondary'"
-           th:href="@{/contenidos(categoria=${c.slug})}" th:text="${c.nombre}">Categoria</a>
+           th:href="@{/contenidos(categoria=${c.slug})}" th:text="${c.nombre}">Categoría</a>
     </div>
 
     <div th:if="${contenidos.isEmpty()}" class="alert alert-info">

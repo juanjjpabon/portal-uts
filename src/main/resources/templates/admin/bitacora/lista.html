@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/comunes :: head('Bitacora')}"></head>
+<head th:replace="~{fragments/comunes :: head('Bitácora')}"></head>
 <body class="bg-light">
 
 <nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
@@ -56,7 +56,7 @@
         </table>
     </div>
 
-    <nav th:if="${registros.totalPages > 1}" aria-label="Paginacion">
+    <nav th:if="${registros.totalPages > 1}" aria-label="Paginación">
         <ul class="pagination pagination-sm">
             <li class="page-item" th:classappend="${!registros.hasPrevious()} ? 'disabled'">
                 <a class="page-link"

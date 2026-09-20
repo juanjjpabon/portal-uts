@@ -83,8 +83,8 @@ public class CuestionarioService {
     public CuestionarioVersion obtenerVersionEditable(Long cuestionarioId, int numero) {
         CuestionarioVersion v = obtenerVersion(cuestionarioId, numero);
         if (!v.esEditable()) {
-            throw new VersionNoEditable("La version " + numero + " esta " + v.getEstado().getEtiqueta().toLowerCase()
-                    + " y no se puede modificar. Crea una version nueva.");
+            throw new VersionNoEditable("La versión " + numero + " está " + v.getEstado().getEtiqueta().toLowerCase()
+                    + " y no se puede modificar. Crea una versión nueva.");
         }
         return v;
     }
@@ -103,7 +103,7 @@ public class CuestionarioService {
         c.nuevaVersionVacia();               // version 1, BORRADOR
         cuestionarioRepository.save(c);
         bitacora.registrar(AccionBitacora.CUESTIONARIO_CREADO, OBJ, c.getId(),
-                "Creo el cuestionario \"" + c.getNombre() + "\"");
+                "Creó el cuestionario \"" + c.getNombre() + "\"");
         return c;
     }
 
@@ -128,7 +128,7 @@ public class CuestionarioService {
         c.setDescripcion(form.getDescripcion());
         c.setActivo(form.isActivo());
         bitacora.registrar(AccionBitacora.CUESTIONARIO_ACTUALIZADO, OBJ, id,
-                "Actualizo los datos de \"" + c.getNombre() + "\"");
+                "Actualizó los datos de \"" + c.getNombre() + "\"");
     }
 
     /** "Un cambio genera una nueva version": copia la ultima version a un BORRADOR nuevo. */
@@ -139,13 +139,13 @@ public class CuestionarioService {
         CuestionarioVersion origen = c.ultimaVersion()
                 .orElseThrow(() -> new CuestionarioNoEncontrado("El cuestionario no tiene versiones"));
         if (origen.esEditable()) {
-            throw new VersionNoEditable("Ya existe una version en borrador (v" + origen.getNumero() + ").");
+            throw new VersionNoEditable("Ya existe una versión en borrador (v" + origen.getNumero() + ").");
         }
         CuestionarioVersion destino = c.nuevaVersionVacia();
         copiarContenido(origen, destino);
         cuestionarioRepository.save(c);
         bitacora.registrar(AccionBitacora.VERSION_CREADA, OBJ, cuestionarioId,
-                "Creo la version " + destino.getNumero() + " de \"" + c.getNombre() + "\" (copia de la v"
+                "Creó la versión " + destino.getNumero() + " de \"" + c.getNombre() + "\" (copia de la v"
                         + origen.getNumero() + ")");
         return destino.getNumero();
     }
@@ -157,22 +157,22 @@ public class CuestionarioService {
         CuestionarioVersion v = c.version(numero)
                 .orElseThrow(() -> new CuestionarioNoEncontrado("Version inexistente"));
         if (v.getEstado() != EstadoVersion.BORRADOR) {
-            throw new VersionNoEditable("Solo se publica una version en borrador.");
+            throw new VersionNoEditable("Solo se publica una versión en borrador.");
         }
         List<String> problemas = validador.problemas(v);
         if (!problemas.isEmpty()) {
-            throw new VersionNoEditable("La version tiene " + problemas.size()
+            throw new VersionNoEditable("La versión tiene " + problemas.size()
                     + " problema(s) sin resolver; corrige antes de publicar.");
         }
         c.versionPublicada().ifPresent(anterior -> {
             anterior.archivar();
             bitacora.registrar(AccionBitacora.VERSION_ARCHIVADA, OBJ, cuestionarioId,
-                    "Archivo la version " + anterior.getNumero() + " de \"" + c.getNombre()
+                    "Archivó la versión " + anterior.getNumero() + " de \"" + c.getNombre()
                             + "\" al publicar la v" + numero);
         });
         v.publicar(Instant.now());
         bitacora.registrar(AccionBitacora.VERSION_PUBLICADA, OBJ, cuestionarioId,
-                "Publico la version " + numero + " de \"" + c.getNombre() + "\"");
+                "Publicó la versión " + numero + " de \"" + c.getNombre() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -182,11 +182,11 @@ public class CuestionarioService {
         CuestionarioVersion v = c.version(numero)
                 .orElseThrow(() -> new CuestionarioNoEncontrado("Version inexistente"));
         if (v.getEstado() != EstadoVersion.PUBLICADA) {
-            throw new VersionNoEditable("Solo se archiva la version publicada.");
+            throw new VersionNoEditable("Solo se archiva la versión publicada.");
         }
         v.archivar();
         bitacora.registrar(AccionBitacora.VERSION_ARCHIVADA, OBJ, cuestionarioId,
-                "Archivo la version " + numero + " de \"" + c.getNombre() + "\"");
+                "Archivó la versión " + numero + " de \"" + c.getNombre() + "\"");
     }
 
     private void copiarContenido(CuestionarioVersion origen, CuestionarioVersion destino) {

@@ -10,7 +10,7 @@ public class CambiarContrasenaForm {
     private String actual;
 
     @NotBlank
-    @Size(min = 8, max = 72, message = "La nueva contrasena debe tener al menos 8 caracteres")
+    @Size(min = 8, max = 72, message = "La nueva contraseña debe tener al menos 8 caracteres")
     private String nueva;
 
     @NotBlank

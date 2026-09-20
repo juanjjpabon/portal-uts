@@ -85,7 +85,7 @@ class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.cambiarActivo(1L, false))
                 .isInstanceOf(OperacionInvalida.class)
-                .hasMessageContaining("administrador tecnico activo");
+                .hasMessageContaining("administrador técnico activo");
         assertThat(tecnico.isActivo()).isTrue();
     }
 

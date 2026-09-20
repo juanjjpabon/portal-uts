@@ -69,7 +69,7 @@ public class RecursoService {
         aplicar(r, form);
         recursoRepository.save(r);
         bitacora.registrar(AccionBitacora.RECURSO_CREADO, OBJ, r.getId(),
-                "Creo " + r.getTipo().getEtiquetaSingular().toLowerCase() + " \"" + r.getTitulo() + "\"");
+                "Creó " + r.getTipo().getEtiquetaSingular().toLowerCase() + " \"" + r.getTitulo() + "\"");
         return r;
     }
 
@@ -79,7 +79,7 @@ public class RecursoService {
         Recurso r = obtenerDeTipo(id, form.getTipo());
         aplicar(r, form);
         bitacora.registrar(AccionBitacora.RECURSO_ACTUALIZADO, OBJ, id,
-                "Actualizo " + r.getTipo().getEtiquetaSingular().toLowerCase() + " \"" + r.getTitulo() + "\"");
+                "Actualizó " + r.getTipo().getEtiquetaSingular().toLowerCase() + " \"" + r.getTitulo() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -87,7 +87,7 @@ public class RecursoService {
     public void publicar(Long id, TipoRecurso tipo) {
         Recurso r = obtenerDeTipo(id, tipo);
         r.publicar(Instant.now());
-        bitacora.registrar(AccionBitacora.RECURSO_PUBLICADO, OBJ, id, "Publico \"" + r.getTitulo() + "\"");
+        bitacora.registrar(AccionBitacora.RECURSO_PUBLICADO, OBJ, id, "Publicó \"" + r.getTitulo() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -95,7 +95,7 @@ public class RecursoService {
     public void archivar(Long id, TipoRecurso tipo) {
         Recurso r = obtenerDeTipo(id, tipo);
         r.archivar();
-        bitacora.registrar(AccionBitacora.RECURSO_ARCHIVADO, OBJ, id, "Archivo \"" + r.getTitulo() + "\"");
+        bitacora.registrar(AccionBitacora.RECURSO_ARCHIVADO, OBJ, id, "Archivó \"" + r.getTitulo() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -103,7 +103,7 @@ public class RecursoService {
     public void eliminar(Long id, TipoRecurso tipo) {
         Recurso r = obtenerDeTipo(id, tipo);
         recursoRepository.delete(r);
-        bitacora.registrar(AccionBitacora.RECURSO_ELIMINADO, OBJ, id, "Elimino \"" + r.getTitulo() + "\"");
+        bitacora.registrar(AccionBitacora.RECURSO_ELIMINADO, OBJ, id, "Eliminó \"" + r.getTitulo() + "\"");
     }
 
     private void aplicar(Recurso r, RecursoForm form) {

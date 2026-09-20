@@ -10,20 +10,22 @@
 
     <div class="card my-3">
         <div class="card-body">
-            <h2 class="h4 mb-2">
-                <span th:text="${resultado.nivelNombre}"
-                      th:style="${resultado.nivelColor != null} ? 'color:' + ${resultado.nivelColor} : ''">Nivel</span>
+            <h2 class="h4 mb-2 d-flex align-items-center gap-2">
+                <span th:if="${resultado.nivelColor != null}" class="rounded-circle border border-secondary-subtle"
+                      style="width:0.9rem;height:0.9rem;display:inline-block;flex:none;"
+                      th:style="'background-color:' + ${resultado.nivelColor} + ';width:0.9rem;height:0.9rem;display:inline-block;flex:none;'"></span>
+                <span th:text="${resultado.nivelNombre}">Nivel</span>
             </h2>
-            <p th:text="${resultado.explicacion}">Explicacion breve del nivel.</p>
+            <p th:text="${resultado.explicacion}">Explicación breve del nivel.</p>
             <div class="alert alert-secondary py-2 mb-0" th:text="${resultado.avisoNoDiagnostico}">
-                Este resultado es orientativo y no es un diagnostico.
+                Este resultado es orientativo y no es un diagnóstico.
             </div>
         </div>
     </div>
 
     <h2 class="h5">Recomendaciones</h2>
     <ul>
-        <li th:each="r : ${resultado.recomendaciones}" th:text="${r}">Recomendacion</li>
+        <li th:each="r : ${resultado.recomendaciones}" th:text="${r}">Recomendación</li>
     </ul>
 
     <h2 class="h5 mt-4" th:if="${!resultado.rutas.isEmpty()}">Rutas a las que puedes acudir</h2>
@@ -40,11 +42,11 @@
         </div>
     </div>
 
-    <!-- HU-06: informacion urgente a un clic -->
+    <!-- HU-06: información urgente a un clic -->
     <div class="alert alert-danger mt-4">
         <strong>&iquest;Necesitas ayuda ahora?</strong>
         <span th:if="${urgenciaMensaje != null and !urgenciaMensaje.isBlank()}" th:text="' ' + ${urgenciaMensaje}"></span>
-        <div class="mt-2"><a class="btn btn-sm btn-danger" th:href="@{/urgencia}">Informacion urgente</a></div>
+        <div class="mt-2"><a class="btn btn-sm btn-danger" th:href="@{/urgencia}">Información urgente</a></div>
     </div>
 
     <!-- HU-07: canal institucional oficial -->
@@ -59,7 +61,7 @@
         <button type="button" class="btn btn-outline-secondary" onclick="window.print()">Imprimir</button>
         <a class="btn btn-link" th:href="@{/}">Ir al inicio</a>
     </p>
-    <p class="text-muted small">Este resultado no se guardo en ningun lugar.</p>
+    <p class="text-muted small">Este resultado no se guardó en ningún lugar.</p>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>

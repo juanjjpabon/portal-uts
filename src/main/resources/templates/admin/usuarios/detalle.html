@@ -53,28 +53,28 @@
             </div></div>
         </div>
 
-        <!-- Contrasena -->
+        <!-- Contraseña -->
         <div class="col-12">
             <div class="card"><div class="card-body">
-                <h2 class="h6">Restablecer contrasena</h2>
+                <h2 class="h6">Restablecer contraseña</h2>
                 <form method="post" th:action="@{|${base}/contrasena|}" class="d-flex gap-2 align-items-start"
                       style="max-width: 420px;">
                     <input type="text" class="form-control form-control-sm" name="contrasena"
-                           placeholder="Nueva contrasena (min. 8)" minlength="8" required>
+                           placeholder="Nueva contraseña (mín. 8)" minlength="8" required>
                     <button class="btn btn-sm btn-outline-danger">Restablecer</button>
                 </form>
                 <p class="small text-muted mt-1 mb-0">
-                    Se marca para cambio obligatorio en el proximo ingreso del usuario.
+                    Se marca para cambio obligatorio en el próximo ingreso del usuario.
                 </p>
             </div></div>
         </div>
     </div>
 
-    <!-- Historial de bitacora del usuario (HU-22) -->
+    <!-- Historial de bitácora del usuario (HU-22) -->
     <h2 class="h5 mt-4">Historial de cambios</h2>
     <div class="table-responsive">
         <table class="table table-sm bg-white">
-            <thead><tr><th>Fecha</th><th>Actor</th><th>Accion</th><th>Descripcion</th></tr></thead>
+            <thead><tr><th>Fecha</th><th>Actor</th><th>Acción</th><th>Descripción</th></tr></thead>
             <tbody>
             <tr th:if="${historial.isEmpty()}"><td colspan="4" class="text-muted text-center py-3">Sin registros.</td></tr>
             <tr th:each="h : ${historial}">

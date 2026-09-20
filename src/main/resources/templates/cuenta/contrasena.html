@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/comunes :: head('Cambiar contrasena')}"></head>
+<head th:replace="~{fragments/comunes :: head('Cambiar contraseña')}"></head>
 <body class="bg-light">
 
 <nav class="navbar navbar-dark bg-dark">
     <div class="container">
         <span class="navbar-brand">Portal UTS</span>
         <form th:action="@{/logout}" method="post" class="d-inline">
-            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesion</button>
+            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
         </form>
     </div>
 </nav>
 
 <main class="container" style="max-width: 460px;">
     <div class="card shadow-sm mt-5"><div class="card-body p-4">
-        <h1 class="h4 mb-3">Cambiar contrasena</h1>
+        <h1 class="h4 mb-3">Cambiar contraseña</h1>
 
         <div th:if="${obligatorio}" class="alert alert-warning py-2">
-            Debes cambiar la contrasena inicial antes de continuar.
+            Debes cambiar la contraseña inicial antes de continuar.
         </div>
         <div th:if="${error}" class="alert alert-danger py-2" th:text="${error}"></div>
 
         <form method="post" th:object="${form}" th:action="@{/cuenta/contrasena}">
             <div class="mb-3">
-                <label class="form-label">Contrasena actual</label>
+                <label class="form-label">Contraseña actual</label>
                 <input type="password" class="form-control" th:field="*{actual}"
                        th:classappend="${#fields.hasErrors('actual')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{actual}"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Nueva contrasena</label>
+                <label class="form-label">Nueva contraseña</label>
                 <input type="password" class="form-control" th:field="*{nueva}"
                        th:classappend="${#fields.hasErrors('nueva')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{nueva}"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Confirmar nueva contrasena</label>
+                <label class="form-label">Confirmar nueva contraseña</label>
                 <input type="password" class="form-control" th:field="*{confirmacion}"
                        th:classappend="${#fields.hasErrors('confirmacion')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{confirmacion}"></div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Cambiar contrasena</button>
+            <button type="submit" class="btn btn-primary w-100">Cambiar contraseña</button>
         </form>
     </div></div>
 </main>

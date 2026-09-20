@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/comunes :: head('Categorias')}"></head>
+<head th:replace="~{fragments/comunes :: head('Categorías')}"></head>
 <body class="bg-light">
 
 <nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
 
 <main class="container py-4">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="h3 mb-0">Categorias</h1>
-        <a class="btn btn-primary" th:href="@{/admin/categorias/nueva}">Nueva categoria</a>
+        <h1 class="h3 mb-0">Categorías</h1>
+        <a class="btn btn-primary" th:href="@{/admin/categorias/nueva}">Nueva categoría</a>
     </div>
 
     <div th:replace="~{fragments/comunes :: alerts}"></div>
@@ -18,7 +18,7 @@
             <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Descripcion</th>
+                <th>Descripción</th>
                 <th>Recursos</th>
                 <th>Activa</th>
                 <th>Orden</th>
@@ -27,7 +27,7 @@
             </thead>
             <tbody>
             <tr th:if="${categorias.isEmpty()}">
-                <td colspan="6" class="text-center text-muted py-4">Sin categorias.</td>
+                <td colspan="6" class="text-center text-muted py-4">Sin categorías.</td>
             </tr>
             <tr th:each="c : ${categorias}">
                 <td th:text="${c.nombre}">Nombre</td>
@@ -35,13 +35,13 @@
                 <td th:text="${conteos[c.id]}">0</td>
                 <td>
                     <span class="badge" th:classappend="${c.activa} ? 'text-bg-success' : 'text-bg-secondary'"
-                          th:text="${c.activa} ? 'Si' : 'No'"></span>
+                          th:text="${c.activa} ? 'Sí' : 'No'"></span>
                 </td>
                 <td th:text="${c.orden}">0</td>
                 <td class="text-end text-nowrap">
                     <a class="btn btn-sm btn-outline-primary" th:href="@{|/admin/categorias/${c.id}/editar|}">Editar</a>
                     <form class="d-inline" method="post" th:action="@{|/admin/categorias/${c.id}/eliminar|}"
-                          onsubmit="return confirm('Eliminar esta categoria?')">
+                          onsubmit="return confirm('Eliminar esta categoría?')">
                         <button class="btn btn-sm btn-outline-danger">Eliminar</button>
                     </form>
                 </td>
@@ -49,7 +49,7 @@
             </tbody>
         </table>
     </div>
-    <p class="text-muted small">Una categoria con recursos asociados no se puede eliminar; desactivala para ocultarla del portal.</p>
+    <p class="text-muted small">Una categoría con recursos asociados no se puede eliminar; desactívala para ocultarla del portal.</p>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>

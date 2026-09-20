@@ -31,7 +31,7 @@ public class NivelAdminController {
     public String crear(@PathVariable Long id, @PathVariable int numero,
                         @Valid @ModelAttribute NivelForm form, BindingResult errores, RedirectAttributes ra) {
         if (errores.hasErrors()) {
-            ra.addFlashAttribute("error", "Revisa nombre, explicacion y puntajes del nivel.");
+            ra.addFlashAttribute("error", "Revisa nombre, explicación y puntajes del nivel.");
         } else {
             nivelService.agregar(id, numero, form);
             ra.addFlashAttribute("ok", "Nivel agregado.");
@@ -43,7 +43,7 @@ public class NivelAdminController {
     public String actualizar(@PathVariable Long id, @PathVariable int numero, @PathVariable Long nivelId,
                              @Valid @ModelAttribute NivelForm form, BindingResult errores, RedirectAttributes ra) {
         if (errores.hasErrors()) {
-            ra.addFlashAttribute("error", "Revisa nombre, explicacion y puntajes del nivel.");
+            ra.addFlashAttribute("error", "Revisa nombre, explicación y puntajes del nivel.");
         } else {
             nivelService.actualizar(id, numero, nivelId, form);
             ra.addFlashAttribute("ok", "Nivel actualizado.");
@@ -63,7 +63,7 @@ public class NivelAdminController {
     public String agregarRecomendacion(@PathVariable Long id, @PathVariable int numero, @PathVariable Long nivelId,
                                        @RequestParam String texto, RedirectAttributes ra) {
         if (texto == null || texto.isBlank()) {
-            ra.addFlashAttribute("error", "La recomendacion no puede estar vacia.");
+            ra.addFlashAttribute("error", "La recomendación no puede estar vacía.");
         } else {
             nivelService.agregarRecomendacion(id, numero, nivelId, texto);
             ra.addFlashAttribute("ok", "Recomendacion agregada.");

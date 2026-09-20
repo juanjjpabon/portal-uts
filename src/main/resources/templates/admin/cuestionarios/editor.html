@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/comunes :: head('Editor de version')}"></head>
+<head th:replace="~{fragments/comunes :: head('Editor de versión')}"></head>
 <body class="bg-light">
 
 <nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
@@ -11,15 +11,15 @@
     <p class="mb-1"><a th:href="@{|/admin/cuestionarios/${cuestionario.id}|}">&larr; Versiones</a></p>
     <h1 class="h3 mb-0" th:text="${cuestionario.nombre}">Cuestionario</h1>
     <p class="text-muted">
-        Version <span th:text="${version.numero}">1</span> ·
+        Versión <span th:text="${version.numero}">1</span> ·
         <span th:text="${version.estado.etiqueta}">Borrador</span>
     </p>
 
     <div th:replace="~{fragments/comunes :: alerts}"></div>
 
     <div th:unless="${editable}" class="alert alert-warning">
-        Esta version esta <strong th:text="${version.estado.etiqueta.toLowerCase()}">publicada</strong> y es de solo
-        lectura. Para cambiarla, crea una version nueva desde la pantalla de versiones.
+        Esta versión está <strong th:text="${version.estado.etiqueta.toLowerCase()}">publicada</strong> y es de solo
+        lectura. Para cambiarla, crea una versión nueva desde la pantalla de versiones.
     </div>
 
     <div th:if="${editable and !problemas.isEmpty()}" class="alert alert-warning">
@@ -29,7 +29,7 @@
         </ul>
     </div>
     <div th:if="${editable and problemas.isEmpty()}" class="alert alert-success py-2">
-        La version esta completa y lista para publicar.
+        La versión está completa y lista para publicar.
     </div>
 
     <!-- ============================ PREGUNTAS ============================ -->
@@ -53,7 +53,7 @@
             <p th:unless="${editable}" class="fw-semibold mb-1" th:text="${pr.enunciado}">Enunciado</p>
 
             <table class="table table-sm mt-3 mb-2">
-                <thead><tr><th>Opcion</th><th style="width:6rem">Valor</th><th style="width:5rem">Orden</th><th></th></tr></thead>
+                <thead><tr><th>Opción</th><th style="width:6rem">Valor</th><th style="width:5rem">Orden</th><th></th></tr></thead>
                 <tbody>
                 <tr th:each="op : ${pr.opciones}">
                     <td colspan="4" class="p-0">
@@ -68,7 +68,7 @@
                                     th:formaction="@{|${base}/preguntas/${pr.id}/opciones/${op.id}/eliminar|}">X</button>
                         </form>
                         <span th:unless="${editable}" class="d-inline-block py-1"
-                              th:text="|${op.texto}  (valor ${op.valor})|">opcion</span>
+                              th:text="|${op.texto}  (valor ${op.valor})|">opción</span>
                     </td>
                 </tr>
                 </tbody>
@@ -76,11 +76,11 @@
 
             <form th:if="${editable}" method="post" th:action="@{|${base}/preguntas/${pr.id}/opciones|}"
                   class="d-flex gap-2 align-items-end">
-                <div><label class="form-label small mb-0">Nueva opcion</label>
+                <div><label class="form-label small mb-0">Nueva opción</label>
                     <input type="text" class="form-control form-control-sm" name="texto" required></div>
                 <div><label class="form-label small mb-0">Valor</label>
                     <input type="number" class="form-control form-control-sm" style="width:6rem" name="valor" value="0"></div>
-                <button class="btn btn-sm btn-outline-secondary">Agregar opcion</button>
+                <button class="btn btn-sm btn-outline-secondary">Agregar opción</button>
             </form>
 
             <form th:if="${editable}" method="post" th:action="@{|${base}/preguntas/${pr.id}/eliminar|}" class="mt-2"
@@ -121,7 +121,7 @@
                     <input type="number" class="form-control" name="puntajeMax" th:value="${ni.puntajeMax}">
                 </div>
                 <div class="col-12">
-                    <label class="form-label small">Explicacion (se muestra en el resultado, HU-11)</label>
+                    <label class="form-label small">Explicación (se muestra en el resultado, HU-11)</label>
                     <textarea class="form-control" rows="2" name="explicacion" required
                               th:text="${ni.explicacion}"></textarea>
                 </div>
@@ -144,12 +144,12 @@
                         <button class="btn btn-sm btn-outline-danger" formmethod="post"
                                 th:formaction="@{|${base}/niveles/${ni.id}/recomendaciones/${re.id}/eliminar|}">X</button>
                     </form>
-                    <span th:unless="${editable}" th:text="${re.texto}">recomendacion</span>
+                    <span th:unless="${editable}" th:text="${re.texto}">recomendación</span>
                 </li>
             </ul>
             <form th:if="${editable}" method="post" th:action="@{|${base}/niveles/${ni.id}/recomendaciones|}"
                   class="d-flex gap-2 mb-3">
-                <input type="text" class="form-control form-control-sm" name="texto" placeholder="Nueva recomendacion" required>
+                <input type="text" class="form-control form-control-sm" name="texto" placeholder="Nueva recomendación" required>
                 <button class="btn btn-sm btn-outline-secondary">Agregar</button>
             </form>
 
@@ -182,14 +182,14 @@
             <div class="col-12 col-md-5"><input type="text" class="form-control" name="nombre" placeholder="Nombre" required></div>
             <div class="col-4 col-md-2"><input type="number" class="form-control" name="puntajeMin" placeholder="min" value="0"></div>
             <div class="col-4 col-md-2"><input type="number" class="form-control" name="puntajeMax" placeholder="max" value="0"></div>
-            <div class="col-12"><textarea class="form-control" name="explicacion" rows="2" placeholder="Explicacion" required></textarea></div>
+            <div class="col-12"><textarea class="form-control" name="explicacion" rows="2" placeholder="Explicación" required></textarea></div>
             <div class="col-12"><button class="btn btn-primary">Agregar nivel</button></div>
         </div>
     </form>
 
     <div class="mt-4" th:if="${editable}">
         <form method="post" th:action="@{|${base}/publicar|}" class="d-inline">
-            <button class="btn btn-success" th:disabled="${!problemas.isEmpty()}">Publicar version</button>
+            <button class="btn btn-success" th:disabled="${!problemas.isEmpty()}">Publicar versión</button>
         </form>
         <span class="text-muted small" th:if="${!problemas.isEmpty()}">Resuelve los pendientes para habilitar.</span>
     </div>

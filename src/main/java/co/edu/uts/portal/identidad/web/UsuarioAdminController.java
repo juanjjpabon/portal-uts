@@ -65,7 +65,7 @@ public class UsuarioAdminController {
         }
         try {
             var u = usuarioService.crear(form);
-            ra.addFlashAttribute("ok", "Usuario creado. Debera cambiar la contrasena al ingresar.");
+            ra.addFlashAttribute("ok", "Usuario creado. Deberá cambiar la contraseña al ingresar.");
             return "redirect:/admin/usuarios/" + u.getId();
         } catch (OperacionInvalida e) {
             ra.addFlashAttribute("error", e.getMessage());
@@ -135,7 +135,7 @@ public class UsuarioAdminController {
     public String restablecerContrasena(@PathVariable Long id, @RequestParam String contrasena,
                                         RedirectAttributes ra) {
         if (contrasena == null || contrasena.length() < 8) {
-            ra.addFlashAttribute("error", "La contrasena debe tener al menos 8 caracteres.");
+            ra.addFlashAttribute("error", "La contraseña debe tener al menos 8 caracteres.");
         } else {
             usuarioService.restablecerContrasena(id, contrasena);
             ra.addFlashAttribute("ok", "Contrasena restablecida. El usuario debera cambiarla al ingresar.");

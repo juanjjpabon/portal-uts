@@ -24,20 +24,20 @@
             <button class="btn btn-outline-primary btn-sm"
                     th:disabled="${cuestionario.ultimaVersion().isPresent()
                                   and cuestionario.ultimaVersion().get().esEditable()}">
-                Nueva version (copiar de la ultima)
+                Nueva versión (copiar de la última)
             </button>
         </form>
     </div>
     <p class="small text-muted"
        th:if="${cuestionario.ultimaVersion().isPresent() and cuestionario.ultimaVersion().get().esEditable()}">
-        Ya hay una version en borrador (v<span th:text="${cuestionario.ultimaVersion().get().numero}">1</span>);
-        publicala o archivala antes de crear otra.
+        Ya hay una versión en borrador (v<span th:text="${cuestionario.ultimaVersion().get().numero}">1</span>);
+        publícala o archívala antes de crear otra.
     </p>
 
     <div class="table-responsive mt-2">
         <table class="table align-middle bg-white">
             <thead>
-            <tr><th>Version</th><th>Estado</th><th>Publicada</th><th class="text-end">Acciones</th></tr>
+            <tr><th>Versión</th><th>Estado</th><th>Publicada</th><th class="text-end">Acciones</th></tr>
             </thead>
             <tbody>
             <tr th:each="v : ${versiones}">

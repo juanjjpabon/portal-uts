@@ -56,7 +56,7 @@ public class CategoriaService {
         Categoria c = new Categoria(form.getNombre().trim(), slugUnico(form.getNombre(), null));
         aplicar(c, form);
         categoriaRepository.save(c);
-        bitacora.registrar(AccionBitacora.CATEGORIA_CREADA, OBJ, c.getId(), "Creo la categoria \"" + c.getNombre() + "\"");
+        bitacora.registrar(AccionBitacora.CATEGORIA_CREADA, OBJ, c.getId(), "Creó la categoría \"" + c.getNombre() + "\"");
         return c;
     }
 
@@ -70,7 +70,7 @@ public class CategoriaService {
         c.setNombre(form.getNombre().trim());
         aplicar(c, form);
         bitacora.registrar(AccionBitacora.CATEGORIA_ACTUALIZADA, OBJ, id,
-                "Actualizo la categoria \"" + c.getNombre() + "\"");
+                "Actualizó la categoría \"" + c.getNombre() + "\"");
     }
 
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
@@ -80,10 +80,10 @@ public class CategoriaService {
         long enUso = categoriaRepository.contarRecursos(id);
         if (enUso > 0) {
             throw new OperacionNoPermitida(
-                    "No se puede eliminar: la categoria tiene " + enUso + " recurso(s) asociado(s).");
+                    "No se puede eliminar: la categoría tiene " + enUso + " recurso(s) asociado(s).");
         }
         categoriaRepository.delete(c);
-        bitacora.registrar(AccionBitacora.CATEGORIA_ELIMINADA, OBJ, id, "Elimino la categoria \"" + c.getNombre() + "\"");
+        bitacora.registrar(AccionBitacora.CATEGORIA_ELIMINADA, OBJ, id, "Eliminó la categoría \"" + c.getNombre() + "\"");
     }
 
     private void aplicar(Categoria c, CategoriaForm form) {

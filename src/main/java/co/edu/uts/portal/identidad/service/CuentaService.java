@@ -34,17 +34,17 @@ public class CuentaService {
                 .orElseThrow(() -> new UsuarioNoEncontrado("Usuario " + usuarioId + " no existe"));
 
         if (!passwordEncoder.matches(form.getActual(), u.getHashContrasena())) {
-            throw new OperacionInvalida("La contrasena actual no es correcta.");
+            throw new OperacionInvalida("La contraseña actual no es correcta.");
         }
         if (!form.coincideConfirmacion()) {
-            throw new OperacionInvalida("La nueva contrasena y su confirmacion no coinciden.");
+            throw new OperacionInvalida("La nueva contraseña y su confirmación no coinciden.");
         }
         if (passwordEncoder.matches(form.getNueva(), u.getHashContrasena())) {
-            throw new OperacionInvalida("La nueva contrasena debe ser distinta de la actual.");
+            throw new OperacionInvalida("La nueva contraseña debe ser distinta de la actual.");
         }
 
         u.establecerContrasena(passwordEncoder.encode(form.getNueva()), false);
         bitacora.registrar(AccionBitacora.CONTRASENA_CAMBIADA, "Usuario", u.getId(),
-                "El usuario " + u.getCorreo() + " cambio su contrasena");
+                "El usuario " + u.getCorreo() + " cambió su contraseña");
     }
 }
