@@ -3,10 +3,13 @@ package co.edu.uts.portal.identidad.web.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/** Cambio de la propia contrasena (HU-21, autoservicio). */
+/**
+ * Cambio de la propia contrasena (HU-21, autoservicio). "actual" no lleva @NotBlank
+ * porque en el cambio obligatorio (debeCambiarClave) el formulario ni siquiera la pide
+ * -- CuentaService la exige solo cuando corresponde (cambio voluntario).
+ */
 public class CambiarContrasenaForm {
 
-    @NotBlank
     private String actual;
 
     @NotBlank

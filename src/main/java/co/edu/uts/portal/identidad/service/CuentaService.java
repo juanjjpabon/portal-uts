@@ -8,6 +8,7 @@ import co.edu.uts.portal.identidad.web.dto.CambiarContrasenaForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * Autoservicio de la propia cuenta (HU-21): cualquier usuario autenticado cambia
@@ -28,12 +29,21 @@ public class CuentaService {
         this.bitacora = bitacora;
     }
 
+    /**
+     * @param requiereActual false para el cambio obligatorio del primer ingreso
+     *                       (debeCambiarClave): el usuario ya uso esa contrasena para
+     *                       autenticarse un paso antes, volver a pedirla es redundante.
+     *                       true para el cambio voluntario desde el perfil, donde si
+     *                       hace falta verificarla.
+     */
     @Transactional
-    public void cambiarContrasena(Long usuarioId, CambiarContrasenaForm form) {
+    public void cambiarContrasena(Long usuarioId, CambiarContrasenaForm form, boolean requiereActual) {
         Usuario u = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontrado("Usuario " + usuarioId + " no existe"));
 
-        if (!passwordEncoder.matches(form.getActual(), u.getHashContrasena())) {
+        if (requiereActual
+                && (!StringUtils.hasText(form.getActual())
+                    || !passwordEncoder.matches(form.getActual(), u.getHashContrasena()))) {
             throw new OperacionInvalida("La contraseña actual no es correcta.");
         }
         if (!form.coincideConfirmacion()) {

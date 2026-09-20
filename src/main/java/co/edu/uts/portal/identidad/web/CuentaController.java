@@ -41,10 +41,11 @@ public class CuentaController {
     public String cambiar(@AuthenticationPrincipal UsuarioAutenticado principal,
                           @Valid @ModelAttribute("form") CambiarContrasenaForm form, BindingResult errores,
                           Model model, HttpServletRequest request, HttpServletResponse response) {
-        model.addAttribute("obligatorio", principal.debeCambiarClave());
+        boolean obligatorio = principal.debeCambiarClave();
+        model.addAttribute("obligatorio", obligatorio);
         if (!errores.hasErrors()) {
             try {
-                cuentaService.cambiarContrasena(principal.getId(), form);
+                cuentaService.cambiarContrasena(principal.getId(), form, !obligatorio);
             } catch (OperacionInvalida e) {
                 model.addAttribute("error", e.getMessage());
                 return "cuenta/contrasena";

@@ -1,5 +1,58 @@
 /* Estilos propios del portal. Bootstrap se carga por CDN desde el layout. */
 
+/* ===== Paleta institucional (verde) =====
+   No tenemos a mano el manual de marca ni el logo oficial de la UTS en este
+   repositorio, asi que este verde NO esta verificado contra un Pantone/hex
+   oficial -- es una eleccion propia pensada para verse institucional/viva
+   sin sacrificar contraste. Si consiguen el manual de marca, cambiar solo
+   los 3 valores de aqui abajo (--uts-verde/-oscuro/-claro) actualiza todo
+   el portal.
+   Contraste verificado (formula WCAG, texto blanco sobre --uts-verde):
+   #17843E con blanco = 4.77:1 (pasa AA normal-text, minimo 4.5:1).
+   Se eligio ese verde y no uno mas brillante porque un verde bien vivo
+   (ej. #0F9D45) da 3.55:1 con blanco -- pasa el 3:1 de UI/texto grande,
+   pero NO el 4.5:1 que exige AA para texto normal (botones, enlaces). */
+:root {
+    --uts-verde: #17843e;
+    --uts-verde-rgb: 23, 132, 62;
+    --uts-verde-oscuro: #0f5c2b;
+    --uts-verde-claro: #e8f5ec;
+
+    --bs-primary: var(--uts-verde);
+    --bs-primary-rgb: var(--uts-verde-rgb);
+    --bs-link-color: var(--uts-verde);
+    --bs-link-color-rgb: var(--uts-verde-rgb);
+    --bs-link-hover-color: var(--uts-verde-oscuro);
+}
+
+/* .btn-primary/.btn-outline-primary traen sus propios colores ya calculados
+   en el CSS precompilado de Bootstrap (no los toma en vivo de --bs-primary),
+   asi que hay que pisarlos aqui directamente para que el boton cambie de
+   verdad -- ver https://getbootstrap.com/docs/5.3/customize/css-variables/ */
+.btn-primary {
+    --bs-btn-bg: var(--uts-verde);
+    --bs-btn-border-color: var(--uts-verde);
+    --bs-btn-hover-bg: var(--uts-verde-oscuro);
+    --bs-btn-hover-border-color: var(--uts-verde-oscuro);
+    --bs-btn-active-bg: var(--uts-verde-oscuro);
+    --bs-btn-active-border-color: var(--uts-verde-oscuro);
+    --bs-btn-disabled-bg: var(--uts-verde);
+    --bs-btn-disabled-border-color: var(--uts-verde);
+    --bs-btn-focus-shadow-rgb: var(--uts-verde-rgb);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--uts-verde);
+    --bs-btn-border-color: var(--uts-verde);
+    --bs-btn-hover-bg: var(--uts-verde);
+    --bs-btn-hover-border-color: var(--uts-verde);
+    --bs-btn-active-bg: var(--uts-verde);
+    --bs-btn-active-border-color: var(--uts-verde);
+    --bs-btn-disabled-color: var(--uts-verde);
+    --bs-btn-disabled-border-color: var(--uts-verde);
+    --bs-btn-focus-shadow-rgb: var(--uts-verde-rgb);
+}
+
 body {
     min-height: 100vh;
     display: flex;
@@ -18,7 +71,8 @@ main {
 }
 
 .form-check-input:checked {
-    border-color: #0d6efd;
+    background-color: var(--uts-verde);
+    border-color: var(--uts-verde);
 }
 
 .form-check {
