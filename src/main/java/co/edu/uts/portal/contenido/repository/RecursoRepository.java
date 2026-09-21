@@ -55,29 +55,12 @@ public interface RecursoRepository extends JpaRepository<Recurso, Long> {
                                      @Param("categoriaSlug") String categoriaSlug);
 
     /**
-     * HU-03: busqueda publica por palabra clave. En CONTENIDO coincide en
-     * titulo/resumen/cuerpo; en RUTA/CONTACTO coincide en titulo/dependencia/canal.
+     * HU-03: recursos publicados de todos los tipos, en el orden de exhibicion
+     * (tipo, orden, titulo). PortalPublicoService filtra esta lista en memoria,
+     * normalizando tildes/enie/mayusculas/puntuacion, para que la busqueda no
+     * dependa de que el usuario escriba el texto exactamente como esta guardado.
      */
-    @Query("""
-            select r from Recurso r
-            where r.estado = :estado
-              and (
-                (r.tipo = :contenido and (
-                     lower(r.titulo) like lower(concat('%', cast(:q as string), '%'))
-                  or lower(coalesce(r.resumen, '')) like lower(concat('%', cast(:q as string), '%'))
-                  or lower(coalesce(r.cuerpo, '')) like lower(concat('%', cast(:q as string), '%'))
-                ))
-                or (r.tipo <> :contenido and (
-                     lower(r.titulo) like lower(concat('%', cast(:q as string), '%'))
-                  or lower(coalesce(r.dependencia, '')) like lower(concat('%', cast(:q as string), '%'))
-                  or lower(coalesce(r.canal, '')) like lower(concat('%', cast(:q as string), '%'))
-                ))
-              )
-            order by r.tipo asc, r.orden asc, r.titulo asc
-            """)
-    List<Recurso> buscarPublico(@Param("estado") EstadoPublicacion estado,
-                                @Param("contenido") TipoRecurso contenido,
-                                @Param("q") String q);
+    List<Recurso> findByEstadoOrderByTipoAscOrdenAscTituloAsc(EstadoPublicacion estado);
 
     /** HU-23: contador de vista, atomico -- nunca se lee-modifica-escribe la entidad. */
     @Modifying

@@ -86,3 +86,27 @@ main {
 .form-check-label {
     margin-left: 0.35rem;
 }
+
+/* Fondo sutil en pantallas grandes (hallazgo de usabilidad externo, 21/9/2026):
+   en desktop el contenido se sentia "vacio" dentro de tanto blanco. El fondo
+   con leve tinte verde queda solo detras de una tarjeta blanca que envuelve
+   <main> -- el texto del portal sigue siempre sobre blanco puro, asi que no
+   cambia ningun contraste ya verificado (ver el bloque de arriba). En mobile
+   no se toca nada, queda exactamente igual que antes. */
+@media (min-width: 992px) {
+    body {
+        background-color: var(--uts-verde-claro);
+        background-image:
+            radial-gradient(circle at 15% 0%, rgba(var(--uts-verde-rgb), 0.10), transparent 45%),
+            radial-gradient(circle at 100% 100%, rgba(var(--uts-verde-rgb), 0.08), transparent 40%);
+        background-attachment: fixed;
+    }
+
+    main {
+        background-color: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.12);
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+}

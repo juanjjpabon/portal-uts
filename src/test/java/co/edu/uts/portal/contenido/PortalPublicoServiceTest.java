@@ -1,6 +1,7 @@
 package co.edu.uts.portal.contenido;
 
 import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
+import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.repository.CategoriaRepository;
 import co.edu.uts.portal.contenido.repository.RecursoRepository;
@@ -53,14 +54,40 @@ class PortalPublicoServiceTest {
     void buscarConTextoVacioNoConsultaLaBaseDeDatos() {
         assertThat(service.buscar("")).isEmpty();
         assertThat(service.buscar(null)).isEmpty();
-        verify(recursoRepo, never()).buscarPublico(any(), any(), anyString());
+        assertThat(service.buscar("   ")).isEmpty();
+        assertThat(service.buscar(" ,. ")).isEmpty();
+        verify(recursoRepo, never()).findByEstadoOrderByTipoAscOrdenAscTituloAsc(any());
     }
 
     @Test
-    void buscarConTextoDelegaEnElRepositorio() {
-        when(recursoRepo.buscarPublico(EstadoPublicacion.PUBLICADO, TipoRecurso.CONTENIDO, "ansiedad"))
+    void buscarConTextoConsultaTodoLoPublicadoYFiltraEnMemoria() {
+        when(recursoRepo.findByEstadoOrderByTipoAscOrdenAscTituloAsc(EstadoPublicacion.PUBLICADO))
                 .thenReturn(List.of());
         service.buscar("  ansiedad  ");
-        verify(recursoRepo).buscarPublico(EstadoPublicacion.PUBLICADO, TipoRecurso.CONTENIDO, "ansiedad");
+        verify(recursoRepo).findByEstadoOrderByTipoAscOrdenAscTituloAsc(EstadoPublicacion.PUBLICADO);
+    }
+
+    @Test
+    void buscarIgnoraTildesMayusculasYPuntuacion() {
+        Recurso contenido = new Recurso(TipoRecurso.CONTENIDO);
+        contenido.setTitulo("Autocuidado en la vida universitaria");
+        contenido.setResumen("Como manejar la ansiedad y el estrés, día a día");
+        contenido.setCuerpo("cuerpo");
+        when(recursoRepo.findByEstadoOrderByTipoAscOrdenAscTituloAsc(EstadoPublicacion.PUBLICADO))
+                .thenReturn(List.of(contenido));
+
+        assertThat(service.buscar("ESTRES,")).containsExactly(contenido);
+        assertThat(service.buscar("Ansiedad")).containsExactly(contenido);
+    }
+
+    @Test
+    void buscarPorDependenciaEncuentraRutasYContactos() {
+        Recurso ruta = new Recurso(TipoRecurso.RUTA);
+        ruta.setTitulo("Linea 123");
+        ruta.setDependencia("Linea Nacional de Emergencias");
+        when(recursoRepo.findByEstadoOrderByTipoAscOrdenAscTituloAsc(EstadoPublicacion.PUBLICADO))
+                .thenReturn(List.of(ruta));
+
+        assertThat(service.buscar("emergencias")).containsExactly(ruta);
     }
 }

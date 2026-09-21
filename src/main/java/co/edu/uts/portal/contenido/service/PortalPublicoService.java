@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Capa de solo lectura para el portal publico (HU-01 a HU-05). Nunca expone un
@@ -80,12 +82,42 @@ public class PortalPublicoService {
                 TipoRecurso.CONTACTO, EstadoPublicacion.PUBLICADO);
     }
 
-    /** HU-03: busqueda publica. q en blanco -> lista vacia (el controlador no la ejecuta). */
+    private static final Pattern DIACRITICOS = Pattern.compile("\\p{M}");
+    private static final Pattern PUNTUACION = Pattern.compile("[,.;:!?'\"()]");
+    private static final Pattern ESPACIOS = Pattern.compile("\\s+");
+
+    /**
+     * HU-03: busqueda publica. q en blanco -> lista vacia (el controlador no la ejecuta).
+     * Compara texto normalizado (sin tildes/enie, en minuscula, sin puntuacion) para que
+     * no haga falta escribirlo exactamente como esta guardado (hallazgo de usabilidad,
+     * 21/9/2026: pidieron que la tilde o la coma no fueran obligatorias para buscar).
+     */
     @Transactional(readOnly = true)
     public List<Recurso> buscar(String q) {
-        if (!StringUtils.hasText(q)) {
+        String qNormalizado = normalizar(q);
+        if (qNormalizado.isEmpty()) {
             return List.of();
         }
-        return recursoRepository.buscarPublico(EstadoPublicacion.PUBLICADO, TipoRecurso.CONTENIDO, q.trim());
+        return recursoRepository.findByEstadoOrderByTipoAscOrdenAscTituloAsc(EstadoPublicacion.PUBLICADO)
+                .stream()
+                .filter(r -> coincide(r, qNormalizado))
+                .toList();
+    }
+
+    private static boolean coincide(Recurso r, String qNormalizado) {
+        String haystack = r.getTipo() == TipoRecurso.CONTENIDO
+                ? normalizar(r.getTitulo()) + " " + normalizar(r.getResumen()) + " " + normalizar(r.getCuerpo())
+                : normalizar(r.getTitulo()) + " " + normalizar(r.getDependencia()) + " " + normalizar(r.getCanal());
+        return haystack.contains(qNormalizado);
+    }
+
+    /** Sin tildes/enie, en minuscula y sin puntuacion, para comparar de forma tolerante. */
+    private static String normalizar(String texto) {
+        if (!StringUtils.hasText(texto)) {
+            return "";
+        }
+        String sinAcentos = DIACRITICOS.matcher(Normalizer.normalize(texto, Normalizer.Form.NFD)).replaceAll("");
+        String sinPuntuacion = PUNTUACION.matcher(sinAcentos.toLowerCase()).replaceAll(" ");
+        return ESPACIOS.matcher(sinPuntuacion).replaceAll(" ").trim();
     }
 }

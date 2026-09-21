@@ -55,13 +55,13 @@
            th:text="${canalEtiqueta}">Contactar al canal institucional</a>
     </p>
 
-    <hr>
-    <p>
+    <hr class="d-print-none">
+    <p class="d-print-none">
         <a class="btn btn-outline-secondary" th:href="@{|/autoorientacion/${tema.slug}|}">Volver a empezar</a>
         <button type="button" class="btn btn-outline-secondary" onclick="window.print()">Imprimir</button>
         <a class="btn btn-link" th:href="@{/}">Ir al inicio</a>
     </p>
-    <p class="text-muted small">Este resultado no se guardó en ningún lugar.</p>
+    <p class="text-muted small d-print-none">Este resultado no se guardó en ningún lugar.</p>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>
