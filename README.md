@@ -177,7 +177,8 @@ SQL; ya se administra como cualquier otro.)*
 ./mvnw test
 ```
 
-Sin base de datos: `SeguridadWebTest` (HU-16/HU-17 por URL), `RecursoAdminControllerTest`
+Sin base de datos: `SeguridadWebTest` (HU-16/HU-17 por URL), `CuentaServiceTest`
+(cambio de contraseña obligatorio vs. voluntario), `RecursoAdminControllerTest`
 (HU-18/HU-19), `RecursoFormValidacionTest` (validación por tipo), `ParametroAdminControllerTest`
 y `ParametroServiceTest` (HU-27), `CuestionarioAdminControllerTest` y `ValidadorVersionTest`
 (HU-20: workflow y reglas de publicación), `UsuarioServiceTest`, `UsuarioAdminControllerTest`
@@ -191,7 +192,7 @@ permisos), `PortalErrorAttributesTest` (HU-26: sin trace/exception/message, con
 referencia solo en `≥500`), `AnaliticaServiceTest` y `AnaliticaAdminControllerTest`
 (HU-23/24: umbral `>=5`, CSV = mismas filas que el reporte), `ValoracionServiceTest`
 y `ValoracionPublicaControllerTest` (HU-25: solo en `PUBLICADO`, redirect por
-`Referer` con lista blanca), `SlugsTest`. 110 pruebas en total.
+`Referer` con lista blanca), `SlugsTest`. 121 pruebas en total.
 
 ## Contraseña de BD en archivo local (opcional)
 
