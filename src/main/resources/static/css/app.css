@@ -96,6 +96,31 @@ main {
     margin-left: 0.35rem;
 }
 
+/* Bordes de campos de texto/desplegables mas visibles (reporte de Juan,
+   23/9/2026): el borde por defecto de Bootstrap (--bs-border-color: #dee2e6,
+   1px) casi no se distingue sobre el fondo blanco de las tarjetas del panel
+   admin. Mismo gris y grosor que ya se usa arriba en checkboxes/radios, para
+   que se vea consistente. El foco tambien pasa del azul por defecto de
+   Bootstrap (viene fijo en el CSS precompilado, no sigue --bs-primary -- ver
+   nota en .btn-primary arriba) al verde institucional, igual que el resto
+   del portal.
+   Contraste del borde en reposo (#6c757d sobre blanco): 4.69:1 -- pasa el
+   3:1 que exige WCAG para bordes de componentes de interfaz. Verificado con
+   captura de antes/despues sobre el login real en produccion (mismas clases
+   .form-control/.form-select que usan todos los formularios del panel, sin
+   overrides por plantilla, asi que el arreglo aplica igual en Contenidos,
+   Rutas, Categorias, Cuestionarios, Parametros, Usuarios y login). */
+.form-control,
+.form-select {
+    border: 2px solid #6c757d;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--uts-verde);
+    box-shadow: 0 0 0 0.25rem rgba(var(--uts-verde-rgb), 0.25);
+}
+
 /* Fondo sutil en pantallas grandes (hallazgo de usabilidad externo, 21/9/2026):
    en desktop el contenido se sentia "vacio" dentro de tanto blanco. El fondo
    con leve tinte verde queda solo detras de una tarjeta blanca que envuelve
