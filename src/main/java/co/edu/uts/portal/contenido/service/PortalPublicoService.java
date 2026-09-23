@@ -2,16 +2,21 @@ package co.edu.uts.portal.contenido.service;
 
 import co.edu.uts.portal.contenido.domain.Categoria;
 import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
+import co.edu.uts.portal.contenido.domain.PasoRuta;
 import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.repository.CategoriaRepository;
+import co.edu.uts.portal.contenido.repository.PasoRutaRepository;
 import co.edu.uts.portal.contenido.repository.RecursoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -24,10 +29,36 @@ public class PortalPublicoService {
 
     private final RecursoRepository recursoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final PasoRutaRepository pasoRutaRepository;
 
-    public PortalPublicoService(RecursoRepository recursoRepository, CategoriaRepository categoriaRepository) {
+    public PortalPublicoService(RecursoRepository recursoRepository, CategoriaRepository categoriaRepository,
+                                PasoRutaRepository pasoRutaRepository) {
         this.recursoRepository = recursoRepository;
         this.categoriaRepository = categoriaRepository;
+        this.pasoRutaRepository = pasoRutaRepository;
+    }
+
+    /** Carrusel de la portada: publicados, destacados y con imagen (maximo {@code cantidad}). */
+    @Transactional(readOnly = true)
+    public List<Recurso> destacados(int cantidad) {
+        return recursoRepository.destacados(EstadoPublicacion.PUBLICADO).stream().limit(cantidad).toList();
+    }
+
+    /**
+     * Pasos de cada ruta, en orden, cargados en una sola consulta. La clave es el id
+     * de la ruta; las rutas sin pasos no aparecen en el mapa.
+     */
+    @Transactional(readOnly = true)
+    public Map<Long, List<PasoRuta>> pasosPorRuta(List<Recurso> rutas) {
+        Map<Long, List<PasoRuta>> mapa = new HashMap<>();
+        List<Long> ids = rutas.stream().filter(r -> r.getTipo() == TipoRecurso.RUTA).map(Recurso::getId).toList();
+        if (ids.isEmpty()) {
+            return mapa;
+        }
+        for (PasoRuta p : pasoRutaRepository.findByRutaIdInOrderByRutaIdAscOrdenAscIdAsc(ids)) {
+            mapa.computeIfAbsent(p.getRutaId(), k -> new ArrayList<>()).add(p);
+        }
+        return mapa;
     }
 
     @Transactional(readOnly = true)

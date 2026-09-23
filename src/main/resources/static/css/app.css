@@ -110,3 +110,714 @@ main {
         margin-bottom: 2rem;
     }
 }
+
+/* =====================================================================
+   Reunión con la directora (22/9/2026): "está muy plano". La gente se
+   queda con imágenes, color y movimiento. Todo lo de abajo agrega eso sin
+   tocar los contrastes ya verificados: el texto largo sigue sobre blanco y
+   el texto sobre la imagen institucional lleva un degradado verde oscuro
+   encima (blanco sobre #0a3d1d/#17843e supera 4.5:1).
+   ===================================================================== */
+
+:root {
+    /* Foto institucional de la portada y de los encabezados. Mientras no haya una foto
+       oficial en static/img/, se ve solo el degradado verde. Para ponerla: copiar la foto
+       como static/img/fondo-uts.jpg y cambiar "none" por url('/img/fondo-uts.jpg'). */
+    --fondo-hero: none;
+    --sombra-suave: 0 0.25rem 1rem rgba(0, 0, 0, 0.08);
+    --sombra-elevada: 0 0.75rem 2rem rgba(0, 0, 0, 0.14);
+}
+
+.navbar-portal {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.marca-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.marca-icono .icono {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.marca-sub {
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.icono {
+    flex-shrink: 0;
+    vertical-align: -0.2em;
+}
+
+.btn .icono {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.15rem;
+}
+
+/* ----- Portada (hero) y encabezados de página con la imagen institucional ----- */
+.hero-uts,
+.encabezado-pagina {
+    position: relative;
+    color: #ffffff;
+    background-color: var(--uts-verde-oscuro);
+    background-image:
+        radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.14), transparent 35%),
+        linear-gradient(115deg, rgba(8, 48, 23, 0.94) 0%, rgba(15, 92, 43, 0.86) 50%, rgba(23, 132, 62, 0.70) 100%),
+        var(--fondo-hero);
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-uts {
+    padding: 4rem 0 6rem;
+}
+
+.encabezado-pagina {
+    padding: 2.5rem 0 3.5rem;
+}
+
+.hero-uts .container,
+.encabezado-pagina .container {
+    position: relative;
+}
+
+.hero-etiqueta {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: rgba(255, 255, 255, 0.16);
+    margin-bottom: 1rem;
+}
+
+.hero-titulo {
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-weight: 700;
+    max-width: 38rem;
+    line-height: 1.1;
+}
+
+.hero-texto {
+    font-size: 1.15rem;
+    max-width: 36rem;
+    margin: 1rem 0 1.75rem;
+}
+
+.encabezado-pagina p {
+    opacity: 0.95;
+    max-width: 40rem;
+}
+
+.hero-arte {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    width: 340px;
+    height: 290px;
+    margin-top: -145px;
+}
+
+.burbuja {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.18);
+    animation: flotar 7s ease-in-out infinite;
+}
+
+.burbuja-1 {
+    width: 170px;
+    height: 170px;
+    left: 10px;
+    top: 0;
+}
+
+.burbuja-1 .icono {
+    width: 72px;
+    height: 72px;
+}
+
+.burbuja-2 {
+    width: 120px;
+    height: 120px;
+    right: 0;
+    top: 50px;
+    animation-delay: -2.5s;
+}
+
+.burbuja-2 .icono {
+    width: 50px;
+    height: 50px;
+}
+
+.burbuja-3 {
+    width: 110px;
+    height: 110px;
+    left: 150px;
+    bottom: 0;
+    animation-delay: -5s;
+    background: rgba(255, 217, 90, 0.22);
+}
+
+.burbuja-3 .icono {
+    width: 46px;
+    height: 46px;
+}
+
+@keyframes flotar {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+.hero-uts .btn-outline-light:hover,
+.hero-uts .btn-light:hover {
+    transform: translateY(-1px);
+}
+
+/* En pantallas pequeñas el texto ocupa todo el ancho: degradado parejo y más oscuro. */
+@media (max-width: 767.98px) {
+    .hero-uts,
+    .encabezado-pagina {
+        background-image:
+            linear-gradient(180deg, rgba(8, 48, 23, 0.92) 0%, rgba(15, 92, 43, 0.88) 100%),
+            var(--fondo-hero);
+    }
+
+    .hero-uts {
+        padding: 2.5rem 0 3rem;
+    }
+
+    .encabezado-pagina {
+        padding: 1.75rem 0 2rem;
+    }
+}
+
+/* En escritorio la tarjeta blanca de <main> se monta sobre la imagen. */
+@media (min-width: 992px) {
+    main.con-hero {
+        margin-top: -3.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    main.con-encabezado {
+        margin-top: -2rem;
+        position: relative;
+        z-index: 1;
+    }
+}
+
+.titulo-seccion {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.titulo-seccion::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    margin-left: 0.5rem;
+    background: linear-gradient(90deg, rgba(var(--uts-verde-rgb), 0.35), transparent);
+}
+
+.titulo-seccion .icono {
+    color: var(--uts-verde);
+}
+
+/* ----- Tarjetas con movimiento sutil ----- */
+.tarjeta-elevable {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-elevable:hover,
+.tarjeta-elevable:focus-within {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-elevada);
+}
+
+/* Aparecer al hacer scroll (solo si hay JavaScript: sin JS todo se ve desde el inicio). */
+.js .aparecer {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.js .aparecer.visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* ----- "¿Qué quieres hacer hoy?" ----- */
+a.accion {
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.accion-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.9rem;
+    margin-bottom: 0.9rem;
+    color: var(--uts-verde-oscuro);
+    background: var(--uts-verde-claro);
+}
+
+.accion-icono .icono {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.accion-enlace {
+    font-weight: 600;
+    color: var(--uts-verde);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.accion-enlace .icono {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s ease;
+}
+
+a.accion:hover .accion-enlace .icono {
+    transform: translateX(4px);
+}
+
+a.accion-principal {
+    background: linear-gradient(135deg, var(--uts-verde-oscuro), var(--uts-verde));
+    color: #ffffff;
+    border: none;
+}
+
+a.accion-principal .accion-icono {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+a.accion-principal .accion-enlace {
+    color: #ffffff;
+}
+
+a.accion-urgente {
+    border-color: rgba(220, 53, 69, 0.45);
+}
+
+a.accion-urgente .accion-icono {
+    background: #fdecee;
+    color: #b02a37;
+}
+
+a.accion-urgente h3,
+a.accion-urgente .accion-enlace {
+    color: #b02a37;
+}
+
+/* ----- Tarjeta de contenido con portada ----- */
+.tarjeta-contenido {
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.tarjeta-portada {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--uts-verde-claro);
+}
+
+.tarjeta-portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Los folletos suelen tener el titulo arriba: se prioriza esa parte al recortar. */
+    object-position: center top;
+    transition: transform 0.4s ease;
+}
+
+.tarjeta-contenido:hover .tarjeta-portada img {
+    transform: scale(1.04);
+}
+
+.portada-sin-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.85);
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 40%),
+        linear-gradient(135deg, var(--uts-verde), var(--uts-verde-oscuro));
+}
+
+.portada-sin-imagen .icono {
+    width: 3rem;
+    height: 3rem;
+}
+
+.enlace-tarjeta {
+    color: #1f2d24;
+    text-decoration: none;
+}
+
+.enlace-tarjeta:hover,
+.enlace-tarjeta:focus {
+    color: var(--uts-verde-oscuro);
+    text-decoration: underline;
+}
+
+.etiqueta-categoria {
+    background: var(--uts-verde-claro);
+    color: var(--uts-verde-oscuro);
+    font-weight: 600;
+}
+
+/* ----- Detalle de contenido: folleto o imagen principal ----- */
+.contenido-imagen {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.contenido-imagen img {
+    max-height: 80vh;
+    border-radius: 0.75rem;
+    box-shadow: var(--sombra-suave);
+    background: #f8f9fa;
+}
+
+/* ----- Rutas: tarjeta, pasos y contacto ----- */
+.tarjeta-ruta {
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-left: 4px solid var(--uts-verde);
+    box-shadow: var(--sombra-suave);
+}
+
+.ruta-portada {
+    width: 100%;
+    max-height: 320px;
+    /* "contain" y no "cover": si es un folleto con texto, no se recorta. */
+    object-fit: contain;
+    background: var(--uts-verde-claro);
+}
+
+.ruta-datos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+}
+
+.ruta-datos .icono {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.1rem;
+    color: var(--uts-verde);
+}
+
+.subtitulo-seccion {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--uts-verde-oscuro);
+    margin-bottom: 0.75rem;
+}
+
+.subtitulo-seccion .icono {
+    width: 1rem;
+    height: 1rem;
+}
+
+.pasos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.paso {
+    position: relative;
+    display: flex;
+    gap: 0.9rem;
+    padding-bottom: 1.1rem;
+}
+
+/* Línea que une los números de los pasos */
+.paso:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 2.2rem;
+    bottom: 0.2rem;
+    width: 2px;
+    margin-left: -1px;
+    background: rgba(var(--uts-verde-rgb), 0.3);
+}
+
+.paso-numero {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-weight: 700;
+    color: #ffffff;
+    background: var(--uts-verde);
+    box-shadow: 0 0 0 4px var(--uts-verde-claro);
+}
+
+.paso-cuerpo {
+    padding-top: 0.2rem;
+    min-width: 0;
+}
+
+.paso-titulo {
+    font-weight: 600;
+}
+
+.paso-descripcion {
+    white-space: pre-line;
+    color: #495057;
+}
+
+.paso-imagen img {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.paso-imagen:hover img {
+    box-shadow: var(--sombra-elevada);
+}
+
+.canal-directo {
+    background: var(--uts-verde-claro);
+    border-radius: 0.6rem;
+    padding: 0.85rem 1rem;
+}
+
+.canal-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.canal-dato {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    word-break: break-all;
+}
+
+.canal-dato .icono {
+    color: var(--uts-verde);
+}
+
+.boton-copiar.copiado {
+    --bs-btn-bg: #198754;
+    --bs-btn-border-color: #198754;
+    --bs-btn-color: #ffffff;
+    --bs-btn-hover-bg: #198754;
+    --bs-btn-hover-color: #ffffff;
+}
+
+.aviso-urgencia {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.6rem;
+    background: #fdecee;
+    color: #842029;
+}
+
+.aviso-urgencia a {
+    color: #842029;
+    font-weight: 600;
+}
+
+/* ----- Carrusel de destacados (portada) ----- */
+.carrusel-destacados {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: var(--sombra-elevada);
+    background: #ffffff;
+}
+
+.destacado {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.destacado-marco {
+    position: relative;
+    display: block;
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+    background: var(--uts-verde-oscuro);
+}
+
+.destacado-fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(22px) brightness(0.75);
+    transform: scale(1.15);
+}
+
+.destacado-imagen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.destacado-pie {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.25rem 1.2rem;
+}
+
+.destacado-titulo {
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.destacado-texto {
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+.destacado-mas {
+    color: var(--uts-verde);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.destacado:hover .destacado-titulo {
+    text-decoration: underline;
+}
+
+.carrusel-destacados .carousel-indicators {
+    top: 0.75rem;
+    bottom: auto;
+    margin-bottom: 0;
+}
+
+.carrusel-destacados .carousel-control-prev,
+.carrusel-destacados .carousel-control-next {
+    width: 3rem;
+    height: 3rem;
+    top: 35%;
+    margin: 0 0.5rem;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 1;
+}
+
+@media (max-width: 767.98px) {
+    .destacado-marco {
+        aspect-ratio: 4 / 3;
+    }
+}
+
+/* ----- Panel: miniaturas ----- */
+.miniatura-admin {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+}
+
+.columna-miniatura {
+    width: 64px;
+}
+
+.miniatura-lista {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 0.4rem;
+}
+
+/* ----- Accesibilidad: sin animaciones para quien las desactiva en su sistema ----- */
+@media (prefers-reduced-motion: reduce) {
+    .burbuja {
+        animation: none;
+    }
+
+    .tarjeta-elevable,
+    .tarjeta-portada img,
+    .accion-enlace .icono,
+    .js .aparecer {
+        transition: none !important;
+    }
+
+    .tarjeta-elevable:hover,
+    .tarjeta-elevable:focus-within,
+    .tarjeta-contenido:hover .tarjeta-portada img,
+    a.accion:hover .accion-enlace .icono {
+        transform: none !important;
+    }
+
+    .js .aparecer {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media print {
+    .hero-uts,
+    .encabezado-pagina,
+    .carrusel-destacados {
+        display: none !important;
+    }
+
+    .js .aparecer {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

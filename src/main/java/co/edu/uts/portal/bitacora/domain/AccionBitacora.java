@@ -21,6 +21,11 @@ public enum AccionBitacora {
     RECURSO_ARCHIVADO("Archivó un recurso"),
     RECURSO_ELIMINADO("Eliminó un recurso"),
 
+    PASO_RUTA_CREADO("Agregó un paso a una ruta"),
+    PASO_RUTA_ACTUALIZADO("Actualizó un paso de una ruta"),
+    PASO_RUTA_REORDENADO("Cambió el orden de los pasos de una ruta"),
+    PASO_RUTA_ELIMINADO("Eliminó un paso de una ruta"),
+
     CATEGORIA_CREADA("Creó una categoría"),
     CATEGORIA_ACTUALIZADA("Actualizó una categoría"),
     CATEGORIA_ELIMINADA("Eliminó una categoría"),

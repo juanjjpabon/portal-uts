@@ -4,15 +4,13 @@
 <body>
 
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+<header th:replace="~{fragments/comunes :: encabezado('Contenidos', 'Información preventiva sobre salud mental y bienestar.')}"></header>
 
-<main class="container py-5">
-    <h1 class="h2">Contenidos</h1>
-    <p class="text-muted">Información preventiva sobre salud mental y bienestar.</p>
-
-    <div class="d-flex flex-wrap gap-2 my-3">
-        <a class="btn btn-sm" th:classappend="${categoriaActiva == null} ? 'btn-primary' : 'btn-outline-secondary'"
+<main class="container py-5 con-encabezado">
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a class="btn btn-sm rounded-pill" th:classappend="${categoriaActiva == null} ? 'btn-primary' : 'btn-outline-secondary'"
            th:href="@{/contenidos}">Todas</a>
-        <a class="btn btn-sm" th:each="c : ${categorias}"
+        <a class="btn btn-sm rounded-pill" th:each="c : ${categorias}"
            th:classappend="${c.slug == categoriaActiva} ? 'btn-primary' : 'btn-outline-secondary'"
            th:href="@{/contenidos(categoria=${c.slug})}" th:text="${c.nombre}">Categoría</a>
     </div>
@@ -21,9 +19,9 @@
         No hay contenidos publicados en esta categoría todavía.
     </div>
 
-    <div class="row g-3">
-        <div class="col-md-4" th:each="r : ${contenidos}">
-            <div th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></div>
+    <div class="row g-4">
+        <div class="col-sm-6 col-lg-4" th:each="r : ${contenidos}">
+            <article th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></article>
         </div>
     </div>
 </main>

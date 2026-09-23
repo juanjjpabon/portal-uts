@@ -4,26 +4,27 @@
 <body>
 
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
+<header th:replace="~{fragments/comunes :: encabezado('Rutas institucionales', 'Qué hacer, paso a paso, y a quién acudir dentro de la institución.')}"></header>
 
-<main class="container py-5" style="max-width: 780px;">
-    <h1 class="h2">Rutas institucionales</h1>
-    <p class="text-muted">A quién acudir dentro de la institución.</p>
-
+<main class="container py-5 con-encabezado" style="max-width: 820px;">
     <div class="alert alert-success py-2" th:if="${gracias}">¡Gracias por tu opinión!</div>
 
     <div th:if="${rutas.isEmpty()}" class="alert alert-info">Aún no hay rutas publicadas.</div>
     <th:block th:each="r : ${rutas}">
-        <div th:replace="~{fragments/tarjetas :: tarjetaRuta(${r})}"></div>
+        <article th:replace="~{fragments/tarjetas :: tarjetaRuta(${r}, ${pasosPorRuta.get(r.id)})}"></article>
     </th:block>
 
-    <h2 class="h3 mt-5">Otros contactos</h2>
-    <div th:if="${contactos.isEmpty()}" class="alert alert-info">Aún no hay contactos publicados.</div>
+    <h2 class="h4 mt-5 mb-3">Otros contactos</h2>
+    <div th:if="${contactos.isEmpty()}" class="alert alert-light border">Aún no hay contactos publicados.</div>
     <th:block th:each="r : ${contactos}">
-        <div th:replace="~{fragments/tarjetas :: tarjetaRuta(${r})}"></div>
+        <article th:replace="~{fragments/tarjetas :: tarjetaRuta(${r}, null)}"></article>
     </th:block>
 
-    <hr class="mt-4">
-    <p><a th:href="@{/urgencia}">¿Es una situación urgente? Ver información urgente &rarr;</a></p>
+    <div class="aviso-urgencia mt-4">
+        <svg th:replace="~{fragments/iconos :: icono('alerta')}"></svg>
+        <p class="mb-0">¿Es una situación urgente?
+            <a th:href="@{/urgencia}">Ver información urgente &rarr;</a></p>
+    </div>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>

@@ -4,6 +4,7 @@ import co.edu.uts.portal.autoorientacion.service.AutoorientacionService;
 import co.edu.uts.portal.autoorientacion.service.RespuestasIncompletas;
 import co.edu.uts.portal.autoorientacion.service.VersionObsoleta;
 import co.edu.uts.portal.autoorientacion.web.dto.RespuestasForm;
+import co.edu.uts.portal.contenido.domain.CanalDirecto;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,7 +76,10 @@ public class AutoorientacionController {
             model.addAttribute("resultado", resultado);
             model.addAttribute("tema", servicio.tema(slug));
             model.addAttribute("urgenciaMensaje", parametros.valor("urgencia.mensaje", ""));
-            model.addAttribute("canalUrl", parametros.valor("canal_institucional.url", "#"));
+            String canalUrl = parametros.valor("canal_institucional.url", "#");
+            model.addAttribute("canalUrl", canalUrl);
+            // Solo se enlaza si es un contacto reconocido (correo, telefono, web); ver CanalDirecto.
+            model.addAttribute("canalDirecto", CanalDirecto.desde(canalUrl).orElse(null));
             model.addAttribute("canalEtiqueta",
                     parametros.valor("canal_institucional.etiqueta", "Contactar al canal institucional"));
             return "publico/autoorientacion/resultado";

@@ -1,8 +1,11 @@
 package co.edu.uts.portal.contenido.web;
 
 import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
+import co.edu.uts.portal.contenido.domain.ImagenProcesada;
 import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
+import co.edu.uts.portal.contenido.service.ImagenInvalida;
+import co.edu.uts.portal.contenido.service.ImagenService;
 import co.edu.uts.portal.contenido.service.RecursoNoEncontrado;
 import co.edu.uts.portal.contenido.service.CategoriaService;
 import co.edu.uts.portal.contenido.service.RecursoService;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 /**
  * CRUD unico del panel para CONTENIDO / RUTA / CONTACTO (F-DC-125, HU-18/HU-19).
@@ -54,7 +59,11 @@ public class RecursoAdminController {
                         @RequestParam(required = false) Long categoria,
                         @RequestParam(required = false) String q,
                         Model model) {
-        model.addAttribute("recursos", recursoService.listar(tipo, estado, categoria, q));
+        List<Recurso> recursos = recursoService.listar(tipo, estado, categoria, q);
+        model.addAttribute("recursos", recursos);
+        if (tipo == TipoRecurso.RUTA) {
+            model.addAttribute("conteoPasos", recursoService.contarPasos(recursos));
+        }
         model.addAttribute("categorias", categoriaService.listar());
         model.addAttribute("estados", EstadoPublicacion.values());
         model.addAttribute("filtroEstado", estado);
@@ -74,10 +83,16 @@ public class RecursoAdminController {
                         @Valid @ModelAttribute("form") RecursoForm form,
                         BindingResult errores, Model model, RedirectAttributes ra) {
         form.setTipo(tipo);
+        ImagenProcesada imagen = procesarImagen(form, errores);
         if (errores.hasErrors()) {
             return prepararFormulario(model);
         }
-        Recurso creado = recursoService.crear(form);
+        Recurso creado = recursoService.crear(form, imagen);
+        if (tipo == TipoRecurso.RUTA) {
+            // Una ruta explica que hacer paso a paso: se lleva directo a agregar los pasos.
+            ra.addFlashAttribute("ok", "Ruta creada. Ahora agrega los pasos que debe seguir la persona.");
+            return "redirect:/admin/recursos/rutas/" + creado.getId() + "/pasos";
+        }
         ra.addFlashAttribute("ok", tipo.getEtiquetaSingular() + " creado.");
         return "redirect:/admin/recursos/" + tipo.getSeccion() + "/" + creado.getId() + "/editar";
     }
@@ -94,10 +109,11 @@ public class RecursoAdminController {
                              BindingResult errores, Model model, RedirectAttributes ra) {
         form.setTipo(tipo);
         form.setId(id);
+        ImagenProcesada imagen = procesarImagen(form, errores);
         if (errores.hasErrors()) {
             return prepararFormulario(model);
         }
-        recursoService.actualizar(id, form);
+        recursoService.actualizar(id, form, imagen);
         ra.addFlashAttribute("ok", "Cambios guardados.");
         return "redirect:/admin/recursos/" + tipo.getSeccion() + "/" + id + "/editar";
     }
@@ -126,7 +142,27 @@ public class RecursoAdminController {
     private String prepararFormulario(Model model) {
         model.addAttribute("categorias", categoriaService.listar());
         model.addAttribute("estados", EstadoPublicacion.values());
+        if (model.getAttribute("form") instanceof RecursoForm form
+                && form.getId() != null && form.getTipo() == TipoRecurso.RUTA) {
+            model.addAttribute("cantidadPasos", recursoService.contarPasosDeRuta(form.getId()));
+        }
         return "admin/recursos/formulario";
+    }
+
+    /**
+     * Procesa la imagen elegida (si hay). Si no se puede aceptar, deja el mensaje en el
+     * campo imagenArchivo para que el formulario lo muestre y devuelve null.
+     */
+    private ImagenProcesada procesarImagen(RecursoForm form, BindingResult errores) {
+        if (!form.tieneImagenNueva()) {
+            return null;
+        }
+        try {
+            return ImagenService.procesar(form.getImagenArchivo());
+        } catch (ImagenInvalida e) {
+            errores.rejectValue("imagenArchivo", "imagen.invalida", e.getMessage());
+            return null;
+        }
     }
 
     private String listaRedirect(TipoRecurso tipo) {

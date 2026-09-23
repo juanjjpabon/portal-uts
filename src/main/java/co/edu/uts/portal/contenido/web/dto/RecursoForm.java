@@ -8,9 +8,11 @@ import co.edu.uts.portal.contenido.domain.validacion.RecursoValidable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * DTO del formulario del panel (HU-18/HU-19). Se enlaza a la vista en lugar de la
@@ -53,6 +55,20 @@ public class RecursoForm implements RecursoValidable {
 
     private boolean urgente;
 
+    // imagen y portada (reunion con la directora, 22/9/2026)
+    /** Archivo nuevo elegido en el formulario (opcional). Lo procesa ProcesadorImagen. */
+    private MultipartFile imagenArchivo;
+
+    /** Solo para mostrar la imagen actual en el formulario; el servicio usa la de la entidad. */
+    private UUID imagenIdActual;
+
+    private boolean quitarImagen;
+
+    @Size(max = 250)
+    private String imagenAlt;
+
+    private boolean destacado;
+
     // comunes
     @NotNull
     private EstadoPublicacion estado = EstadoPublicacion.BORRADOR;
@@ -78,8 +94,11 @@ public class RecursoForm implements RecursoValidable {
         f.dependencia = r.getDependencia();
         f.horario = r.getHorario();
         f.canal = r.getCanal();
-        f.urlCanal = r.getUrlCanal();
+        f.urlCanal = co.edu.uts.portal.contenido.domain.CanalDirecto.paraEditar(r.getUrlCanal());
         f.urgente = r.isUrgente();
+        f.imagenIdActual = r.getImagenId();
+        f.imagenAlt = r.getImagenAlt();
+        f.destacado = r.isDestacado();
         f.estado = r.getEstado();
         f.orden = r.getOrden();
         r.getCategorias().forEach(c -> f.categoriaIds.add(c.getId()));
@@ -169,6 +188,7 @@ public class RecursoForm implements RecursoValidable {
         this.canal = canal;
     }
 
+    @Override
     public String getUrlCanal() {
         return urlCanal;
     }
@@ -183,6 +203,51 @@ public class RecursoForm implements RecursoValidable {
 
     public void setUrgente(boolean urgente) {
         this.urgente = urgente;
+    }
+
+    public MultipartFile getImagenArchivo() {
+        return imagenArchivo;
+    }
+
+    public void setImagenArchivo(MultipartFile imagenArchivo) {
+        this.imagenArchivo = imagenArchivo;
+    }
+
+    /** true si en este envio se eligio un archivo de imagen. */
+    public boolean tieneImagenNueva() {
+        return imagenArchivo != null && !imagenArchivo.isEmpty();
+    }
+
+    public UUID getImagenIdActual() {
+        return imagenIdActual;
+    }
+
+    public void setImagenIdActual(UUID imagenIdActual) {
+        this.imagenIdActual = imagenIdActual;
+    }
+
+    public boolean isQuitarImagen() {
+        return quitarImagen;
+    }
+
+    public void setQuitarImagen(boolean quitarImagen) {
+        this.quitarImagen = quitarImagen;
+    }
+
+    public String getImagenAlt() {
+        return imagenAlt;
+    }
+
+    public void setImagenAlt(String imagenAlt) {
+        this.imagenAlt = imagenAlt;
+    }
+
+    public boolean isDestacado() {
+        return destacado;
+    }
+
+    public void setDestacado(boolean destacado) {
+        this.destacado = destacado;
     }
 
     public EstadoPublicacion getEstado() {

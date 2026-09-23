@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Recurso generico del portal (F-DC-125): un mismo modelo y un mismo CRUD para
@@ -73,6 +74,19 @@ public class Recurso extends BaseAuditable {
     /** Marca la ruta/contacto como informacion para situaciones urgentes (HU-06/HU-19). */
     @Column(name = "urgente", nullable = false)
     private boolean urgente = false;
+
+    // --- imagen y portada (reunion con la directora, 22/9/2026) ---
+    /** Imagen principal (folleto, banner, foto). Solo el id: los bytes se leen al servir /imagenes/{id}. */
+    @Column(name = "imagen_id")
+    private UUID imagenId;
+
+    /** Texto alternativo de la imagen para lectores de pantalla (accesibilidad). */
+    @Column(name = "imagen_alt", length = 250)
+    private String imagenAlt;
+
+    /** Aparece en el carrusel de la portada (solo si tiene imagen y esta publicado). */
+    @Column(name = "destacado", nullable = false)
+    private boolean destacado = false;
 
     // --- comunes ---
     @Enumerated(EnumType.STRING)
@@ -215,6 +229,47 @@ public class Recurso extends BaseAuditable {
 
     public void setUrgente(boolean urgente) {
         this.urgente = urgente;
+    }
+
+    /**
+     * Contacto directo listo para mostrar (correo o telefono a la vista con boton de
+     * copiar, enlace web, WhatsApp). Null si no tiene o no es valido. No se persiste.
+     */
+    public CanalDirecto getCanalDirecto() {
+        return CanalDirecto.desde(urlCanal).orElse(null);
+    }
+
+    public UUID getImagenId() {
+        return imagenId;
+    }
+
+    public void setImagenId(UUID imagenId) {
+        this.imagenId = imagenId;
+    }
+
+    public boolean isTieneImagen() {
+        return imagenId != null;
+    }
+
+    public String getImagenAlt() {
+        return imagenAlt;
+    }
+
+    public void setImagenAlt(String imagenAlt) {
+        this.imagenAlt = imagenAlt;
+    }
+
+    /** Texto alternativo efectivo: el que escribio el administrador, o el titulo del recurso. */
+    public String getTextoAlternativo() {
+        return imagenAlt != null && !imagenAlt.isBlank() ? imagenAlt : titulo;
+    }
+
+    public boolean isDestacado() {
+        return destacado;
+    }
+
+    public void setDestacado(boolean destacado) {
+        this.destacado = destacado;
     }
 
     public EstadoPublicacion getEstado() {

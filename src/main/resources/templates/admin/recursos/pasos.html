@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Pasos de la ruta')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 900px;">
+    <p class="mb-1">
+        <a th:href="@{/admin/recursos/rutas}">&larr; Rutas institucionales</a>
+        &middot;
+        <a th:href="@{|/admin/recursos/rutas/${ruta.id}/editar|}">Editar datos de la ruta</a>
+    </p>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+            <h1 class="h3 mb-0">Pasos de la ruta</h1>
+            <p class="text-muted mb-0" th:text="${ruta.titulo}">Nombre de la ruta</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{|/admin/recursos/rutas/${ruta.id}/pasos/nuevo|}">
+            <svg th:replace="~{fragments/iconos :: icono('mas')}"></svg> Agregar paso
+        </a>
+    </div>
+
+    <div th:replace="~{fragments/comunes :: alerts}"></div>
+
+    <div class="alert alert-light border small mt-3">
+        Escribe lo que la persona debe hacer, en orden, con frases cortas. Por ejemplo:
+        <em>“Paso 1: Escribe al correo del CAE pidiendo la tutoría”</em>,
+        <em>“Paso 2: Espera la confirmación con fecha y salón”</em>,
+        <em>“Paso 3: Asiste y lleva tus dudas anotadas”</em>.
+        Puedes agregar una foto a cada paso (la oficina, el formulario, el edificio).
+        <span th:if="${ruta.estado.name() != 'PUBLICADO'}" class="d-block mt-1 text-danger">
+            Esta ruta aún no está publicada: los pasos se verán en el portal cuando la publiques.
+        </span>
+    </div>
+
+    <div th:if="${pasos.isEmpty()}" class="text-center text-muted py-5 border rounded bg-white">
+        Esta ruta todavía no tiene pasos.
+        <div class="mt-2">
+            <a class="btn btn-outline-primary" th:href="@{|/admin/recursos/rutas/${ruta.id}/pasos/nuevo|}">Agregar el primer paso</a>
+        </div>
+    </div>
+
+    <ol class="list-unstyled mt-3" th:unless="${pasos.isEmpty()}">
+        <li class="card mb-2" th:each="p, st : ${pasos}">
+            <div class="card-body d-flex flex-wrap gap-3 align-items-start">
+                <span class="paso-numero" th:text="${p.orden}">1</span>
+                <img th:if="${p.imagenId}" th:src="@{|/imagenes/${p.imagenId}|}" alt="" class="miniatura-admin">
+                <div class="flex-grow-1" style="min-width: 12rem;">
+                    <p class="fw-semibold mb-1" th:text="${p.titulo}">Título del paso</p>
+                    <p class="small text-muted mb-0" style="white-space: pre-line" th:if="${p.descripcion}"
+                       th:text="${p.descripcion}">Descripción</p>
+                </div>
+                <div class="d-flex flex-wrap gap-1">
+                    <form method="post" th:action="@{|/admin/recursos/rutas/${ruta.id}/pasos/${p.id}/subir|}" class="d-inline">
+                        <button class="btn btn-sm btn-outline-secondary" th:disabled="${st.first}"
+                                th:attr="aria-label=|Subir el paso ${p.orden}|" title="Subir">
+                            <svg th:replace="~{fragments/iconos :: icono('arriba')}"></svg>
+                        </button>
+                    </form>
+                    <form method="post" th:action="@{|/admin/recursos/rutas/${ruta.id}/pasos/${p.id}/bajar|}" class="d-inline">
+                        <button class="btn btn-sm btn-outline-secondary" th:disabled="${st.last}"
+                                th:attr="aria-label=|Bajar el paso ${p.orden}|" title="Bajar">
+                            <svg th:replace="~{fragments/iconos :: icono('abajo')}"></svg>
+                        </button>
+                    </form>
+                    <a class="btn btn-sm btn-outline-primary"
+                       th:href="@{|/admin/recursos/rutas/${ruta.id}/pasos/${p.id}/editar|}">Editar</a>
+                    <form method="post" th:action="@{|/admin/recursos/rutas/${ruta.id}/pasos/${p.id}/eliminar|}"
+                          class="d-inline" onsubmit="return confirm('¿Eliminar este paso?')">
+                        <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ol>
+
+    <p class="mt-4 small" th:if="${ruta.estado.name() == 'PUBLICADO'}">
+        <a th:href="@{|/rutas#ruta-${ruta.id}|}" target="_blank" rel="noopener">Ver cómo se ve en el portal &rarr;</a>
+    </p>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

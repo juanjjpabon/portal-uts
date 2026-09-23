@@ -4,6 +4,7 @@ import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
 import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.repository.CategoriaRepository;
+import co.edu.uts.portal.contenido.repository.PasoRutaRepository;
 import co.edu.uts.portal.contenido.repository.RecursoRepository;
 import co.edu.uts.portal.contenido.service.ContenidoNoDisponible;
 import co.edu.uts.portal.contenido.service.PortalPublicoService;
@@ -28,7 +29,9 @@ class PortalPublicoServiceTest {
 
     private final RecursoRepository recursoRepo = mock(RecursoRepository.class);
     private final CategoriaRepository categoriaRepo = mock(CategoriaRepository.class);
-    private final PortalPublicoService service = new PortalPublicoService(recursoRepo, categoriaRepo);
+    private final PasoRutaRepository pasoRepo = mock(PasoRutaRepository.class);
+    private final PortalPublicoService service =
+            new PortalPublicoService(recursoRepo, categoriaRepo, pasoRepo);
 
     @Test
     void contenidosSinCategoriaUsaElListadoSimple() {
@@ -89,5 +92,27 @@ class PortalPublicoServiceTest {
                 .thenReturn(List.of(ruta));
 
         assertThat(service.buscar("emergencias")).containsExactly(ruta);
+    }
+
+    @Test
+    void pasosSeAgrupanPorRutaEnUnaSolaConsulta() {
+        Recurso ruta1 = new Recurso(TipoRecurso.RUTA);
+        org.springframework.test.util.ReflectionTestUtils.setField(ruta1, "id", 1L);
+        Recurso ruta2 = new Recurso(TipoRecurso.RUTA);
+        org.springframework.test.util.ReflectionTestUtils.setField(ruta2, "id", 2L);
+        var p1 = new co.edu.uts.portal.contenido.domain.PasoRuta(1L, 1);
+        var p2 = new co.edu.uts.portal.contenido.domain.PasoRuta(1L, 2);
+        when(pasoRepo.findByRutaIdInOrderByRutaIdAscOrdenAscIdAsc(List.of(1L, 2L))).thenReturn(List.of(p1, p2));
+
+        var mapa = service.pasosPorRuta(List.of(ruta1, ruta2));
+
+        assertThat(mapa.get(1L)).containsExactly(p1, p2);
+        assertThat(mapa.get(2L)).isNull();   // sin pasos: la tarjeta se ve como contacto
+    }
+
+    @Test
+    void sinRutasNoSeConsultanPasos() {
+        assertThat(service.pasosPorRuta(List.of())).isEmpty();
+        verify(pasoRepo, never()).findByRutaIdInOrderByRutaIdAscOrdenAscIdAsc(any());
     }
 }

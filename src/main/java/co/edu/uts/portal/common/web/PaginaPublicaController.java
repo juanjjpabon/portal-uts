@@ -21,6 +21,8 @@ public class PaginaPublicaController {
     @GetMapping("/")
     public String inicio(Model model) {
         model.addAttribute("ultimosContenidos", portalPublicoService.ultimosContenidos(3));
+        // Carrusel de banners/folletos destacados por el CAE (reunion con la directora, 22/9/2026).
+        model.addAttribute("destacados", portalPublicoService.destacados(6));
         return "public/inicio";
     }
 }

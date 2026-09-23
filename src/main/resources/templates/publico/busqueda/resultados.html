@@ -21,13 +21,13 @@
     <div th:each="grupo : ${resultados}">
         <h2 class="h4 mt-4" th:text="${grupo.key.etiquetaPlural}">Grupo</h2>
         <div th:if="${grupo.key.name() == 'CONTENIDO'}" class="row g-3">
-            <div class="col-md-4" th:each="r : ${grupo.value}">
-                <div th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></div>
+            <div class="col-sm-6 col-lg-4" th:each="r : ${grupo.value}">
+                <article th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></article>
             </div>
         </div>
         <div th:unless="${grupo.key.name() == 'CONTENIDO'}">
             <th:block th:each="r : ${grupo.value}">
-                <div th:replace="~{fragments/tarjetas :: tarjetaRuta(${r})}"></div>
+                <article th:replace="~{fragments/tarjetas :: tarjetaRuta(${r}, null)}"></article>
             </th:block>
         </div>
     </div>

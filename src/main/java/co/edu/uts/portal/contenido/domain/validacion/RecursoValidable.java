@@ -21,5 +21,8 @@ public interface RecursoValidable {
 
     String getHorario();
 
+    /** Contacto directo (correo, telefono, WhatsApp o enlace web); opcional. */
+    String getUrlCanal();
+
     boolean tieneCategorias();
 }

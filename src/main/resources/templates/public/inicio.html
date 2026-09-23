@@ -5,58 +5,130 @@
 
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
 
-<main class="container py-5">
-    <h1>Portal de orientación psicosocial</h1>
-    <p class="lead">
-        Información preventiva y rutas institucionales de la UTS, de acceso libre.
-    </p>
+<!-- Portada con imagen institucional (reunión con la directora, 22/9/2026: el
+     portal se veía "plano"; la gente se queda con imágenes, color y movimiento). -->
+<header class="hero-uts d-print-none">
+    <div class="container">
+        <p class="hero-etiqueta">Unidades Tecnológicas de Santander</p>
+        <h1 class="hero-titulo">Portal de orientación psicosocial</h1>
+        <p class="hero-texto">
+            Información preventiva, rutas institucionales paso a paso y un ejercicio de
+            autoorientación anónimo. De acceso libre, sin registrarte.
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-light btn-lg fw-semibold" th:href="@{/autoorientacion}">Hacer la autoorientación</a>
+            <a class="btn btn-outline-light btn-lg" th:href="@{/rutas}">Ver rutas de atención</a>
+        </div>
+        <!-- Decoración (solo pantallas grandes): los tres frentes del portal flotando suavemente. -->
+        <div class="hero-arte d-none d-lg-block" aria-hidden="true">
+            <span class="burbuja burbuja-1"><svg th:replace="~{fragments/iconos :: icono('corazon')}"></svg></span>
+            <span class="burbuja burbuja-2"><svg th:replace="~{fragments/iconos :: icono('brujula')}"></svg></span>
+            <span class="burbuja burbuja-3"><svg th:replace="~{fragments/iconos :: icono('libro')}"></svg></span>
+        </div>
+    </div>
+</header>
 
-    <p class="text-uppercase text-muted small fw-semibold mt-4 mb-2">¿Qué quieres hacer hoy?</p>
+<main class="container py-5 con-hero">
+
+    <!-- Carrusel de destacados: banners, folletos y eventos que el CAE marca como
+         "destacado" en el panel. Solo aparece si hay alguno. -->
+    <section th:if="${!destacados.isEmpty()}" class="mb-5" aria-labelledby="titulo-destacados">
+        <h2 id="titulo-destacados" class="titulo-seccion">
+            <svg th:replace="~{fragments/iconos :: icono('estrella')}"></svg> Destacados
+        </h2>
+        <div id="carruselDestacados" class="carousel slide carrusel-destacados" data-carrusel-portal>
+            <div class="carousel-indicators" th:if="${destacados.size() > 1}">
+                <button type="button" th:each="d, st : ${destacados}" data-bs-target="#carruselDestacados"
+                        th:attr="data-bs-slide-to=${st.index},aria-label=|Destacado ${st.count}|"
+                        th:classappend="${st.first} ? 'active'"
+                        th:aria-current="${st.first} ? 'true' : null"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item" th:each="d, st : ${destacados}" th:classappend="${st.first} ? 'active'">
+                    <a class="destacado"
+                       th:href="${d.tipo.name() == 'CONTENIDO'} ? @{|/contenidos/${d.slug}|} : @{|/rutas#ruta-${d.id}|}">
+                        <span class="destacado-marco">
+                            <img class="destacado-fondo" th:src="@{|/imagenes/${d.imagenId}|}" alt="" aria-hidden="true">
+                            <img class="destacado-imagen" th:src="@{|/imagenes/${d.imagenId}|}"
+                                 th:alt="${d.textoAlternativo}">
+                        </span>
+                        <span class="destacado-pie">
+                            <span class="destacado-titulo" th:text="${d.titulo}">Título</span>
+                            <span class="destacado-texto" th:if="${d.resumen}" th:text="${d.resumen}">Resumen</span>
+                            <span class="destacado-mas">Ver más &rarr;</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <th:block th:if="${destacados.size() > 1}">
+                <button class="carousel-control-prev" type="button" data-bs-target="#carruselDestacados"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carruselDestacados"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </th:block>
+        </div>
+    </section>
+
+    <h2 class="titulo-seccion">¿Qué quieres hacer hoy?</h2>
     <div class="row g-3">
         <div class="col-sm-6 col-lg-3">
-            <div class="card h-100"><div class="card-body d-flex flex-column">
-                <h2 class="h5">Contenidos</h2>
-                <p class="small text-muted flex-grow-1">Información preventiva por categorías.</p>
-                <a class="btn btn-outline-primary" th:href="@{/contenidos}">Explorar</a>
-            </div></div>
+            <a class="card h-100 accion tarjeta-elevable aparecer" th:href="@{/contenidos}">
+                <div class="card-body">
+                    <span class="accion-icono"><svg th:replace="~{fragments/iconos :: icono('libro')}"></svg></span>
+                    <h3 class="h5">Contenidos</h3>
+                    <p class="small text-muted mb-3">Información preventiva por categorías.</p>
+                    <span class="accion-enlace">Explorar <svg th:replace="~{fragments/iconos :: icono('flecha')}"></svg></span>
+                </div>
+            </a>
         </div>
         <div class="col-sm-6 col-lg-3">
-            <div class="card h-100"><div class="card-body d-flex flex-column">
-                <h2 class="h5">Rutas y contactos</h2>
-                <p class="small text-muted flex-grow-1">A quién acudir dentro de la institución.</p>
-                <a class="btn btn-outline-primary" th:href="@{/rutas}">Ver rutas</a>
-            </div></div>
+            <a class="card h-100 accion tarjeta-elevable aparecer" th:href="@{/rutas}">
+                <div class="card-body">
+                    <span class="accion-icono"><svg th:replace="~{fragments/iconos :: icono('brujula')}"></svg></span>
+                    <h3 class="h5">Rutas y contactos</h3>
+                    <p class="small text-muted mb-3">Qué hacer, paso a paso, y a quién acudir en la institución.</p>
+                    <span class="accion-enlace">Ver rutas <svg th:replace="~{fragments/iconos :: icono('flecha')}"></svg></span>
+                </div>
+            </a>
         </div>
         <div class="col-sm-6 col-lg-3">
-            <div class="card h-100"><div class="card-body d-flex flex-column">
-                <h2 class="h5">Autoorientación</h2>
-                <p class="small text-muted flex-grow-1">
-                    Un ejercicio breve y anónimo de reflexión. No guarda tus respuestas.
-                </p>
-                <a class="btn btn-primary" th:href="@{/autoorientacion}">Comenzar</a>
-            </div></div>
+            <a class="card h-100 accion accion-principal tarjeta-elevable aparecer" th:href="@{/autoorientacion}">
+                <div class="card-body">
+                    <span class="accion-icono"><svg th:replace="~{fragments/iconos :: icono('corazon')}"></svg></span>
+                    <h3 class="h5">Autoorientación</h3>
+                    <p class="small mb-3">Un ejercicio breve y anónimo de reflexión. No guarda tus respuestas.</p>
+                    <span class="accion-enlace">Comenzar <svg th:replace="~{fragments/iconos :: icono('flecha')}"></svg></span>
+                </div>
+            </a>
         </div>
         <div class="col-sm-6 col-lg-3">
-            <div class="card h-100 border-danger"><div class="card-body d-flex flex-column">
-                <h2 class="h5 text-danger">Ayuda urgente</h2>
-                <p class="small text-muted flex-grow-1">
-                    Qué hacer y a quién acudir en una situación urgente.
-                </p>
-                <a class="btn btn-outline-danger" th:href="@{/urgencia}">Ver información urgente</a>
-            </div></div>
+            <a class="card h-100 accion accion-urgente tarjeta-elevable aparecer" th:href="@{/urgencia}">
+                <div class="card-body">
+                    <span class="accion-icono"><svg th:replace="~{fragments/iconos :: icono('alerta')}"></svg></span>
+                    <h3 class="h5">Ayuda urgente</h3>
+                    <p class="small text-muted mb-3">Qué hacer y a quién acudir en una situación urgente.</p>
+                    <span class="accion-enlace">Qué hacer ahora <svg th:replace="~{fragments/iconos :: icono('flecha')}"></svg></span>
+                </div>
+            </a>
         </div>
     </div>
 
     <div th:if="${!ultimosContenidos.isEmpty()}">
-        <h2 class="h4 mt-5">Últimos contenidos</h2>
-        <div class="row g-3">
-            <div class="col-md-4" th:each="r : ${ultimosContenidos}">
-                <div th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></div>
+        <h2 class="titulo-seccion mt-5">Últimos contenidos</h2>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-4" th:each="r : ${ultimosContenidos}">
+                <article th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></article>
             </div>
         </div>
     </div>
 
-    <p class="mt-4"><a class="btn btn-link px-0" th:href="@{/login}">Acceso administrativo</a></p>
+    <p class="mt-5 mb-0"><a class="btn btn-link px-0" th:href="@{/login}">Acceso administrativo</a></p>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>

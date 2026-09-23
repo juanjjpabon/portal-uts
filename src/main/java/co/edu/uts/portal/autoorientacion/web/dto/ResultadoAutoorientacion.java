@@ -14,7 +14,12 @@ public record ResultadoAutoorientacion(
         List<String> recomendaciones,
         List<RutaVista> rutas) {
 
-    public record RutaVista(String titulo, String dependencia, String horario,
+    public record RutaVista(Long id, String titulo, String dependencia, String horario,
                             String canal, String urlCanal) {
+
+        /** Contacto directo listo para mostrar (dato visible + copiar), o null. Ver CanalDirecto. */
+        public co.edu.uts.portal.contenido.domain.CanalDirecto getCanalDirecto() {
+            return co.edu.uts.portal.contenido.domain.CanalDirecto.desde(urlCanal).orElse(null);
+        }
     }
 }

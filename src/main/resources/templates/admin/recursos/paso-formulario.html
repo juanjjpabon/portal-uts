@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/comunes :: head('Paso de la ruta')}"></head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/comunes :: navbarAdmin}"></nav>
+
+<main class="container py-4" style="max-width: 780px;">
+    <p class="mb-1">
+        <a th:href="@{|/admin/recursos/rutas/${ruta.id}/pasos|}">&larr; Pasos de la ruta</a>
+    </p>
+    <h1 class="h3" th:text="${form.id == null} ? |Nuevo paso (paso ${numeroPaso})| : |Editar el paso ${numeroPaso}|">Paso</h1>
+    <p class="text-muted" th:text="${ruta.titulo}">Nombre de la ruta</p>
+
+    <form method="post" th:object="${form}" enctype="multipart/form-data"
+          th:action="${form.id == null}
+                     ? @{|/admin/recursos/rutas/${ruta.id}/pasos|}
+                     : @{|/admin/recursos/rutas/${ruta.id}/pasos/${form.id}|}">
+
+        <div class="mb-3">
+            <label class="form-label" for="titulo">¿Qué debe hacer la persona?</label>
+            <input type="text" class="form-control" th:field="*{titulo}"
+                   placeholder="Ej.: Escribe al correo del CAE pidiendo la tutoría"
+                   th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{titulo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="descripcion">Detalles <span class="text-muted">(opcional)</span></label>
+            <textarea class="form-control" rows="4" th:field="*{descripcion}"
+                      placeholder="Ej.: Indica tu nombre, programa, la materia y en qué horario puedes."
+                      th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid'"></textarea>
+            <div class="invalid-feedback" th:errors="*{descripcion}"></div>
+        </div>
+
+        <fieldset class="border rounded p-3 mb-3 bg-white">
+            <legend class="fs-6 fw-semibold float-none w-auto px-2 mb-0">Foto del paso <span class="text-muted fw-normal">(opcional)</span></legend>
+            <div th:if="*{imagenIdActual != null}" class="d-flex align-items-start gap-3 mb-3">
+                <img th:src="@{|/imagenes/${form.imagenIdActual}|}" alt="Imagen actual" class="miniatura-admin">
+                <div class="form-check mt-1">
+                    <input type="checkbox" class="form-check-input" id="quitarImagen" th:field="*{quitarImagen}">
+                    <label class="form-check-label" for="quitarImagen">Quitar la imagen actual</label>
+                </div>
+                <input type="hidden" th:field="*{imagenIdActual}">
+            </div>
+            <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo"
+                   accept="image/jpeg,image/png,image/webp,image/gif" data-max-bytes="5242880" data-vista-previa="vistaPreviaPaso"
+                   th:classappend="${#fields.hasErrors('imagenArchivo')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{imagenArchivo}"></div>
+            <div class="form-text">Por ejemplo, la foto de la oficina, del edificio o del formulario que hay que llenar. JPG, PNG, GIF o WebP, hasta 5 MB.</div>
+            <img id="vistaPreviaPaso" class="miniatura-admin mt-2" alt="Vista previa de la imagen elegida" hidden>
+            <div class="mt-3">
+                <label class="form-label" for="imagenAlt">Descripción de la imagen <span class="text-muted">(para lectores de pantalla)</span></label>
+                <input type="text" class="form-control" th:field="*{imagenAlt}"
+                       placeholder="Ej.: Entrada de la oficina del CAE, edificio B, primer piso">
+            </div>
+        </fieldset>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar paso</button>
+            <a class="btn btn-link" th:href="@{|/admin/recursos/rutas/${ruta.id}/pasos|}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/comunes :: footer}"></footer>
+<th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+</body>
+</html>

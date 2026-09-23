@@ -116,7 +116,7 @@ public class AutoorientacionService {
     }
 
     private ResultadoAutoorientacion.RutaVista aRutaVista(Recurso r) {
-        return new ResultadoAutoorientacion.RutaVista(r.getTitulo(), r.getDependencia(),
+        return new ResultadoAutoorientacion.RutaVista(r.getId(), r.getTitulo(), r.getDependencia(),
                 r.getHorario(), r.getCanal(), r.getUrlCanal());
     }
 

@@ -12,8 +12,7 @@
         Mensaje de urgencia.
     </div>
 
-    <a class="btn btn-primary btn-lg" th:href="${canalUrl}" target="_blank" rel="noopener"
-       th:text="${canalEtiqueta}">Contactar al canal institucional</a>
+    <div th:replace="~{fragments/tarjetas :: canalInstitucional(${canalDirecto}, ${canalEtiqueta})}"></div>
 
     <p class="mt-4"><a th:href="@{/}">Volver al inicio</a></p>
 </main>

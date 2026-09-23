@@ -43,11 +43,13 @@
         <table class="table table-hover align-middle bg-white">
             <thead>
             <tr>
+                <th class="columna-miniatura"><span class="visually-hidden">Imagen</span></th>
                 <th>Título</th>
                 <th th:if="${tipo.esContenido()}">Categorías</th>
                 <th th:unless="${tipo.esContenido()}">Dependencia</th>
                 <th th:unless="${tipo.esContenido()}">Canal</th>
                 <th th:unless="${tipo.esContenido()}">Urgente</th>
+                <th th:if="${tipo.name() == 'RUTA'}">Pasos</th>
                 <th>Estado</th>
                 <th>Actualizado</th>
                 <th class="text-end">Acciones</th>
@@ -55,10 +57,16 @@
             </thead>
             <tbody>
             <tr th:if="${recursos.isEmpty()}">
-                <td colspan="7" class="text-center text-muted py-4">Sin registros.</td>
+                <td colspan="9" class="text-center text-muted py-4">Sin registros.</td>
             </tr>
             <tr th:each="r : ${recursos}">
-                <td th:text="${r.titulo}">Título</td>
+                <td class="columna-miniatura">
+                    <img th:if="${r.tieneImagen}" th:src="@{|/imagenes/${r.imagenId}|}" alt="" class="miniatura-lista">
+                </td>
+                <td>
+                    <span th:text="${r.titulo}">Título</span>
+                    <span th:if="${r.destacado}" class="badge text-bg-warning ms-1" title="Aparece en el carrusel de la portada">Destacado</span>
+                </td>
                 <td th:if="${tipo.esContenido()}">
                     <span class="badge text-bg-light me-1" th:each="c : ${r.categorias}" th:text="${c.nombre}"></span>
                 </td>
@@ -66,6 +74,12 @@
                 <td th:unless="${tipo.esContenido()}" th:text="${r.canal}">Canal</td>
                 <td th:unless="${tipo.esContenido()}">
                     <span th:if="${r.urgente}" class="badge text-bg-danger">Urgente</span>
+                </td>
+                <td th:if="${tipo.name() == 'RUTA'}">
+                    <th:block th:with="n=${conteoPasos.get(r.id) != null ? conteoPasos.get(r.id) : 0}">
+                        <span th:if="${n == 0}" class="badge text-bg-light border" title="Esta ruta aún no dice qué pasos seguir">Sin pasos</span>
+                        <span th:unless="${n == 0}" class="badge text-bg-primary" th:text="|${n} pasos|">3 pasos</span>
+                    </th:block>
                 </td>
                 <td>
                     <span class="badge"
@@ -80,6 +94,8 @@
                 <td class="text-end text-nowrap">
                     <a class="btn btn-sm btn-outline-primary"
                        th:href="@{|/admin/recursos/${seccion}/${r.id}/editar|}">Editar</a>
+                    <a th:if="${tipo.name() == 'RUTA'}" class="btn btn-sm btn-primary"
+                       th:href="@{|/admin/recursos/rutas/${r.id}/pasos|}">Pasos</a>
                     <form class="d-inline" method="post"
                           th:if="${r.estado.name() != 'PUBLICADO'}"
                           th:action="@{|/admin/recursos/${seccion}/${r.id}/publicar|}">

@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/webjars/**", "/favicon.ico").permitAll()
                 .requestMatchers("/login", "/error", "/error/**").permitAll()
                 .requestMatchers("/contenidos/**", "/rutas/**", "/autoorientacion", "/autoorientacion/**",
-                        "/urgencia", "/buscar", "/valoraciones/**").permitAll()
+                        "/urgencia", "/buscar", "/valoraciones/**", "/imagenes/**").permitAll()
 
                 // Panel administrativo - HU-17 separacion estricta
                 .requestMatchers("/admin/usuarios/**", "/admin/bitacora/**", "/admin/sistema/**").hasRole(TECNICO)

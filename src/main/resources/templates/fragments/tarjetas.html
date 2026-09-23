@@ -2,42 +2,151 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!-- Tarjeta de un CONTENIDO publicado (HU-01/HU-02/HU-04). -->
-<div th:fragment="tarjetaContenido(r)" class="card h-100">
+<!-- Tarjeta de un CONTENIDO publicado (HU-01/HU-02/HU-04). Toda la tarjeta es
+     clicable (stretched-link del título). Si el contenido no tiene imagen, se
+     muestra una portada de color con un ícono para que la vitrina no se vea vacía
+     (reunión con la directora, 22/9/2026: "está muy plano"). -->
+<article th:fragment="tarjetaContenido(r)" class="card h-100 tarjeta-contenido tarjeta-elevable aparecer">
+    <div class="tarjeta-portada">
+        <img th:if="${r.tieneImagen}" th:src="@{|/imagenes/${r.imagenId}|}" alt="" loading="lazy">
+        <span th:unless="${r.tieneImagen}" class="portada-sin-imagen">
+            <svg th:replace="~{fragments/iconos :: icono('libro')}"></svg>
+        </span>
+    </div>
     <div class="card-body d-flex flex-column">
-        <h3 class="h5"><a th:href="@{|/contenidos/${r.slug}|}" th:text="${r.titulo}">Titulo</a></h3>
-        <p class="text-muted small flex-grow-1" th:text="${r.resumen}">Resumen</p>
-        <div>
-            <span class="badge text-bg-light me-1" th:each="c : ${r.categorias}" th:text="${c.nombre}"></span>
+        <div class="mb-2">
+            <span class="badge etiqueta-categoria me-1" th:each="c : ${r.categorias}" th:text="${c.nombre}"></span>
         </div>
+        <h3 class="h5"><a class="stretched-link enlace-tarjeta" th:href="@{|/contenidos/${r.slug}|}"
+                          th:text="${r.titulo}">Titulo</a></h3>
+        <p class="text-muted small flex-grow-1" th:text="${r.resumen}">Resumen</p>
         <p class="text-muted small mb-0 mt-2"
            th:if="${r.actualizadoEn != null}"
            th:text="'Actualizado el ' + ${#temporals.format(r.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
             Actualizado
         </p>
     </div>
-</div>
+</article>
 
-<!-- Tarjeta de una RUTA o CONTACTO publicado (HU-05/HU-06/HU-07). -->
-<div th:fragment="tarjetaRuta(r)" class="card mb-2">
+<!-- Tarjeta de una RUTA o CONTACTO publicado (HU-05/HU-06/HU-07).
+     "pasos": lista de PasoRuta de la ruta (o null). Una ruta con pasos muestra el
+     "paso a paso" numerado; sin pasos, se ve como una tarjeta de contacto. -->
+<article th:fragment="tarjetaRuta(r, pasos)" class="card tarjeta-ruta mb-4 aparecer" th:id="|ruta-${r.id}|">
+    <img th:if="${r.tieneImagen}" class="card-img-top ruta-portada" th:src="@{|/imagenes/${r.imagenId}|}"
+         th:alt="${r.textoAlternativo}" loading="lazy">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-            <h3 class="h6 mb-1" th:text="${r.titulo}">Título</h3>
+        <div class="d-flex justify-content-between align-items-start gap-2">
+            <h3 class="h5 mb-2" th:text="${r.titulo}">Título</h3>
             <span th:if="${r.urgente}" class="badge text-bg-danger">Urgente</span>
         </div>
-        <p class="small mb-1">
-            <strong>Dependencia:</strong> <span th:text="${r.dependencia}"></span><br>
-            <span th:if="${r.horario}"><strong>Horario:</strong> <span th:text="${r.horario}"></span><br></span>
-            <strong>Canal:</strong> <span th:text="${r.canal}"></span>
-        </p>
-        <p class="text-muted small mb-2" th:if="${r.actualizadoEn != null}"
+        <ul class="list-unstyled ruta-datos small mb-3">
+            <li>
+                <svg th:replace="~{fragments/iconos :: icono('edificio')}"></svg>
+                <span><strong>Dependencia:</strong> <span th:text="${r.dependencia}"></span></span>
+            </li>
+            <li th:if="${not #strings.isEmpty(r.horario)}">
+                <svg th:replace="~{fragments/iconos :: icono('reloj')}"></svg>
+                <span><strong>Horario:</strong> <span th:text="${r.horario}"></span></span>
+            </li>
+        </ul>
+
+        <section th:if="${pasos != null and !pasos.isEmpty()}" class="ruta-pasos mb-3"
+                 th:aria-label="|Pasos de la ruta ${r.titulo}|">
+            <h4 class="subtitulo-seccion">
+                <svg th:replace="~{fragments/iconos :: icono('pasos')}"></svg> Paso a paso
+            </h4>
+            <ol class="pasos">
+                <li th:each="p : ${pasos}" class="paso">
+                    <span class="paso-numero" aria-hidden="true" th:text="${p.orden}">1</span>
+                    <div class="paso-cuerpo">
+                        <p class="paso-titulo mb-1">
+                            <span class="visually-hidden" th:text="|Paso ${p.orden}:|">Paso 1:</span>
+                            <span th:text="${p.titulo}">Título del paso</span>
+                        </p>
+                        <p class="paso-descripcion small mb-2" th:if="${not #strings.isEmpty(p.descripcion)}"
+                           th:text="${p.descripcion}">Descripción</p>
+                        <a th:if="${p.imagenId}" class="paso-imagen" th:href="@{|/imagenes/${p.imagenId}|}"
+                           target="_blank" rel="noopener">
+                            <img th:src="@{|/imagenes/${p.imagenId}|}" th:alt="${p.textoAlternativo}" loading="lazy">
+                            <span class="visually-hidden">(abre la imagen en tamaño completo)</span>
+                        </a>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <section class="ruta-contacto">
+            <h4 class="subtitulo-seccion">Cómo contactar</h4>
+            <div th:replace="~{fragments/tarjetas :: canal(${r.canalDirecto}, ${r.canal})}"></div>
+        </section>
+
+        <p class="text-muted small mt-3 mb-0" th:if="${r.actualizadoEn != null}"
            th:text="'Última revisión: ' + ${#temporals.format(r.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
             Última revisión
         </p>
-        <a th:if="${r.urlCanal}" class="btn btn-sm btn-outline-primary" th:href="${r.urlCanal}"
-           target="_blank" rel="noopener">Abrir canal</a>
         <div th:replace="~{fragments/tarjetas :: valorar(${r})}"></div>
     </div>
+</article>
+
+<!-- Contacto directo (HU-07), reunión con la directora 22/9/2026: "Abrir canal no
+     lleva a ningún lado". El dato (correo/teléfono) queda a la vista con un botón
+     para copiarlo, que funciona en cualquier equipo; los enlaces (Gmail, llamar,
+     abrir página) quedan como alternativa.
+     cd: CanalDirecto (o null) ; texto: descripción libre del canal (o null). -->
+<div th:fragment="canal(cd, texto)" class="canal-directo">
+    <p class="small mb-2" th:if="${not #strings.isEmpty(texto)}" th:text="${texto}">Correo: bienestar@... — agenda tu cita</p>
+    <div th:if="${cd != null}" class="canal-acciones">
+        <span class="canal-dato">
+            <svg th:replace="~{fragments/iconos :: icono(${cd.icono})}"></svg>
+            <strong th:text="${cd.valor}">bienestar@correo.uts.edu.co</strong>
+        </span>
+        <div class="d-flex flex-wrap gap-2">
+            <!-- Correo -->
+            <button th:if="${cd.correo}" type="button" class="btn btn-sm btn-primary boton-copiar"
+                    th:attr="data-copiar=${cd.textoCopiable}">
+                <svg th:replace="~{fragments/iconos :: icono('copiar')}"></svg>
+                <span class="boton-copiar-texto">Copiar correo</span>
+            </button>
+            <a th:if="${cd.correo}" class="btn btn-sm btn-outline-primary" th:href="${cd.hrefGmail}"
+               target="_blank" rel="noopener">
+                <svg th:replace="~{fragments/iconos :: icono('externo')}"></svg> Escribir en Gmail
+            </a>
+            <a th:if="${cd.correo}" class="btn btn-sm btn-link px-1" th:href="${cd.href}">Usar mi app de correo</a>
+            <!-- Teléfono -->
+            <a th:if="${cd.telefono}" class="btn btn-sm btn-primary" th:href="${cd.href}">
+                <svg th:replace="~{fragments/iconos :: icono('telefono')}"></svg> Llamar
+            </a>
+            <button th:if="${cd.telefono or cd.whatsapp}" type="button"
+                    class="btn btn-sm btn-outline-primary boton-copiar" th:attr="data-copiar=${cd.textoCopiable}">
+                <svg th:replace="~{fragments/iconos :: icono('copiar')}"></svg>
+                <span class="boton-copiar-texto">Copiar número</span>
+            </button>
+            <!-- WhatsApp -->
+            <a th:if="${cd.whatsapp}" class="btn btn-sm btn-primary" th:href="${cd.href}" target="_blank" rel="noopener">
+                <svg th:replace="~{fragments/iconos :: icono('chat')}"></svg> Abrir WhatsApp
+            </a>
+            <!-- Página web -->
+            <a th:if="${cd.web}" class="btn btn-sm btn-primary" th:href="${cd.href}" target="_blank" rel="noopener">
+                <svg th:replace="~{fragments/iconos :: icono('externo')}"></svg> Abrir la página
+            </a>
+        </div>
+        <p th:if="${cd.telefono}" class="text-muted small mb-0 mt-1">“Llamar” funciona desde el celular.</p>
+    </div>
+</div>
+
+<!-- HU-07: canal institucional oficial (parametro canal_institucional.url). Si es una
+     página web o WhatsApp, un botón; si es correo o teléfono, el dato con botón de copiar;
+     si no se reconoce, nunca se enlaza tal cual: se ofrece ir a Rutas y contactos. -->
+<div th:fragment="canalInstitucional(cd, etiqueta)" class="canal-institucional">
+    <a th:if="${cd != null and (cd.web or cd.whatsapp)}" class="btn btn-primary btn-lg"
+       th:href="${cd.href}" target="_blank" rel="noopener" th:text="${etiqueta}">Contactar al canal institucional</a>
+    <div th:if="${cd != null and (cd.correo or cd.telefono)}" class="card">
+        <div class="card-body">
+            <h2 class="h6" th:text="${etiqueta}">Canal institucional</h2>
+            <div th:replace="~{fragments/tarjetas :: canal(${cd}, null)}"></div>
+        </div>
+    </div>
+    <a th:if="${cd == null}" class="btn btn-primary btn-lg" th:href="@{/rutas}">Ver rutas y contactos</a>
 </div>
 
 <!-- HU-25: valoracion de utilidad, publica, sin dato personal, sin evitar el doble voto. -->

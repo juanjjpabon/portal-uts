@@ -29,16 +29,16 @@
     </ul>
 
     <h2 class="h5 mt-4" th:if="${!resultado.rutas.isEmpty()}">Rutas a las que puedes acudir</h2>
-    <div class="card mb-2" th:each="ruta : ${resultado.rutas}">
+    <div class="card mb-3 tarjeta-ruta" th:each="ruta : ${resultado.rutas}">
         <div class="card-body">
             <h3 class="h6 mb-1" th:text="${ruta.titulo}">Ruta</h3>
-            <p class="small mb-1">
-                <strong>Dependencia:</strong> <span th:text="${ruta.dependencia}"></span><br>
-                <span th:if="${ruta.horario}"><strong>Horario:</strong> <span th:text="${ruta.horario}"></span><br></span>
-                <strong>Canal:</strong> <span th:text="${ruta.canal}"></span>
+            <p class="small mb-2">
+                <strong>Dependencia:</strong> <span th:text="${ruta.dependencia}"></span>
+                <span th:if="${not #strings.isEmpty(ruta.horario)}"><br><strong>Horario:</strong> <span th:text="${ruta.horario}"></span></span>
             </p>
-            <a th:if="${ruta.urlCanal}" class="btn btn-sm btn-outline-primary"
-               th:href="${ruta.urlCanal}" target="_blank" rel="noopener">Abrir canal</a>
+            <div th:replace="~{fragments/tarjetas :: canal(${ruta.canalDirecto}, ${ruta.canal})}"></div>
+            <a class="d-inline-block small mt-2 d-print-none" th:if="${ruta.id != null}"
+               th:href="@{|/rutas#ruta-${ruta.id}|}">Ver la ruta completa, paso a paso &rarr;</a>
         </div>
     </div>
 
@@ -50,10 +50,9 @@
     </div>
 
     <!-- HU-07: canal institucional oficial -->
-    <p>
-        <a class="btn btn-primary" th:href="${canalUrl}" target="_blank" rel="noopener"
-           th:text="${canalEtiqueta}">Contactar al canal institucional</a>
-    </p>
+    <div class="mb-3">
+        <div th:replace="~{fragments/tarjetas :: canalInstitucional(${canalDirecto}, ${canalEtiqueta})}"></div>
+    </div>
 
     <hr class="d-print-none">
     <p class="d-print-none">

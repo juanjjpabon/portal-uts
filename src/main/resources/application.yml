@@ -23,11 +23,24 @@ spring:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: false
+  # Subida de imagenes desde el panel (22/9/2026). El limite real para el usuario es
+  # 5 MB y lo valida ProcesadorImagen con un mensaje claro; estos topes son mas
+  # holgados a proposito, para que un archivo algo mas grande llegue hasta esa
+  # validacion en vez de cortarse antes con un error generico. El archivo se
+  # guarda en un temporal mientras se procesa, no en memoria.
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
 
 server:
   # Render (y la mayoria de plataformas de hosting) asignan el puerto propio
   # por la variable de entorno PORT; en local, sin esa variable, sigue siendo 8080.
   port: ${PORT:8080}
+  tomcat:
+    # Si alguien sube un archivo mayor al tope de arriba, Tomcat igual lee (y descarta)
+    # el resto de la peticion para poder responder, en lugar de cortar la conexion.
+    max-swallow-size: 30MB
   error:
     whitelabel:
       enabled: false

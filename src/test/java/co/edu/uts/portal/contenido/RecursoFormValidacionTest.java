@@ -88,4 +88,34 @@ class RecursoFormValidacionTest {
 
         assertThat(camposConError(f)).isEmpty();
     }
+
+    @Test
+    void contactoDirectoDebeSerCorreoTelefonoOEnlace() {
+        RecursoForm f = RecursoForm.nuevo(TipoRecurso.RUTA);
+        f.setTitulo("Tutorías");
+        f.setDependencia("CAE");
+        f.setHorario("L-V");
+        f.setCanal("Correo del CAE");
+
+        f.setUrlCanal("javascript:alert(1)");
+        assertThat(camposConError(f)).contains("urlCanal");
+
+        f.setUrlCanal("cae@correo.uts.edu.co");
+        assertThat(camposConError(f)).isEmpty();
+
+        f.setUrlCanal("");
+        assertThat(camposConError(f)).isEmpty();
+    }
+
+    @Test
+    void contactoDirectoDemasiadoLargoTrasNormalizarSeRechaza() {
+        RecursoForm f = RecursoForm.nuevo(TipoRecurso.CONTACTO);
+        f.setTitulo("Sitio");
+        f.setDependencia("CAE");
+        f.setCanal("Web");
+        // 300 caracteres sin esquema: al guardarse gana "https://" y ya no cabe en la columna.
+        f.setUrlCanal("www.uts.edu.co/" + "a".repeat(300 - "www.uts.edu.co/".length()));
+
+        assertThat(camposConError(f)).contains("urlCanal");
+    }
 }

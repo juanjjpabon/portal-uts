@@ -25,6 +25,17 @@ public interface RecursoRepository extends JpaRepository<Recurso, Long> {
     List<Recurso> findByTipoAndEstadoOrderByOrdenAscTituloAsc(TipoRecurso tipo, EstadoPublicacion estado);
 
     /**
+     * Carrusel de la portada (reunion con la directora, 22/9/2026): recursos
+     * publicados, marcados como destacados y con imagen.
+     */
+    @Query("""
+            select r from Recurso r
+            where r.estado = :estado and r.destacado = true and r.imagenId is not null
+            order by r.orden asc, r.publicadoEn desc
+            """)
+    List<Recurso> destacados(@Param("estado") EstadoPublicacion estado);
+
+    /**
      * Listado del panel (HU-18/HU-19): filtra por tipo y, opcionalmente, por estado,
      * categoria y texto libre en titulo/dependencia.
      */

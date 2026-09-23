@@ -5,11 +5,11 @@
 
 <nav th:replace="~{fragments/comunes :: navbarPublico}"></nav>
 
-<main class="container py-5" style="max-width: 760px;">
-    <p class="mb-1"><a th:href="@{/contenidos}">&larr; Contenidos</a></p>
+<main class="container py-5" style="max-width: 820px;">
+    <p class="mb-2"><a th:href="@{/contenidos}">&larr; Contenidos</a></p>
 
     <div class="mb-2">
-        <span class="badge text-bg-light me-1" th:each="c : ${contenido.categorias}"
+        <span class="badge etiqueta-categoria me-1" th:each="c : ${contenido.categorias}"
               th:text="${c.nombre}"></span>
     </div>
 
@@ -21,20 +21,29 @@
               th:text="'Actualizado el ' + ${#temporals.format(contenido.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
             Actualizado
         </span>
-        <span th:if="${contenido.fuente}"> &middot; Fuente: <span th:text="${contenido.fuente}"></span></span>
+        <span th:if="${not #strings.isEmpty(contenido.fuente)}"> &middot; Fuente: <span th:text="${contenido.fuente}"></span></span>
     </p>
 
+    <!-- Imagen principal (folleto, infografía...). Clic para verla en tamaño completo. -->
+    <figure th:if="${contenido.tieneImagen}" class="contenido-imagen aparecer">
+        <a th:href="@{|/imagenes/${contenido.imagenId}|}" target="_blank" rel="noopener">
+            <img th:src="@{|/imagenes/${contenido.imagenId}|}" th:alt="${contenido.textoAlternativo}"
+                 class="img-fluid">
+        </a>
+        <figcaption class="small text-muted mt-2">Toca la imagen para verla en tamaño completo.</figcaption>
+    </figure>
+
     <hr>
-    <div style="white-space: pre-line" th:text="${contenido.cuerpo}">Cuerpo del contenido.</div>
+    <div class="contenido-cuerpo" style="white-space: pre-line" th:text="${contenido.cuerpo}">Cuerpo del contenido.</div>
 
     <div class="alert alert-success py-2 mt-4" th:if="${gracias}">¡Gracias por tu opinión!</div>
     <div th:replace="~{fragments/tarjetas :: valorar(${contenido})}"></div>
 
     <hr class="mt-4">
-    <p>
-        <a th:href="@{/autoorientacion}">Hacer la autoorientación &rarr;</a> &middot;
-        <a th:href="@{/urgencia}">Necesito ayuda urgente &rarr;</a>
-    </p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-primary" th:href="@{/autoorientacion}">Hacer la autoorientación &rarr;</a>
+        <a class="btn btn-outline-danger" th:href="@{/urgencia}">Necesito ayuda urgente &rarr;</a>
+    </div>
 </main>
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>
