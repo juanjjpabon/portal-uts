@@ -210,7 +210,7 @@ class ProcesadorImagenTest {
 
     @Test
     void resolucionExcesivaSeRechazaAntesDeDecodificar() throws IOException {
-        // 6000 x 4000 = 24 megapixeles (> 20): se detecta leyendo solo la cabecera.
+        // 6000 x 4000 = 24 megapixeles (> 16): se detecta leyendo solo la cabecera.
         BufferedImage enorme = new BufferedImage(6000, 4000, BufferedImage.TYPE_BYTE_BINARY);
         byte[] png = codificar(enorme, "png");
 

@@ -21,6 +21,10 @@ Proyecto 65-2026-015. Spring Boot + Spring Security + PostgreSQL + Thymeleaf/Boo
 | HU-14 / HU-15 | Contenido para docentes (M04, categoría de contenido) | Sin cambio de código; categoría **"Docentes"** creada e inactiva, a la espera del texto de la directora/CAE |
 | HU-23 / HU-24 | Estadísticas agregadas y exportación CSV (M07) | Implementada |
 | HU-25 | Valoración de utilidad (M07) | Implementada |
+| HU-28 | Contacto del canal visible y copiable (mejora de HU-07) | Implementada (cambio del 22/9/2026) |
+| HU-29 | Rutas institucionales paso a paso, con imagen opcional por paso | Implementada (cambio del 22/9/2026) |
+| HU-30 | Imágenes en contenidos, rutas y contactos (folletos, banners) | Implementada (cambio del 22/9/2026) |
+| HU-31 | Carrusel de destacados en la portada | Implementada (cambio del 22/9/2026) |
 
 HU-18 y HU-19 comparten el modelo genérico `Recurso` (`tipo` ∈ CONTENIDO / RUTA /
 CONTACTO, F-DC-125): una entidad, un repositorio, un servicio y un par de plantillas.
@@ -108,6 +112,26 @@ oculte después. El voto de HU-25 no identifica al visitante (sin cookie, sin se
 propia) y vuelve a la página de origen validando el header `Referer` contra una lista
 blanca de rutas propias, nunca redirigiendo a la URL cruda del encabezado. Migración `V8`.
 
+HU-28 a HU-31 (cambio de alcance pedido por la directora en la revisión del 22/9/2026,
+registrado en el product backlog). **Canal directo** (`CanalDirecto`): el contacto que
+escribe el CAE (correo, teléfono, WhatsApp o página) se normaliza al guardar
+(`mailto:`/`tel:`/`https:`) y en la página pública se muestra el dato a la vista con un
+botón "Copiar", más "Escribir en Gmail" o "Llamar"; esquemas como `javascript:`,
+`data:` o `file:` y el texto libre se rechazan en la validación, y `desde()` nunca lanza
+al pintar un dato viejo raro. **Imágenes** (`ProcesadorImagen` + `ImagenService`, tabla
+`imagen` en `bytea`): se valida el formato por el contenido (JPG, PNG, GIF, WebP, máx.
+5 MB y 16 MP leídos de la cabecera, antes de decodificar), la foto se gira según EXIF,
+se reduce a 1600 px y se vuelve a codificar, lo que borra los metadatos (incluida la
+ubicación GPS); una sola imagen se procesa a la vez para acotar la memoria. Se sirven en
+`/imagenes/{uuid}` con caché inmutable de un año; al reemplazar o eliminar un recurso se
+borran las imágenes huérfanas. Cada imagen lleva texto alternativo. **Rutas paso a paso**
+(`PasoRuta`, `PasoRutaService`): pasos numerados con imagen opcional; el administrador
+funcional los agrega, edita, reordena y elimina en
+`/admin/recursos/rutas/{id}/pasos`, y cada cambio queda en la bitácora (`PASO_RUTA_*`).
+**Destacados**: un recurso publicado, marcado como destacado y con imagen aparece en el
+carrusel de la portada; el carrusel no avanza solo si el sistema pide reducir el
+movimiento. Migración `V10`.
+
 Pendiente del backlog: el **texto** de HU-14/HU-15 (la categoría y el resto de la
 infraestructura ya están listos, ver arriba).
 
@@ -144,7 +168,7 @@ infraestructura ya están listos, ver arriba).
    ./mvnw spring-boot:run
    ```
 
-   Flyway crea el esquema (`V1`–`V8`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
+   Flyway crea el esquema (`V1`–`V10`) y siembra roles (`V2`) y parámetros (`V4`). `SeedAdminInicial`
    crea el usuario `admin.tecnico@uts.edu.co` con rol `ADMIN_TECNICO` usando
    `PORTAL_ADMIN_INICIAL_PASSWORD`.
 
@@ -163,7 +187,7 @@ SQL; ya se administra como cualquier otro.)*
 
 | Ruta | Acceso |
 |---|---|
-| `/`, `/contenidos/**`, `/rutas/**`, `/autoorientacion/**`, `/urgencia`, `/buscar`, `/valoraciones/**` | Público |
+| `/`, `/contenidos/**`, `/rutas/**`, `/autoorientacion/**`, `/urgencia`, `/buscar`, `/valoraciones/**`, `/imagenes/**` | Público |
 | `/login`, `/logout` | Público |
 | `/admin` | Cualquier administrador autenticado |
 | `/admin/recursos/{contenidos\|rutas\|contactos}/**`, `/admin/categorias/**` | Solo `ADMIN_FUNCIONAL` |
@@ -192,7 +216,11 @@ permisos), `PortalErrorAttributesTest` (HU-26: sin trace/exception/message, con
 referencia solo en `≥500`), `AnaliticaServiceTest` y `AnaliticaAdminControllerTest`
 (HU-23/24: umbral `>=5`, CSV = mismas filas que el reporte), `ValoracionServiceTest`
 y `ValoracionPublicaControllerTest` (HU-25: solo en `PUBLICADO`, redirect por
-`Referer` con lista blanca), `SlugsTest`. 121 pruebas en total.
+`Referer` con lista blanca), `SlugsTest`, `CanalDirectoTest` (HU-28: normalización y
+esquemas seguros), `ProcesadorImagenTest` (HU-30: formato por contenido, límites,
+orientación EXIF, sin metadatos), `PasoRutaServiceTest` (HU-29: orden, reordenar,
+bitácora) e `ImagenYPasosWebTest` (subida desde el panel, permisos y `/imagenes/{id}`).
+171 pruebas en total.
 
 ## Contraseña de BD en archivo local (opcional)
 

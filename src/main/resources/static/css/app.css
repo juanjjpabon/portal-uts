@@ -11,12 +11,21 @@
    #17843E con blanco = 4.77:1 (pasa AA normal-text, minimo 4.5:1).
    Se eligio ese verde y no uno mas brillante porque un verde bien vivo
    (ej. #0F9D45) da 3.55:1 con blanco -- pasa el 3:1 de UI/texto grande,
-   pero NO el 4.5:1 que exige AA para texto normal (botones, enlaces). */
+   pero NO el 4.5:1 que exige AA para texto normal (botones, enlaces).
+
+   Verde lima institucional (22/9/2026): #C4D430, medido sobre una pieza
+   grafica oficial de Bienestar UTS (2026-2). Se usa SOLO como acento
+   (franja bajo el menu, etiqueta de la portada, lineas y detalles): con
+   texto blanco da apenas 1.6:1, asi que nunca lleva texto blanco encima.
+   Con texto verde muy oscuro (--uts-lima-texto) da 8.9:1. */
 :root {
     --uts-verde: #17843e;
     --uts-verde-rgb: 23, 132, 62;
     --uts-verde-oscuro: #0f5c2b;
     --uts-verde-claro: #e8f5ec;
+    --uts-lima: #c4d430;
+    --uts-lima-rgb: 196, 212, 48;
+    --uts-lima-texto: #1c2e06;
 
     --bs-primary: var(--uts-verde);
     --bs-primary-rgb: var(--uts-verde-rgb);
@@ -120,16 +129,22 @@ main {
    ===================================================================== */
 
 :root {
-    /* Foto institucional de la portada y de los encabezados. Mientras no haya una foto
-       oficial en static/img/, se ve solo el degradado verde. Para ponerla: copiar la foto
-       como static/img/fondo-uts.jpg y cambiar "none" por url('/img/fondo-uts.jpg'). */
+    /* Fondo de la portada y de los encabezados: degradado verde institucional con una
+       textura propia de curvas de nivel (static/img/textura-topografica.svg) y un brillo
+       verde lima en la esquina. Si mas adelante el CAE entrega una FOTO institucional
+       (sede, campus), copiarla como static/img/fondo-uts.jpg y cambiar "none" por
+       url('/img/fondo-uts.jpg'): queda debajo del degradado, asi que el texto blanco
+       conserva el contraste. Evitar imagenes con texto o cifras (infografias): se
+       verian detras del titulo. */
     --fondo-hero: none;
+    --textura-hero: url('/img/textura-topografica.svg');
     --sombra-suave: 0 0.25rem 1rem rgba(0, 0, 0, 0.08);
     --sombra-elevada: 0 0.75rem 2rem rgba(0, 0, 0, 0.14);
 }
 
 .navbar-portal {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    border-bottom: 3px solid var(--uts-lima);
 }
 
 .marca-icono {
@@ -170,6 +185,8 @@ main {
     color: #ffffff;
     background-color: var(--uts-verde-oscuro);
     background-image:
+        var(--textura-hero),
+        radial-gradient(circle at 100% 100%, rgba(var(--uts-lima-rgb), 0.28), transparent 34%),
         radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.14), transparent 35%),
         linear-gradient(115deg, rgba(8, 48, 23, 0.94) 0%, rgba(15, 92, 43, 0.86) 50%, rgba(23, 132, 62, 0.70) 100%),
         var(--fondo-hero);
@@ -198,7 +215,8 @@ main {
     font-weight: 600;
     padding: 0.3rem 0.75rem;
     border-radius: 2rem;
-    background: rgba(255, 255, 255, 0.16);
+    color: var(--uts-lima-texto);
+    background: var(--uts-lima);
     margin-bottom: 1rem;
 }
 
@@ -273,7 +291,7 @@ main {
     left: 150px;
     bottom: 0;
     animation-delay: -5s;
-    background: rgba(255, 217, 90, 0.22);
+    background: rgba(var(--uts-lima-rgb), 0.30);
 }
 
 .burbuja-3 .icono {
@@ -300,6 +318,7 @@ main {
     .hero-uts,
     .encabezado-pagina {
         background-image:
+            var(--textura-hero),
             linear-gradient(180deg, rgba(8, 48, 23, 0.92) 0%, rgba(15, 92, 43, 0.88) 100%),
             var(--fondo-hero);
     }
@@ -342,7 +361,7 @@ main {
     flex: 1;
     height: 2px;
     margin-left: 0.5rem;
-    background: linear-gradient(90deg, rgba(var(--uts-verde-rgb), 0.35), transparent);
+    background: linear-gradient(90deg, var(--uts-lima), rgba(var(--uts-lima-rgb), 0));
 }
 
 .titulo-seccion .icono {
@@ -743,6 +762,10 @@ a.accion-urgente .accion-enlace {
     top: 0.75rem;
     bottom: auto;
     margin-bottom: 0;
+}
+
+.carrusel-destacados .carousel-indicators .active {
+    background-color: var(--uts-lima);
 }
 
 .carrusel-destacados .carousel-control-prev,
