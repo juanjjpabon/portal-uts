@@ -135,3 +135,28 @@ Proyecto 65-2026-015 — Portal de orientación psicosocial UTS
 | HU-26 | Errores técnicos seguros | M08 | 11-13 | Alta |
 
 **Nota:** dentro de cada bloque de días, programar primero las de prioridad Alta. Si algo se atrasa, se sacrifica tiempo de pulido en las de prioridad Media, nunca en las Altas.
+
+## Cambio de alcance solicitado por la directora (22/9/2026) — iteración de mejora
+
+Registrado según el procedimiento de cambio de los Lineamientos (16.1): **origen:** reunión de revisión del portal desplegado con la directora, 22/9/2026; **clasificación:** ampliación de alcance menor sobre requisitos existentes (RF-05, RF-07, RF-21, RF-22), sin eliminar ni reemplazar nada del backlog aprobado; **impacto:** módulos M01, M02 y M06, nueva migración de base de datos (V10), sin cambios en cuestionarios ni en el anonimato; **pruebas:** 50 pruebas automáticas nuevas (171 en total, todas en verde); **aprobación:** pedido directo de la directora.
+
+Hallazgos que motivan el cambio: (1) el botón "Abrir canal" no llevaba a ningún lado en equipos sin programa de correo configurado; (2) el portal se veía "plano", solo texto — la comunidad responde a imágenes, color y movimiento (lo notaron tanto la directora como las personas a quienes se les mostró el portal); (3) las rutas publicadas eran en realidad contactos: no explicaban qué pasos seguir; el CAE trabaja sobre todo con folletos (más imagen, poco texto).
+
+**HU-28 (mejora de RF-07 / HU-07).** Como visitante, quiero ver el correo o el teléfono del canal y poder copiarlo, para contactar aunque mi equipo no tenga un programa de correo configurado.
+*Criterio:* el dato se ve a la vista con un botón "Copiar"; hay alternativas (escribir en Gmail, llamar desde el celular, abrir la página); solo se generan enlaces con esquemas seguros (correo, teléfono, http/https).
+
+**HU-29 (amplía RF-05 y RF-22).** Como visitante, quiero ver las rutas institucionales paso a paso, con fotos opcionales, para saber exactamente qué hacer y en qué orden.
+*Criterio:* la ruta muestra sus pasos numerados; el administrador funcional los agrega, edita, reordena y elimina desde el panel; cada cambio queda en la bitácora.
+
+**HU-30 (amplía RF-21 y RF-22).** Como administrador funcional, quiero subir imágenes (folletos, banners, fotos) a contenidos, rutas y contactos, para que el portal sea más visual.
+*Criterio:* acepta JPG, PNG, GIF o WebP de hasta 5 MB; rechaza con un mensaje claro lo que no es una imagen; las fotos se optimizan y se les quitan los metadatos (incluida la ubicación GPS); cada imagen lleva texto alternativo para lectores de pantalla.
+
+**HU-31 (nueva, M01).** Como visitante, quiero ver en la portada los contenidos y rutas destacados por el CAE en un carrusel, para enterarme de lo más importante (eventos, campañas, folletos).
+*Criterio:* solo aparecen recursos publicados, marcados como destacados y con imagen; el carrusel se detiene para quien desactivó las animaciones en su sistema.
+
+| ID | Historia | Módulo | Fecha | Prioridad |
+|---|---|---|---|---|
+| HU-28 | Contacto visible y copiable | M02 | 22-23/9 | Alta |
+| HU-29 | Rutas paso a paso | M02/M06 | 22-23/9 | Alta |
+| HU-30 | Imágenes en contenidos y rutas | M06 | 22-23/9 | Alta |
+| HU-31 | Carrusel de destacados en la portada | M01 | 22-23/9 | Media |
