@@ -3,24 +3,29 @@ package co.edu.uts.portal.contenido;
 import co.edu.uts.portal.bitacora.domain.AccionBitacora;
 import co.edu.uts.portal.bitacora.service.BitacoraService;
 import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
+import co.edu.uts.portal.contenido.domain.PasoRuta;
 import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.repository.CategoriaRepository;
 import co.edu.uts.portal.contenido.repository.PasoRutaRepository;
 import co.edu.uts.portal.contenido.repository.RecursoRepository;
 import co.edu.uts.portal.contenido.service.ImagenService;
+import co.edu.uts.portal.contenido.service.OperacionNoPermitida;
 import co.edu.uts.portal.contenido.service.RecursoService;
 import co.edu.uts.portal.contenido.web.dto.RecursoForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -115,8 +120,33 @@ class RecursoServiceTest {
     @Test
     void publicarRegistraRecursoPublicado() {
         when(recursoRepo.findById(2L)).thenReturn(Optional.of(recurso(2, TipoRecurso.RUTA)));
+        when(pasoRepo.findByRutaIdOrderByOrdenAscIdAsc(2L)).thenReturn(List.of(new PasoRuta(2L, 1)));
+
         service.publicar(2L, TipoRecurso.RUTA);
+
         verify(bitacora).registrar(eq(AccionBitacora.RECURSO_PUBLICADO), eq("Recurso"), eq(2L), any());
+    }
+
+    // Ajuste Laura #2: una ruta sin pasos no dice que hacer, no se puede publicar.
+    @Test
+    void publicarRutaSinPasosLanzaOperacionNoPermitidaYNoRegistraNada() {
+        when(recursoRepo.findById(20L)).thenReturn(Optional.of(recurso(20, TipoRecurso.RUTA)));
+        // pasoRepo sin stub -> Mockito devuelve lista vacia (sin pasos)
+
+        assertThatThrownBy(() -> service.publicar(20L, TipoRecurso.RUTA))
+                .isInstanceOf(OperacionNoPermitida.class);
+
+        verify(bitacora, never()).registrar(eq(AccionBitacora.RECURSO_PUBLICADO), any(), any(), any());
+    }
+
+    // Un contenido o contacto no tiene pasos; la regla no le aplica.
+    @Test
+    void publicarContenidoNoRequierePasos() {
+        when(recursoRepo.findById(21L)).thenReturn(Optional.of(recurso(21, TipoRecurso.CONTENIDO)));
+
+        service.publicar(21L, TipoRecurso.CONTENIDO);
+
+        verify(bitacora).registrar(eq(AccionBitacora.RECURSO_PUBLICADO), eq("Recurso"), eq(21L), any());
     }
 
     @Test
@@ -129,7 +159,23 @@ class RecursoServiceTest {
     @Test
     void eliminarRegistraRecursoEliminado() {
         when(recursoRepo.findById(4L)).thenReturn(Optional.of(recurso(4, TipoRecurso.RUTA)));
+        when(recursoRepo.estaAsignadoComoRutaDeNivel(4L)).thenReturn(false);
+
         service.eliminar(4L, TipoRecurso.RUTA);
+
         verify(bitacora).registrar(eq(AccionBitacora.RECURSO_ELIMINADO), eq("Recurso"), eq(4L), any());
+    }
+
+    // Ajuste Laura #3: no se elimina una ruta asignada como ruta aplicable de un nivel.
+    @Test
+    void eliminarRutaEnUsoLanzaOperacionNoPermitidaYNoBorraNada() {
+        when(recursoRepo.findById(22L)).thenReturn(Optional.of(recurso(22, TipoRecurso.RUTA)));
+        when(recursoRepo.estaAsignadoComoRutaDeNivel(22L)).thenReturn(true);
+
+        assertThatThrownBy(() -> service.eliminar(22L, TipoRecurso.RUTA))
+                .isInstanceOf(OperacionNoPermitida.class);
+
+        verify(recursoRepo, never()).delete(any());
+        verify(bitacora, never()).registrar(eq(AccionBitacora.RECURSO_ELIMINADO), any(), any(), any());
     }
 }

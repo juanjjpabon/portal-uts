@@ -11,7 +11,14 @@
 </head>
 <body>
 
-<nav th:fragment="navbarPublico" class="navbar navbar-expand-lg navbar-dark bg-primary d-print-none navbar-portal">
+<!-- Ajuste Laura #1: aviso configurable (parametro aviso.contenido_demostrativo) en toda
+     pagina publica. navbarPublico ya se incluye en todas ellas, asi que envolverlo en
+     este th:block basta para que aparezca en todas sin tocar cada plantilla; vacio
+     (borrado desde /admin/parametros) = no se muestra nada. El valor llega como
+     atributo de modelo "avisoContenidoDemostrativo" (ver AvisoDemostrativoAdvice), no
+     como llamada directa a un bean desde la plantilla. -->
+<th:block th:fragment="navbarPublico">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary d-print-none navbar-portal">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
             <span class="marca-icono"><svg th:replace="~{fragments/iconos :: icono('corazon')}"></svg></span>
@@ -34,6 +41,9 @@
         </div>
     </div>
 </nav>
+<div th:if="${not #strings.isEmpty(avisoContenidoDemostrativo)}" class="text-center small py-1 px-2 bg-warning-subtle text-dark d-print-none aviso-demostrativo"
+     th:text="${avisoContenidoDemostrativo}">Aviso de contenido demostrativo.</div>
+</th:block>
 
 <nav th:fragment="navbarAdmin" class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
@@ -70,9 +80,6 @@
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN_TECNICO')">
                     <a class="nav-link" th:href="@{/admin/bitacora}">Bitácora</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN_TECNICO')">
-                    <span class="nav-link text-muted">Sistema (próximamente)</span>
                 </li>
             </ul>
             <span class="navbar-text text-light me-3" sec:authentication="name">correo</span>

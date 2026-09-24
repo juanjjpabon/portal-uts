@@ -22,4 +22,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             where r.nombre = :rol and u.activo = true
             """)
     long contarActivosConRol(@Param("rol") NombreRol rol);
+
+    /** Panel admin (ajuste Laura #6). */
+    long countByActivoTrue();
 }

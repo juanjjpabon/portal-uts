@@ -2,6 +2,7 @@ package co.edu.uts.portal.contenido;
 
 import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.contenido.service.CategoriaService;
+import co.edu.uts.portal.contenido.service.OperacionNoPermitida;
 import co.edu.uts.portal.contenido.service.RecursoService;
 import co.edu.uts.portal.contenido.web.RecursoAdminController;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -149,5 +151,31 @@ class RecursoAdminControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/recursos/rutas"));
         verify(recursoService).eliminar(eq(7L), eq(co.edu.uts.portal.contenido.domain.TipoRecurso.RUTA));
+    }
+
+    // Ajuste Laura #3: eliminar una ruta en uso no revienta, muestra el motivo.
+    @Test
+    @WithMockUser(roles = "ADMIN_FUNCIONAL")
+    void eliminarRutaEnUsoMuestraElMotivoEnLugarDeFallar() throws Exception {
+        org.mockito.Mockito.doThrow(new OperacionNoPermitida("No se puede eliminar: la ruta está en uso."))
+                .when(recursoService).eliminar(eq(9L), eq(co.edu.uts.portal.contenido.domain.TipoRecurso.RUTA));
+
+        mockMvc.perform(post("/admin/recursos/rutas/9/eliminar").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/recursos/rutas"))
+                .andExpect(flash().attributeExists("error"));
+    }
+
+    // Ajuste Laura #2: publicar una ruta sin pasos no revienta, muestra el motivo.
+    @Test
+    @WithMockUser(roles = "ADMIN_FUNCIONAL")
+    void publicarRutaSinPasosMuestraElMotivoEnLugarDeFallar() throws Exception {
+        org.mockito.Mockito.doThrow(new OperacionNoPermitida("No se puede publicar: la ruta no tiene pasos."))
+                .when(recursoService).publicar(eq(9L), eq(co.edu.uts.portal.contenido.domain.TipoRecurso.RUTA));
+
+        mockMvc.perform(post("/admin/recursos/rutas/9/publicar").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/recursos/rutas"))
+                .andExpect(flash().attributeExists("error"));
     }
 }

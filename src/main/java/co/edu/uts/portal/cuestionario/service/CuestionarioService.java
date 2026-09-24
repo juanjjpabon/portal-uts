@@ -46,6 +46,17 @@ public class CuestionarioService {
         return cs;
     }
 
+    /** Ajuste Laura #6: conteos para los indicadores del panel. */
+    @Transactional(readOnly = true)
+    public long contarActivos() {
+        return cuestionarioRepository.countByActivoTrue();
+    }
+
+    @Transactional(readOnly = true)
+    public long contarPublicados() {
+        return cuestionarioRepository.countByVersiones_Estado(EstadoVersion.PUBLICADA);
+    }
+
     @Transactional(readOnly = true)
     public Cuestionario obtener(Long id) {
         return cuestionarioRepository.findById(id)

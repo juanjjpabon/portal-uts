@@ -17,4 +17,10 @@ public interface CuestionarioRepository extends JpaRepository<Cuestionario, Long
 
     /** Cuestionarios ofrecibles al publico (activos y con version publicada). */
     List<Cuestionario> findByActivoTrueAndVersiones_EstadoOrderByNombreAsc(EstadoVersion estado);
+
+    /** Panel admin (ajuste Laura #6). */
+    long countByActivoTrue();
+
+    /** Cuantos cuestionarios tienen (al menos) una version en el estado dado; a lo sumo 1 PUBLICADA por cuestionario. */
+    long countByVersiones_Estado(EstadoVersion estado);
 }

@@ -7,6 +7,7 @@ import co.edu.uts.portal.autoorientacion.web.UrgenciaController;
 import co.edu.uts.portal.autoorientacion.web.dto.CuestionarioParaResponder;
 import co.edu.uts.portal.autoorientacion.web.dto.ResultadoAutoorientacion;
 import co.edu.uts.portal.config.SecurityConfig;
+import co.edu.uts.portal.contenido.service.PortalPublicoService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
 import co.edu.uts.portal.parametros.service.ParametroService;
@@ -44,6 +45,11 @@ class AutoorientacionControllerTest {
     AutoorientacionService servicio;
     @MockitoBean
     ParametroService parametros;
+    // Ajuste Laura #4: UrgenciaController ahora pide la lista de recursos urgentes
+    // a PortalPublicoService (ver urgenciaEsPublica). Sin stub -> Mockito devuelve
+    // lista vacia, que es exactamente el caso "sin recursos urgentes marcados".
+    @MockitoBean
+    PortalPublicoService portalPublicoService;
     @MockitoBean
     RegistroAccesoHandler registroAccesoHandler;
     @MockitoBean

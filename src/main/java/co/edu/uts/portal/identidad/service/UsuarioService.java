@@ -50,6 +50,15 @@ public class UsuarioService {
         return usuarioRepository.findAllByOrderByNombreCompletoAsc();
     }
 
+    /**
+     * Ajuste Laura #6: conteo para el panel. Hereda el @PreAuthorize de la clase
+     * (solo ADMIN_TECNICO), igual que el resto de este servicio.
+     */
+    @Transactional(readOnly = true)
+    public long contarActivos() {
+        return usuarioRepository.countByActivoTrue();
+    }
+
     @Transactional(readOnly = true)
     public Usuario obtener(Long id) {
         return usuarioRepository.findById(id)

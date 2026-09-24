@@ -1,6 +1,7 @@
 package co.edu.uts.portal.autoorientacion.web;
 
 import co.edu.uts.portal.contenido.domain.CanalDirecto;
+import co.edu.uts.portal.contenido.service.PortalPublicoService;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * HU-06: informacion visible para situaciones urgentes. Publica, a un clic desde
- * cualquier resultado de autoorientacion y desde el navbar.
+ * cualquier resultado de autoorientacion y desde el navbar. Ajuste Laura #4: ademas
+ * del mensaje y el canal institucional (ya dinamicos via Parametro), tambien lista
+ * las rutas/contactos marcados como "urgente" (HU-06/HU-19) que esten publicados,
+ * via PortalPublicoService.urgentes() (el mismo servicio de solo-lectura que usan
+ * las demas paginas publicas; este controlador no toca un Repository directo).
  */
 @Controller
 public class UrgenciaController {
@@ -18,9 +23,11 @@ public class UrgenciaController {
                     + "o acude al servicio de urgencias más cercano.";
 
     private final ParametroService parametros;
+    private final PortalPublicoService portalPublicoService;
 
-    public UrgenciaController(ParametroService parametros) {
+    public UrgenciaController(ParametroService parametros, PortalPublicoService portalPublicoService) {
         this.parametros = parametros;
+        this.portalPublicoService = portalPublicoService;
     }
 
     @GetMapping("/urgencia")
@@ -33,6 +40,7 @@ public class UrgenciaController {
         model.addAttribute("canalDirecto", CanalDirecto.desde(canalUrl).orElse(null));
         model.addAttribute("canalEtiqueta",
                 parametros.valor("canal_institucional.etiqueta", "Contactar al canal institucional"));
+        model.addAttribute("recursosUrgentes", portalPublicoService.urgentes());
         return "publico/urgencia";
     }
 }

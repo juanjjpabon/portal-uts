@@ -69,6 +69,12 @@ public class RecursoService {
         return conteo;
     }
 
+    /** Ajuste Laura #6: conteos para los indicadores del panel, por tipo y estado. */
+    @Transactional(readOnly = true)
+    public long contarPorTipoYEstado(TipoRecurso tipo, EstadoPublicacion estado) {
+        return recursoRepository.countByTipoAndEstado(tipo, estado);
+    }
+
     @Transactional(readOnly = true)
     public List<Recurso> listar(TipoRecurso tipo, EstadoPublicacion estado, Long categoriaId, String texto) {
         String t = StringUtils.hasText(texto) ? texto.trim() : null;
@@ -132,10 +138,19 @@ public class RecursoService {
         }
     }
 
+    /**
+     * Ajuste Laura #2: una ruta sin pasos no dice que hacer, asi que no se puede
+     * publicar (mismo principio que ValidadorVersion bloquea un cuestionario
+     * incompleto). Contenidos y contactos no tienen pasos, no aplica.
+     */
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public void publicar(Long id, TipoRecurso tipo) {
         Recurso r = obtenerDeTipo(id, tipo);
+        if (tipo == TipoRecurso.RUTA && contarPasosDeRuta(id) == 0) {
+            throw new OperacionNoPermitida(
+                    "No se puede publicar: la ruta no tiene pasos. Agrega al menos un paso antes de publicarla.");
+        }
         r.publicar(Instant.now());
         bitacora.registrar(AccionBitacora.RECURSO_PUBLICADO, OBJ, id, "Publicó \"" + r.getTitulo() + "\"");
     }
@@ -148,10 +163,20 @@ public class RecursoService {
         bitacora.registrar(AccionBitacora.RECURSO_ARCHIVADO, OBJ, id, "Archivó \"" + r.getTitulo() + "\"");
     }
 
+    /**
+     * Ajuste Laura #3: no se elimina una ruta que este en uso como ruta aplicable de
+     * un nivel de resultado (tabla nivel_ruta, ON DELETE CASCADE) -- si no, la version
+     * del cuestionario (publicada o no) pierde esa ruta sin aviso, por fuera de
+     * ValidadorVersion, que solo se corre al publicar.
+     */
     @PreAuthorize("hasRole('ADMIN_FUNCIONAL')")
     @Transactional
     public void eliminar(Long id, TipoRecurso tipo) {
         Recurso r = obtenerDeTipo(id, tipo);
+        if (tipo == TipoRecurso.RUTA && recursoRepository.estaAsignadoComoRutaDeNivel(id)) {
+            throw new OperacionNoPermitida("No se puede eliminar: la ruta está asignada como ruta aplicable "
+                    + "de un nivel de resultado de un cuestionario. Quítala de ahí primero.");
+        }
         recursoRepository.delete(r);
         bitacora.registrar(AccionBitacora.RECURSO_ELIMINADO, OBJ, id, "Eliminó \"" + r.getTitulo() + "\"");
         // La base de datos borra los pasos de la ruta (ON DELETE CASCADE); sus imagenes y

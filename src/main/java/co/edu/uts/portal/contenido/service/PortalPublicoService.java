@@ -113,6 +113,15 @@ public class PortalPublicoService {
                 TipoRecurso.CONTACTO, EstadoPublicacion.PUBLICADO);
     }
 
+    private static final List<TipoRecurso> TIPOS_URGENTES = List.of(TipoRecurso.RUTA, TipoRecurso.CONTACTO);
+
+    /** Ajuste Laura #4: rutas y contactos publicados marcados como "urgente", para /urgencia. */
+    @Transactional(readOnly = true)
+    public List<Recurso> urgentes() {
+        return recursoRepository.findByTipoInAndUrgenteTrueAndEstadoOrderByOrdenAscTituloAsc(
+                TIPOS_URGENTES, EstadoPublicacion.PUBLICADO);
+    }
+
     private static final Pattern DIACRITICOS = Pattern.compile("\\p{M}");
     private static final Pattern PUNTUACION = Pattern.compile("[,.;:!?'\"()]");
     private static final Pattern ESPACIOS = Pattern.compile("\\s+");

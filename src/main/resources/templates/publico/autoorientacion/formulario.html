@@ -12,11 +12,28 @@
 
     <div th:if="${error}" class="alert alert-warning" th:text="${error}"></div>
 
-    <form method="post" th:object="${form}" th:action="@{|/autoorientacion/${cuestionario.slug}/resultado|}">
+    <!-- Ajuste Laura #5: paso a paso (una pregunta por vista) con progreso y validacion,
+         hecho como mejora progresiva en JS puro: el formulario sigue siendo exactamente
+         el mismo (mismos campos, mismo POST a /resultado) y, sin JS, se ve y funciona
+         igual que antes (todas las preguntas en una sola vista, validacion nativa del
+         navegador). No se toca CalculadoraNivel ni AutoorientacionController/Service:
+         el calculo y el no-almacenamiento (RF-13/RS-13) siguen intactos. -->
+    <form method="post" th:object="${form}" th:action="@{|/autoorientacion/${cuestionario.slug}/resultado|}"
+          id="formAutoorientacion">
         <input type="hidden" th:field="*{numeroVersion}">
 
-        <fieldset class="mb-4 p-3 rounded border"
+        <div id="wizardProgreso" class="mb-3 d-none">
+            <div class="d-flex justify-content-between small text-muted mb-1">
+                <span id="wizardEtiqueta" aria-live="polite"></span>
+            </div>
+            <div class="progress" style="height:6px">
+                <div id="wizardBarra" class="progress-bar" role="progressbar"></div>
+            </div>
+        </div>
+
+        <fieldset class="mb-4 p-3 rounded border paso-pregunta"
                   th:each="pr, it : ${cuestionario.preguntas}"
+                  th:attr="data-paso=${it.index}"
                   th:classappend="${faltantes != null and faltantes.contains(pr.id)} ? 'border-danger' : ''">
             <legend class="fs-6 fw-semibold">
                 <span th:text="${it.count}">1</span>.
@@ -33,7 +50,13 @@
             </p>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary btn-lg">Ver mi resultado</button>
+        <div id="wizardNav" class="d-flex justify-content-between mt-2 d-none">
+            <button type="button" id="wizardAnterior" class="btn btn-outline-secondary">&larr; Anterior</button>
+            <button type="button" id="wizardSiguiente" class="btn btn-primary">Siguiente &rarr;</button>
+        </div>
+        <p id="wizardAviso" class="text-danger small mt-2 d-none">Selecciona una opción para continuar.</p>
+
+        <button type="submit" id="botonEnviar" class="btn btn-primary btn-lg">Ver mi resultado</button>
     </form>
 
     <p class="mt-3">
@@ -43,5 +66,73 @@
 
 <footer th:replace="~{fragments/comunes :: footer}"></footer>
 <th:block th:replace="~{fragments/comunes :: scripts}"></th:block>
+<script>
+(function () {
+    var form = document.getElementById('formAutoorientacion');
+    var pasos = Array.prototype.slice.call(form.querySelectorAll('.paso-pregunta'));
+    if (pasos.length < 2) {
+        return; // una sola pregunta: no hay nada que paginar
+    }
+
+    var nav = document.getElementById('wizardNav');
+    var anterior = document.getElementById('wizardAnterior');
+    var siguiente = document.getElementById('wizardSiguiente');
+    var aviso = document.getElementById('wizardAviso');
+    var enviar = document.getElementById('botonEnviar');
+    var progreso = document.getElementById('wizardProgreso');
+    var etiqueta = document.getElementById('wizardEtiqueta');
+    var barra = document.getElementById('wizardBarra');
+
+    // Si el servidor devolvio "faltantes" (RespuestasIncompletas), arranca en la
+    // primera pregunta sin responder en vez de en la 1, para no hacer retroceder al
+    // usuario por las que ya contesto.
+    var actual = 0;
+    for (var i = 0; i < pasos.length; i++) {
+        if (pasos[i].classList.contains('border-danger')) {
+            actual = i;
+            break;
+        }
+    }
+
+    function respondida(indice) {
+        return !!pasos[indice].querySelector('input[type="radio"]:checked');
+    }
+
+    function mostrar(indice) {
+        actual = indice;
+        pasos.forEach(function (p, i) {
+            p.style.display = i === indice ? '' : 'none';
+        });
+        anterior.style.visibility = indice === 0 ? 'hidden' : 'visible';
+        var esUltimo = indice === pasos.length - 1;
+        siguiente.classList.toggle('d-none', esUltimo);
+        enviar.classList.toggle('d-none', !esUltimo);
+        etiqueta.textContent = 'Pregunta ' + (indice + 1) + ' de ' + pasos.length;
+        barra.style.width = Math.round(((indice + 1) / pasos.length) * 100) + '%';
+        aviso.classList.add('d-none');
+    }
+
+    siguiente.addEventListener('click', function () {
+        if (!respondida(actual)) {
+            aviso.classList.remove('d-none');
+            return;
+        }
+        mostrar(actual + 1);
+    });
+    anterior.addEventListener('click', function () {
+        mostrar(Math.max(0, actual - 1));
+    });
+    enviar.addEventListener('click', function (ev) {
+        if (!respondida(actual)) {
+            ev.preventDefault();
+            aviso.classList.remove('d-none');
+        }
+    });
+
+    nav.classList.remove('d-none');
+    progreso.classList.remove('d-none');
+    mostrar(actual);
+})();
+</script>
 </body>
 </html>

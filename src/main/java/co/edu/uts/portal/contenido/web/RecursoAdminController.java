@@ -6,6 +6,7 @@ import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.service.ImagenInvalida;
 import co.edu.uts.portal.contenido.service.ImagenService;
+import co.edu.uts.portal.contenido.service.OperacionNoPermitida;
 import co.edu.uts.portal.contenido.service.RecursoNoEncontrado;
 import co.edu.uts.portal.contenido.service.CategoriaService;
 import co.edu.uts.portal.contenido.service.RecursoService;
@@ -120,8 +121,12 @@ public class RecursoAdminController {
 
     @PostMapping("/{id}/publicar")
     public String publicar(@ModelAttribute("tipo") TipoRecurso tipo, @PathVariable Long id, RedirectAttributes ra) {
-        recursoService.publicar(id, tipo);
-        ra.addFlashAttribute("ok", "Publicado.");
+        try {
+            recursoService.publicar(id, tipo);
+            ra.addFlashAttribute("ok", "Publicado.");
+        } catch (OperacionNoPermitida e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
         return listaRedirect(tipo);
     }
 
@@ -134,8 +139,12 @@ public class RecursoAdminController {
 
     @PostMapping("/{id}/eliminar")
     public String eliminar(@ModelAttribute("tipo") TipoRecurso tipo, @PathVariable Long id, RedirectAttributes ra) {
-        recursoService.eliminar(id, tipo);
-        ra.addFlashAttribute("ok", tipo.getEtiquetaSingular() + " eliminado.");
+        try {
+            recursoService.eliminar(id, tipo);
+            ra.addFlashAttribute("ok", tipo.getEtiquetaSingular() + " eliminado.");
+        } catch (OperacionNoPermitida e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
         return listaRedirect(tipo);
     }
 

@@ -19,6 +19,9 @@
             <tr><th>Nombre</th><th>Correo</th><th>Roles</th><th>Estado</th><th>Último acceso</th><th></th></tr>
             </thead>
             <tbody>
+            <tr th:if="${usuarios.isEmpty()}">
+                <td colspan="6" class="text-center text-muted py-4">Sin usuarios.</td>
+            </tr>
             <tr th:each="u : ${usuarios}">
                 <td th:text="${u.nombreCompleto}">Nombre</td>
                 <td th:text="${u.correo}">correo</td>

@@ -104,4 +104,24 @@ public interface RecursoRepository extends JpaRepository<Recurso, Long> {
             """)
     List<Recurso> valoradosConSuficientesVotos(@Param("estado") EstadoPublicacion estado,
                                                @Param("minimo") int minimo);
+
+    /** Panel admin (ajuste Laura #6): conteo real por tipo y estado. */
+    long countByTipoAndEstado(TipoRecurso tipo, EstadoPublicacion estado);
+
+    /**
+     * Pagina de urgencias (ajuste Laura #4): rutas/contactos marcados como urgentes
+     * (columna "urgente", HU-06/HU-19) y publicados. El indice ix_recurso_tipo_urgente
+     * ya existia para esta consulta; no se habia conectado a ningun controlador.
+     */
+    List<Recurso> findByTipoInAndUrgenteTrueAndEstadoOrderByOrdenAscTituloAsc(List<TipoRecurso> tipos,
+                                                                              EstadoPublicacion estado);
+
+    /**
+     * Ajuste Laura #3: true si el recurso (tipicamente una ruta) esta asignado como
+     * ruta aplicable de algun nivel de resultado (tabla nivel_ruta), publicado o no.
+     * Consulta nativa contra la tabla de union en vez de una referencia JPQL a
+     * NivelResultado (modulo cuestionario) para no acoplar este repositorio a ese modulo.
+     */
+    @Query(value = "select exists(select 1 from nivel_ruta where recurso_id = :recursoId)", nativeQuery = true)
+    boolean estaAsignadoComoRutaDeNivel(@Param("recursoId") Long recursoId);
 }

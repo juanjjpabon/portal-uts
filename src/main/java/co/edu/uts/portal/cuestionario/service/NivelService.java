@@ -1,5 +1,6 @@
 package co.edu.uts.portal.cuestionario.service;
 
+import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
 import co.edu.uts.portal.contenido.domain.Recurso;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.repository.RecursoRepository;
@@ -70,7 +71,12 @@ public class NivelService {
                 .removeIf(r -> r.getId().equals(recomendacionId));
     }
 
-    /** Reemplaza el conjunto de rutas del nivel con los recursos indicados (solo tipo RUTA). */
+    /**
+     * Reemplaza el conjunto de rutas del nivel con los recursos indicados. Ajuste
+     * Laura #3: solo tipo RUTA y solo PUBLICADO -- el editor ya solo ofrece rutas
+     * publicadas como checkbox (VersionEditorController), pero se filtra otra vez
+     * aqui por si el POST llega manipulado directamente.
+     */
     @Transactional
     public void asignarRutas(Long cuestionarioId, int numero, Long nivelId, Set<Long> recursoIds) {
         NivelResultado n = nivel(cuestionarioId, numero, nivelId);
@@ -78,7 +84,7 @@ public class NivelService {
         if (recursoIds != null) {
             for (Long id : recursoIds) {
                 recursoRepository.findById(id)
-                        .filter(r -> r.getTipo() == TipoRecurso.RUTA)
+                        .filter(r -> r.getTipo() == TipoRecurso.RUTA && r.getEstado() == EstadoPublicacion.PUBLICADO)
                         .ifPresent(rutas::add);
             }
         }

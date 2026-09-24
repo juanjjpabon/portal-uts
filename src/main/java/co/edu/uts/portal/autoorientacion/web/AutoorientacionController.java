@@ -24,9 +24,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/autoorientacion")
 public class AutoorientacionController {
 
+    // Ajuste Laura #7: deja explicito que no hay dato individual (ni respuesta ni
+    // resultado) pero si conteos agregados anonimos (HU-13/HU-23); ver V11 para el
+    // mismo texto sembrado/corregido en la fila real de parametro.
     private static final String AVISO_PREVIO_DEFAULT =
-            "La autoorientación es una herramienta de reflexión personal y anónima. "
-                    + "No guarda tus respuestas, no genera un diagnóstico y no reemplaza la atención de un profesional.";
+            "La autoorientación es una herramienta de reflexión personal y anónima: no se guardan tus respuestas "
+                    + "ni tu resultado individual, y nadie puede identificar qué contestaste. Del cuestionario solo "
+                    + "se llevan conteos agregados y anónimos (por ejemplo, cuántas personas obtuvieron cada nivel), "
+                    + "sin ningún dato personal asociado. Esto no genera un diagnóstico ni reemplaza la atención "
+                    + "de un profesional. Al continuar confirmas que has leído este aviso.";
 
     private final AutoorientacionService servicio;
     private final ParametroService parametros;

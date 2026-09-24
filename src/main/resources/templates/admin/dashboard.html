@@ -12,6 +12,54 @@
         Sesión iniciada como <strong sec:authentication="name">correo</strong>.
     </p>
 
+    <!-- Ajuste Laura #6: indicadores reales en vez de solo un menu de enlaces. -->
+    <div class="row g-3 mt-1" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 text-center">
+                <div class="card-body py-3">
+                    <div class="h4 mb-0" th:text="${contenidosPublicados}">0</div>
+                    <div class="small text-muted">Contenidos publicados</div>
+                    <div class="small text-muted" th:text="|${contenidosBorrador} en borrador|">0 en borrador</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 text-center">
+                <div class="card-body py-3">
+                    <div class="h4 mb-0" th:text="${rutasPublicadas}">0</div>
+                    <div class="small text-muted">Rutas publicadas</div>
+                    <div class="small text-muted" th:text="|${rutasBorrador} en borrador|">0 en borrador</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 text-center">
+                <div class="card-body py-3">
+                    <div class="h4 mb-0" th:text="${contactosPublicados}">0</div>
+                    <div class="small text-muted">Contactos publicados</div>
+                    <div class="small text-muted" th:text="|${contactosBorrador} en borrador|">0 en borrador</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 text-center">
+                <div class="card-body py-3">
+                    <div class="h4 mb-0" th:text="${cuestionariosPublicados}">0</div>
+                    <div class="small text-muted">Cuestionarios con versión publicada</div>
+                    <div class="small text-muted" th:text="|${cuestionariosActivos} activos en total|">0 activos</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2" sec:authorize="hasRole('ADMIN_TECNICO')">
+            <div class="card h-100 text-center">
+                <div class="card-body py-3">
+                    <div class="h4 mb-0" th:text="${usuariosActivos}">0</div>
+                    <div class="small text-muted">Usuarios activos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-3 mt-2">
         <div class="col-md-4" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
             <div class="card h-100">
@@ -36,7 +84,26 @@
                     <ul class="small mb-0 ps-3">
                         <li><a th:href="@{/admin/usuarios}">Usuarios y roles</a></li>
                         <li><a th:href="@{/admin/bitacora}">Bitácora de cambios</a></li>
-                        <li><span class="text-muted">Configuración del sistema (próximamente)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" sec:authorize="hasRole('ADMIN_TECNICO')">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 mb-0">Últimas acciones</h2>
+                        <a class="small" th:href="@{/admin/bitacora}">Ver todo</a>
+                    </div>
+                    <p th:if="${#lists.isEmpty(ultimasAcciones)}" class="text-muted small mb-0 mt-2">
+                        Todavía no hay acciones registradas.
+                    </p>
+                    <ul class="small mb-0 ps-3 mt-2" th:unless="${#lists.isEmpty(ultimasAcciones)}">
+                        <li th:each="a : ${ultimasAcciones}">
+                            <span th:text="${#temporals.format(a.ocurridoEn, 'dd/MM HH:mm', 'America/Bogota')}">fecha</span>
+                            &middot; <span th:text="${a.actor}">actor</span>
+                            &middot; <span th:text="${a.descripcion}">descripción</span>
+                        </li>
                     </ul>
                 </div>
             </div>

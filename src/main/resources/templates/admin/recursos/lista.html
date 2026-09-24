@@ -98,8 +98,10 @@
                        th:href="@{|/admin/recursos/rutas/${r.id}/pasos|}">Pasos</a>
                     <form class="d-inline" method="post"
                           th:if="${r.estado.name() != 'PUBLICADO'}"
-                          th:action="@{|/admin/recursos/${seccion}/${r.id}/publicar|}">
-                        <button class="btn btn-sm btn-outline-success">Publicar</button>
+                          th:action="@{|/admin/recursos/${seccion}/${r.id}/publicar|}"
+                          th:with="sinPasos=${tipo.name() == 'RUTA' and (conteoPasos.get(r.id) == null or conteoPasos.get(r.id) == 0)}">
+                        <button class="btn btn-sm btn-outline-success" th:disabled="${sinPasos}"
+                                th:title="${sinPasos} ? 'Agrega al menos un paso antes de publicar' : null">Publicar</button>
                     </form>
                     <form class="d-inline" method="post"
                           th:if="${r.estado.name() == 'PUBLICADO'}"

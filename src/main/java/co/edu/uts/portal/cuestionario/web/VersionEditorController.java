@@ -1,5 +1,6 @@
 package co.edu.uts.portal.cuestionario.web;
 
+import co.edu.uts.portal.contenido.domain.EstadoPublicacion;
 import co.edu.uts.portal.contenido.domain.TipoRecurso;
 import co.edu.uts.portal.contenido.service.RecursoService;
 import co.edu.uts.portal.cuestionario.domain.CuestionarioVersion;
@@ -35,8 +36,11 @@ public class VersionEditorController {
         model.addAttribute("niveles", v.getNiveles());
         model.addAttribute("editable", v.esEditable());
         model.addAttribute("problemas", cuestionarioService.problemasParaPublicar(id, numero));
+        // Ajuste Laura #3: solo se ofrecen rutas publicadas como "ruta aplicable" de un
+        // nivel de resultado (una en borrador o archivada podria no ser visible o no
+        // estar lista todavia).
         model.addAttribute("rutasDisponibles",
-                recursoService.listar(TipoRecurso.RUTA, null, null, null));
+                recursoService.listar(TipoRecurso.RUTA, EstadoPublicacion.PUBLICADO, null, null));
         return "admin/cuestionarios/editor";
     }
 }

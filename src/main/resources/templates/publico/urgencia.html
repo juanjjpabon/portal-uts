@@ -14,6 +14,22 @@
 
     <div th:replace="~{fragments/tarjetas :: canalInstitucional(${canalDirecto}, ${canalEtiqueta})}"></div>
 
+    <div th:if="${not #lists.isEmpty(recursosUrgentes)}" class="mt-4">
+        <h2 class="h5">Rutas y contactos urgentes</h2>
+        <div class="card mb-3" th:each="r : ${recursosUrgentes}">
+            <div class="card-body">
+                <h3 class="h6 mb-1" th:text="${r.titulo}">Ruta o contacto</h3>
+                <p class="small mb-2">
+                    <strong>Dependencia:</strong> <span th:text="${r.dependencia}"></span>
+                    <span th:if="${not #strings.isEmpty(r.horario)}"><br><strong>Horario:</strong> <span th:text="${r.horario}"></span></span>
+                </p>
+                <div th:replace="~{fragments/tarjetas :: canal(${r.canalDirecto}, ${r.canal})}"></div>
+                <a class="d-inline-block small mt-2 d-print-none" th:if="${r.tipo.name() == 'RUTA'}"
+                   th:href="@{|/rutas#ruta-${r.id}|}">Ver la ruta completa, paso a paso &rarr;</a>
+            </div>
+        </div>
+    </div>
+
     <p class="mt-4"><a th:href="@{/}">Volver al inicio</a></p>
 </main>
 
