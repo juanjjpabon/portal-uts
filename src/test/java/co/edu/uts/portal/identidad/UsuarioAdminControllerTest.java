@@ -6,6 +6,7 @@ import co.edu.uts.portal.identidad.domain.NombreRol;
 import co.edu.uts.portal.identidad.domain.Usuario;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
+import co.edu.uts.portal.identidad.service.LimitadorIntentosLogin;
 import co.edu.uts.portal.identidad.service.UsuarioService;
 import co.edu.uts.portal.identidad.web.UsuarioAdminController;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,8 @@ class UsuarioAdminControllerTest {
     BitacoraService bitacoraService;
     @MockitoBean
     RegistroAccesoHandler registroAccesoHandler;
+    @MockitoBean
+    LimitadorIntentosLogin limitadorIntentosLogin;
     @MockitoBean
     DetalleUsuarioService detalleUsuarioService;
 

@@ -5,6 +5,7 @@ import co.edu.uts.portal.contenido.service.ValoracionService;
 import co.edu.uts.portal.contenido.web.publico.ValoracionPublicaController;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
+import co.edu.uts.portal.identidad.service.LimitadorIntentosLogin;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -34,6 +35,8 @@ class ValoracionPublicaControllerTest {
     ValoracionService valoracionService;
     @MockitoBean
     RegistroAccesoHandler registroAccesoHandler;
+    @MockitoBean
+    LimitadorIntentosLogin limitadorIntentosLogin;
     @MockitoBean
     DetalleUsuarioService detalleUsuarioService;
 

@@ -3,6 +3,7 @@ package co.edu.uts.portal.parametros;
 import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
+import co.edu.uts.portal.identidad.service.LimitadorIntentosLogin;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import co.edu.uts.portal.parametros.web.ParametroAdminController;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,8 @@ class ParametroAdminControllerTest {
     ParametroService parametroService;
     @MockitoBean
     RegistroAccesoHandler registroAccesoHandler;
+    @MockitoBean
+    LimitadorIntentosLogin limitadorIntentosLogin;
     @MockitoBean
     DetalleUsuarioService detalleUsuarioService;
 

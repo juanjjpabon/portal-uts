@@ -37,6 +37,13 @@ server:
   # Render (y la mayoria de plataformas de hosting) asignan el puerto propio
   # por la variable de entorno PORT; en local, sin esa variable, sigue siendo 8080.
   port: ${PORT:8080}
+  servlet:
+    session:
+      # RS-03.3: expiracion de sesion por inactividad. Antes dependia del valor por
+      # defecto de Tomcat (30 minutos) sin declararlo en ningun lado del proyecto;
+      # ahora queda explicito y documentado. Mismo valor de siempre, no cambia el
+      # comportamiento real -- ver comentario 64 de la directora / RS-14 V7.3.1.
+      timeout: 30m
   tomcat:
     # Si alguien sube un archivo mayor al tope de arriba, Tomcat igual lee (y descarta)
     # el resto de la peticion para poder responder, en lugar de cortar la conexion.

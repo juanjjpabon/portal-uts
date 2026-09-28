@@ -10,6 +10,7 @@ import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.contenido.service.PortalPublicoService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
+import co.edu.uts.portal.identidad.service.LimitadorIntentosLogin;
 import co.edu.uts.portal.parametros.service.ParametroService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,8 @@ class AutoorientacionControllerTest {
     PortalPublicoService portalPublicoService;
     @MockitoBean
     RegistroAccesoHandler registroAccesoHandler;
+    @MockitoBean
+    LimitadorIntentosLogin limitadorIntentosLogin;
     @MockitoBean
     DetalleUsuarioService detalleUsuarioService;
 

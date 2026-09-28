@@ -17,6 +17,7 @@ import co.edu.uts.portal.contenido.service.ValoracionService;
 import co.edu.uts.portal.identidad.service.CuentaService;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
 import co.edu.uts.portal.identidad.service.RegistroAccesoHandler;
+import co.edu.uts.portal.identidad.service.LimitadorIntentosLogin;
 import co.edu.uts.portal.identidad.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ class SeguridadWebTest {
 
     @MockitoBean
     RegistroAccesoHandler registroAccesoHandler;
+    @MockitoBean
+    LimitadorIntentosLogin limitadorIntentosLogin;
 
     @MockitoBean
     DetalleUsuarioService detalleUsuarioService;

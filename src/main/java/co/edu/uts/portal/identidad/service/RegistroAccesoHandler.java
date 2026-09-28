@@ -11,17 +11,21 @@ import java.io.IOException;
 import java.time.Instant;
 
 /**
- * Al iniciar sesion correctamente (HU-16) registra el instante de acceso del usuario
- * y luego delega en el comportamiento estandar (redirige a la URL solicitada o a
+ * Al iniciar sesion correctamente (HU-16) registra el instante de acceso del usuario,
+ * limpia su contador de intentos fallidos (RS-10.4, ver LimitadorIntentosLogin) y
+ * luego delega en el comportamiento estandar (redirige a la URL solicitada o a
  * defaultSuccessUrl).
  */
 @Component
 public class RegistroAccesoHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private final RegistroAccesoService registroAccesoService;
+    private final LimitadorIntentosLogin limitadorIntentosLogin;
 
-    public RegistroAccesoHandler(RegistroAccesoService registroAccesoService) {
+    public RegistroAccesoHandler(RegistroAccesoService registroAccesoService,
+                                  LimitadorIntentosLogin limitadorIntentosLogin) {
         this.registroAccesoService = registroAccesoService;
+        this.limitadorIntentosLogin = limitadorIntentosLogin;
         setDefaultTargetUrl("/admin");
         setAlwaysUseDefaultTargetUrl(false);
     }
@@ -31,6 +35,7 @@ public class RegistroAccesoHandler extends SavedRequestAwareAuthenticationSucces
                                         Authentication authentication) throws IOException, ServletException {
         if (authentication.getPrincipal() instanceof UsuarioAutenticado principal) {
             registroAccesoService.registrarAcceso(principal.getId(), Instant.now());
+            limitadorIntentosLogin.registrarExito(principal.getCorreo());
         }
         super.onAuthenticationSuccess(request, response, authentication);
     }
