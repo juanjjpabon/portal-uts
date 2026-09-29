@@ -24,7 +24,8 @@
             <span class="marca-icono"><svg th:replace="~{fragments/iconos :: icono('corazon')}"></svg></span>
             <span>Portal UTS <span class="marca-sub d-none d-sm-inline">· Bienestar</span></span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPublico">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPublico"
+                aria-controls="menuPublico" aria-expanded="false" aria-label="Abrir menú de navegación">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="menuPublico">
@@ -48,7 +49,8 @@
 <nav th:fragment="navbarAdmin" class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/admin}">Panel administrativo</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuAdmin">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuAdmin"
+                aria-controls="menuAdmin" aria-expanded="false" aria-label="Abrir menú de navegación">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="menuAdmin">

@@ -17,14 +17,14 @@
 
     <form class="row g-2 my-3" method="get" th:action="@{|/admin/recursos/${seccion}|}">
         <div class="col-sm-3">
-            <select name="estado" class="form-select">
+            <select name="estado" class="form-select" aria-label="Filtrar por estado">
                 <option value="">Todos los estados</option>
                 <option th:each="e : ${estados}" th:value="${e}" th:text="${e.etiqueta}"
                         th:selected="${e == filtroEstado}"></option>
             </select>
         </div>
         <div class="col-sm-3">
-            <select name="categoria" class="form-select">
+            <select name="categoria" class="form-select" aria-label="Filtrar por categoría">
                 <option value="">Todas las categorías</option>
                 <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"
                         th:selected="${c.id == filtroCategoria}"></option>

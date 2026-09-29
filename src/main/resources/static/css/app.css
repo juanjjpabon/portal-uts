@@ -189,7 +189,6 @@ main {
 
 .marca-sub {
     font-weight: 300;
-    opacity: 0.9;
 }
 
 .icono {
@@ -694,12 +693,26 @@ a.accion-urgente .accion-enlace {
     color: var(--uts-verde);
 }
 
+.canal-directo .btn-outline-primary,
+.canal-directo .btn-link {
+    --bs-btn-color: var(--uts-verde-oscuro);
+    --bs-btn-hover-color: var(--uts-verde-oscuro);
+}
+
 .boton-copiar.copiado {
     --bs-btn-bg: #198754;
     --bs-btn-border-color: #198754;
     --bs-btn-color: #ffffff;
     --bs-btn-hover-bg: #198754;
     --bs-btn-hover-color: #ffffff;
+}
+
+.btn-outline-warning {
+    --bs-btn-color: #7a5200;
+    --bs-btn-border-color: #ffc107;
+    --bs-btn-hover-color: #212529;
+    --bs-btn-hover-bg: #ffc107;
+    --bs-btn-hover-border-color: #ffc107;
 }
 
 .aviso-urgencia {
@@ -789,6 +802,13 @@ a.accion-urgente .accion-enlace {
     margin-bottom: 0;
 }
 
+.carrusel-destacados .carousel-indicators button {
+    min-width: 24px;
+    min-height: 24px;
+    background-clip: content-box;
+    border: 7px solid transparent;
+}
+
 .carrusel-destacados .carousel-indicators .active {
     background-color: var(--uts-lima);
 }
@@ -868,4 +888,9 @@ a.accion-urgente .accion-enlace {
         opacity: 1 !important;
         transform: none !important;
     }
+}
+
+ul.small li a {
+    display: inline-block;
+    padding: 0.2rem 0;
 }

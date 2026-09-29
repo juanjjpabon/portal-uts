@@ -27,7 +27,9 @@
                 <span id="wizardEtiqueta" aria-live="polite"></span>
             </div>
             <div class="progress" style="height:6px">
-                <div id="wizardBarra" class="progress-bar" role="progressbar"></div>
+                <div id="wizardBarra" class="progress-bar" role="progressbar"
+                     aria-label="Progreso del cuestionario"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
             </div>
         </div>
 
@@ -108,7 +110,10 @@
         siguiente.classList.toggle('d-none', esUltimo);
         enviar.classList.toggle('d-none', !esUltimo);
         etiqueta.textContent = 'Pregunta ' + (indice + 1) + ' de ' + pasos.length;
-        barra.style.width = Math.round(((indice + 1) / pasos.length) * 100) + '%';
+        var porcentaje = Math.round(((indice + 1) / pasos.length) * 100);
+        barra.style.width = porcentaje + '%';
+        barra.setAttribute('aria-valuenow', porcentaje);
+        barra.setAttribute('aria-valuetext', 'Pregunta ' + (indice + 1) + ' de ' + pasos.length);
         aviso.classList.add('d-none');
     }
 

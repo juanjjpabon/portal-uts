@@ -19,6 +19,7 @@
         No hay contenidos publicados en esta categoría todavía.
     </div>
 
+    <h2 class="visually-hidden">Lista de contenidos</h2>
     <div class="row g-4">
         <div class="col-sm-6 col-lg-4" th:each="r : ${contenidos}">
             <article th:replace="~{fragments/tarjetas :: tarjetaContenido(${r})}"></article>
