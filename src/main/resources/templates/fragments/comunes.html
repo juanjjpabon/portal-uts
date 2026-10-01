@@ -74,9 +74,9 @@
                 <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
                     <a class="nav-link" th:href="@{/admin/parametros}">Parámetros</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN_FUNCIONAL')">
-                    <a class="nav-link" th:href="@{/admin/analitica}">Analítica</a>
-                </li>
+                <!-- Analitica (M07, HU-23/HU-24): trasladado a trabajo futuro el 26/9/2026
+                     (ver informe final 4.1 y 5.10) y bloqueado en SecurityConfig. Enlace
+                     retirado para que el panel no ofrezca una ruta que ya no esta expuesta. -->
                 <li class="nav-item" sec:authorize="hasRole('ADMIN_TECNICO')">
                     <a class="nav-link" th:href="@{/admin/usuarios}">Usuarios y roles</a>
                 </li>

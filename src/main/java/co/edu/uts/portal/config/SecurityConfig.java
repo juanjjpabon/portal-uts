@@ -102,8 +102,16 @@ public class SecurityConfig {
 
                 // Panel administrativo - HU-17 separacion estricta
                 .requestMatchers("/admin/usuarios/**", "/admin/bitacora/**", "/admin/sistema/**").hasRole(TECNICO)
+                // M07 (estadisticas agregadas, HU-23/HU-24): la directora del trabajo de
+                // grado autorizo trasladarlo a trabajo futuro el 26/9/2026 (informe final,
+                // 4.1 y 5.10). El controlador y el servicio quedan construidos y probados
+                // (evidencia de codigo, tal como documenta el informe), pero la ruta se
+                // bloquea por completo -- ni siquiera el administrador funcional puede
+                // entrar por URL directa -- para que la version desplegada coincida con lo
+                // que el informe declara ("no se encuentra expuesto en esta version").
+                .requestMatchers("/admin/analitica/**").denyAll()
                 .requestMatchers("/admin/recursos/**", "/admin/categorias/**", "/admin/cuestionarios/**",
-                        "/admin/parametros/**", "/admin/analitica/**").hasRole(FUNCIONAL)
+                        "/admin/parametros/**").hasRole(FUNCIONAL)
                 .requestMatchers("/admin", "/admin/").hasAnyRole(FUNCIONAL, TECNICO)
 
                 .anyRequest().authenticated()

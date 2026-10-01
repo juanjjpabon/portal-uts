@@ -1,7 +1,6 @@
 package co.edu.uts.portal.analitica;
 
 import co.edu.uts.portal.analitica.service.AnaliticaService;
-import co.edu.uts.portal.analitica.service.ReporteAnalitica;
 import co.edu.uts.portal.analitica.web.AnaliticaAdminController;
 import co.edu.uts.portal.config.SecurityConfig;
 import co.edu.uts.portal.identidad.service.DetalleUsuarioService;
@@ -15,15 +14,16 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/** HU-23/HU-24: solo ADMIN_FUNCIONAL ve o exporta las estadisticas (HU-17). */
+/**
+ * M07 (HU-23/HU-24): trasladado a trabajo futuro el 26/9/2026 (informe final, 4.1 y
+ * 5.10). La ruta queda bloqueada en SecurityConfig para todo el mundo, incluido el
+ * administrador funcional que antes sí podía entrar -- estas pruebas verifican que el
+ * bloqueo es real a nivel de URL, no solo una afirmación del informe.
+ */
 @WebMvcTest(AnaliticaAdminController.class)
 @Import(SecurityConfig.class)
 class AnaliticaAdminControllerTest {
@@ -42,10 +42,9 @@ class AnaliticaAdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN_FUNCIONAL")
-    void funcionalVeElReporte() throws Exception {
-        when(analiticaService.generarReporte())
-                .thenReturn(new ReporteAnalitica(List.of(), List.of(), List.of()));
-        mockMvc.perform(get("/admin/analitica")).andExpect(status().isOk());
+    void funcionalNoAccedeMientrasEsteEnTrabajoFuturo() throws Exception {
+        mockMvc.perform(get("/admin/analitica")).andExpect(status().isForbidden());
+        verifyNoInteractions(analiticaService);
     }
 
     @Test
@@ -57,10 +56,8 @@ class AnaliticaAdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN_FUNCIONAL")
-    void exportaComoCsvDescargable() throws Exception {
-        when(analiticaService.generarCsv()).thenReturn("seccion,nombre,indicador,valor\r\n");
-        mockMvc.perform(get("/admin/analitica/exportar.csv"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith("text/csv"));
+    void exportarCsvTampocoEstaDisponible() throws Exception {
+        mockMvc.perform(get("/admin/analitica/exportar.csv")).andExpect(status().isForbidden());
+        verifyNoInteractions(analiticaService);
     }
 }
