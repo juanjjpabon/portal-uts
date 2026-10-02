@@ -1,0 +1,535 @@
+INFORME DE EJECUCIÓN DE PRUEBAS AUTOMATIZADAS — PORTAL UTS
+============================================================
+
+Commit evaluado: 065b2d5 (código idéntico al de la corrida; ver nota 3)
+  "Oculta el control de valoracion de utilidad (HU-25, trabajo futuro) y ajusta el menu del panel en 1024 px"
+Comando ejecutado: .\mvnw.cmd test
+Máquina: entorno local de Juan José Jerez Pabón (Windows, PowerShell, Java 21.0.12.1, Spring Boot 3.5.5)
+Fecha y hora reales de la corrida: 02/10/2026, 02:09 (hora local, UTC-05:00); fin registrado por Maven: 2026-10-02T02:09:28-05:00
+Resultado final: Tests run: 176, Failures: 0, Errors: 0, Skipped: 0 — BUILD SUCCESS
+Tiempo total: 18.034 s
+
+NOTAS ACLARATORIAS (agregadas para la lectura de este anexo; el resto del
+archivo es la salida real y sin editar de Maven/Surefire):
+
+1. Varias líneas de la consola muestran "Using generated security password:
+   <valor>". Estas son contraseñas de desarrollo que Spring Boot genera de
+   forma automática y aleatoria en cada arranque de la suite de pruebas
+   (una distinta por cada clase de prueba que levanta el contexto). No son
+   credenciales reales del sistema, cambian en cada ejecución y no tienen
+   ninguna validez fuera de esa corrida puntual.
+
+2. La traza de error que aparece dentro de "PortalErrorAttributesTest"
+   (con el mensaje "credenciales invalidas de la BD: secret123") es
+   intencional: ese caso de prueba verifica a propósito que un error
+   técnico interno quede registrado en el log del servidor pero NO se
+   exponga al usuario final. No es una falla del sistema ni de la suite;
+   el resultado final de esa clase, como el de toda la suite, es
+   "Failures: 0, Errors: 0".
+
+3. La corrida se ejecutó con el comando "mvnw.cmd test" (sin "clean") sobre
+   el árbol de trabajo que contenía los tres cambios de código del commit
+   065b2d5 (fragments/comunes.html, fragments/tarjetas.html y
+   publico/contenidos/detalle.html), antes de confirmar ese commit (el
+   commit se creó y se publicó a las 02:14 hora local, sin modificar nada
+   más del código). Los cambios consisten en ocultar el control "¿Te fue
+   útil?" (HU-25, trabajo futuro) y en cambiar el punto de quiebre del menú
+   del panel administrativo de "lg" a "xl". Los informes de Surefire de esta
+   corrida se conservan en el archivo comprimido
+   surefire-reports_065b2d5_2026-10-02.zip de esta misma carpeta.
+
+============================================================
+CONSOLA COMPLETA (salida real de Maven/Surefire, sin editar)
+============================================================
+
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------------< co.edu.uts:portal-uts >------------------------
+[INFO] Building portal-uts 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- resources:3.3.1:resources (default-resources) @ portal-uts ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 62 resources from src\main\resources to target\classes
+[INFO]
+[INFO] --- compiler:3.14.0:compile (default-compile) @ portal-uts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ portal-uts ---
+[INFO] skip non existing resourceDirectory C:\Users\Juan\portal-uts\src\test\resources
+[INFO]
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ portal-uts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.3:test (default-test) @ portal-uts ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running co.edu.uts.portal.analitica.AnaliticaAdminControllerTest
+02:09:13.954 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [co.edu.uts.portal.analitica.AnaliticaAdminControllerTest]: AnaliticaAdminControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+02:09:14.153 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.analitica.AnaliticaAdminControllerTest
+02:09:14.275 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:14.745-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.a.AnaliticaAdminControllerTest   : Starting AnaliticaAdminControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:14.746-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.a.AnaliticaAdminControllerTest   : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:14.747-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.a.AnaliticaAdminControllerTest   : The following 1 profile is active: "dev"
+.\mvnw.cmd : Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future
+releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation:
+https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+En línea: 1 Carácter: 1
++ .\mvnw.cmd test 2>&1 | Tee-Object -FilePath "$env:TEMP\salida_complet ...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Mockito is curr...ockito.html#0.3:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+WARNING: A Java agent has been loaded dynamically
+(C:\Users\Juan\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.7\byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has
+been appended
+2026-10-02T02:09:17.177-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:17.974-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 722ee93f-15db-442f-a98d-57b126f5650b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:18.040-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:18.040-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:18.042-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-02T02:09:18.075-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.a.AnaliticaAdminControllerTest   : Started AnaliticaAdminControllerTest in 3.818 seconds (process running for 5.26)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.478 s -- in co.edu.uts.portal.analitica.AnaliticaAdminControllerTest
+[INFO] Running co.edu.uts.portal.analitica.AnaliticaServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.428 s -- in co.edu.uts.portal.analitica.AnaliticaServiceTest
+[INFO] Running co.edu.uts.portal.autoorientacion.AutoorientacionControllerTest
+2026-10-02T02:09:18.662-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.autoorientacion.AutoorientacionControllerTest]: AutoorientacionControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:18.727-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.autoorientacion.AutoorientacionControllerTest
+2026-10-02T02:09:18.732-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:18.771-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.a.AutoorientacionControllerTest  : Starting AutoorientacionControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:18.771-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.a.AutoorientacionControllerTest  : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:18.771-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.a.AutoorientacionControllerTest  : The following 1 profile is active: "dev"
+2026-10-02T02:09:19.312-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:19.504-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 92578399-12b1-4052-902f-b147842ab631
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:19.512-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:19.513-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:19.513-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-02T02:09:19.523-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.a.AutoorientacionControllerTest  : Started AutoorientacionControllerTest in 0.791 seconds (process running for 6.708)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.502 s -- in co.edu.uts.portal.autoorientacion.AutoorientacionControllerTest
+[INFO] Running co.edu.uts.portal.autoorientacion.AutoorientacionServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.123 s -- in co.edu.uts.portal.autoorientacion.AutoorientacionServiceTest
+[INFO] Running co.edu.uts.portal.autoorientacion.CalculadoraNivelTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.010 s -- in co.edu.uts.portal.autoorientacion.CalculadoraNivelTest
+[INFO] Running co.edu.uts.portal.bitacora.BitacoraAdminControllerTest
+2026-10-02T02:09:20.306-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.bitacora.BitacoraAdminControllerTest]: BitacoraAdminControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:20.347-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.bitacora.BitacoraAdminControllerTest
+2026-10-02T02:09:20.352-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:20.387-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.b.BitacoraAdminControllerTest    : Starting BitacoraAdminControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:20.387-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.b.BitacoraAdminControllerTest    : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:20.387-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.b.BitacoraAdminControllerTest    : The following 1 profile is active: "dev"
+2026-10-02T02:09:20.767-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:20.910-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: d6b0bf60-cdbb-42eb-a951-e9755d8c468b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:20.915-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:20.915-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:20.916-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-02T02:09:20.927-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.b.BitacoraAdminControllerTest    : Started BitacoraAdminControllerTest in 0.575 seconds (process running for 8.112)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.723 s -- in co.edu.uts.portal.bitacora.BitacoraAdminControllerTest
+[INFO] Running co.edu.uts.portal.bitacora.BitacoraServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s -- in co.edu.uts.portal.bitacora.BitacoraServiceTest
+[INFO] Running co.edu.uts.portal.common.PortalErrorAttributesTest
+2026-10-02T02:09:21.127-05:00 ERROR 29396 --- [portal-uts] [           main] c.e.u.p.c.web.PortalErrorAttributes      : Error interno [41e20519] GET /algo
+
+java.lang.RuntimeException: credenciales invalidas de la BD: secret123
+        at co.edu.uts.portal.common.PortalErrorAttributesTest.unErrorTecnicoAgregaUnaReferenciaYQuedaSinDetalleTecnico(PortalErrorAttributesTest.java:33) ~[test-classes/:na]
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+        at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:775) ~[junit-platform-commons-1.12.2.jar:1.12.2]
+        at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.12.2.jar:1.12.2]
+        at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:216) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:212) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69) ~[junit-jupiter-engine-5.12.2.jar:5.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+        at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+        at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:201) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:170) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:94) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:59) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:142) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:58) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.12.2.jar:1.12.2]
+        at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:194) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:150) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:124) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385) ~[surefire-booter-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162) ~[surefire-booter-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.5.3.jar:3.5.3]
+        at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.5.3.jar:3.5.3]
+
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.020 s -- in co.edu.uts.portal.common.PortalErrorAttributesTest
+[INFO] Running co.edu.uts.portal.common.SlugsTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in co.edu.uts.portal.common.SlugsTest
+[INFO] Running co.edu.uts.portal.config.DatabaseUrlEnvironmentPostProcessorTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.020 s -- in co.edu.uts.portal.config.DatabaseUrlEnvironmentPostProcessorTest
+[INFO] Running co.edu.uts.portal.contenido.CanalDirectoTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.019 s -- in co.edu.uts.portal.contenido.CanalDirectoTest
+[INFO] Running co.edu.uts.portal.contenido.CategoriaServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.071 s -- in co.edu.uts.portal.contenido.CategoriaServiceTest
+[INFO] Running co.edu.uts.portal.contenido.ImagenYPasosWebTest
+2026-10-02T02:09:21.272-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.contenido.ImagenYPasosWebTest]: ImagenYPasosWebTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:21.312-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.contenido.ImagenYPasosWebTest
+2026-10-02T02:09:21.315-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:21.346-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.contenido.ImagenYPasosWebTest    : Starting ImagenYPasosWebTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:21.346-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.contenido.ImagenYPasosWebTest    : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:21.346-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.contenido.ImagenYPasosWebTest    : The following 1 profile is active: "dev"
+2026-10-02T02:09:21.724-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:21.869-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 6adc34d5-4259-4713-8e32-1a90aec11cd1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:21.875-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:21.875-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:21.876-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-02T02:09:21.895-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.contenido.ImagenYPasosWebTest    : Started ImagenYPasosWebTest in 0.58 seconds (process running for 9.08)
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.953 s -- in co.edu.uts.portal.contenido.ImagenYPasosWebTest
+[INFO] Running co.edu.uts.portal.contenido.PasoRutaServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.088 s -- in co.edu.uts.portal.contenido.PasoRutaServiceTest
+[INFO] Running co.edu.uts.portal.contenido.PortalPublicoControllerTest
+2026-10-02T02:09:22.315-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.contenido.PortalPublicoControllerTest]: PortalPublicoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:22.327-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.contenido.PortalPublicoControllerTest
+2026-10-02T02:09:22.335-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:22.367-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.c.PortalPublicoControllerTest    : Starting PortalPublicoControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:22.367-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.c.PortalPublicoControllerTest    : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:22.367-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.c.PortalPublicoControllerTest    : The following 1 profile is active: "dev"
+2026-10-02T02:09:22.633-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:22.772-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 50dc5eac-3753-47b9-a048-347bfc52f02a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:22.777-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:22.777-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:22.779-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-02T02:09:22.785-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.c.PortalPublicoControllerTest    : Started PortalPublicoControllerTest in 0.452 seconds (process running for 9.969)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.614 s -- in co.edu.uts.portal.contenido.PortalPublicoControllerTest
+[INFO] Running co.edu.uts.portal.contenido.PortalPublicoServiceTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.021 s -- in co.edu.uts.portal.contenido.PortalPublicoServiceTest
+[INFO] Running co.edu.uts.portal.contenido.ProcesadorImagenTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.459 s -- in co.edu.uts.portal.contenido.ProcesadorImagenTest
+[INFO] Running co.edu.uts.portal.contenido.RecursoAdminControllerTest
+2026-10-02T02:09:24.414-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.contenido.RecursoAdminControllerTest]: RecursoAdminControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:24.425-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.contenido.RecursoAdminControllerTest
+2026-10-02T02:09:24.431-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:24.456-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.c.RecursoAdminControllerTest     : Starting RecursoAdminControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:24.456-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.c.RecursoAdminControllerTest     : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:24.456-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.c.RecursoAdminControllerTest     : The following 1 profile is active: "dev"
+2026-10-02T02:09:24.790-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:24.893-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 62b06d37-7f4e-4ae3-90a2-deef9ae90784
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:24.897-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:24.897-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:24.899-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-02T02:09:24.904-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.c.RecursoAdminControllerTest     : Started RecursoAdminControllerTest in 0.473 seconds (process running for 12.088)
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.695 s -- in co.edu.uts.portal.contenido.RecursoAdminControllerTest
+[INFO] Running co.edu.uts.portal.contenido.RecursoFormValidacionTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in co.edu.uts.portal.contenido.RecursoFormValidacionTest
+[INFO] Running co.edu.uts.portal.contenido.RecursoServiceTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s -- in co.edu.uts.portal.contenido.RecursoServiceTest
+[INFO] Running co.edu.uts.portal.contenido.ValoracionPublicaControllerTest
+2026-10-02T02:09:25.182-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.contenido.ValoracionPublicaControllerTest]: ValoracionPublicaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:25.194-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.contenido.ValoracionPublicaControllerTest
+2026-10-02T02:09:25.200-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:25.229-05:00  INFO 29396 --- [portal-uts] [           main] .e.u.p.c.ValoracionPublicaControllerTest : Starting ValoracionPublicaControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:25.229-05:00 DEBUG 29396 --- [portal-uts] [           main] .e.u.p.c.ValoracionPublicaControllerTest : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:25.229-05:00  INFO 29396 --- [portal-uts] [           main] .e.u.p.c.ValoracionPublicaControllerTest : The following 1 profile is active: "dev"
+2026-10-02T02:09:25.507-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:25.618-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 9f99bd62-53d9-46a5-ab12-f3cb7ed3e266
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:25.622-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:25.622-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:25.622-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-02T02:09:25.630-05:00  INFO 29396 --- [portal-uts] [           main] .e.u.p.c.ValoracionPublicaControllerTest : Started ValoracionPublicaControllerTest in 0.43 seconds (process running for 12.814)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.486 s -- in co.edu.uts.portal.contenido.ValoracionPublicaControllerTest
+[INFO] Running co.edu.uts.portal.contenido.ValoracionServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in co.edu.uts.portal.contenido.ValoracionServiceTest
+[INFO] Running co.edu.uts.portal.cuestionario.CuestionarioAdminControllerTest
+2026-10-02T02:09:25.679-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.cuestionario.CuestionarioAdminControllerTest]: CuestionarioAdminControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:25.725-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.cuestionario.CuestionarioAdminControllerTest
+2026-10-02T02:09:25.729-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:25.754-05:00  INFO 29396 --- [portal-uts] [           main] .e.u.p.c.CuestionarioAdminControllerTest : Starting CuestionarioAdminControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:25.755-05:00 DEBUG 29396 --- [portal-uts] [           main] .e.u.p.c.CuestionarioAdminControllerTest : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:25.755-05:00  INFO 29396 --- [portal-uts] [           main] .e.u.p.c.CuestionarioAdminControllerTest : The following 1 profile is active: "dev"
+2026-10-02T02:09:26.079-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:26.205-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: ca91a24a-3e24-4783-bb1e-b3ef71821220
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:26.211-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:26.211-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:26.212-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-02T02:09:26.219-05:00  INFO 29396 --- [portal-uts] [           main] .e.u.p.c.CuestionarioAdminControllerTest : Started CuestionarioAdminControllerTest in 0.49 seconds (process running for 13.404)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.608 s -- in co.edu.uts.portal.cuestionario.CuestionarioAdminControllerTest
+[INFO] Running co.edu.uts.portal.cuestionario.CuestionarioServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 s -- in co.edu.uts.portal.cuestionario.CuestionarioServiceTest
+[INFO] Running co.edu.uts.portal.cuestionario.ValidadorVersionTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in co.edu.uts.portal.cuestionario.ValidadorVersionTest
+[INFO] Running co.edu.uts.portal.identidad.CuentaServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.129 s -- in co.edu.uts.portal.identidad.CuentaServiceTest
+[INFO] Running co.edu.uts.portal.identidad.SeguridadWebTest
+2026-10-02T02:09:26.497-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.identidad.SeguridadWebTest]: SeguridadWebTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:26.540-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.identidad.SeguridadWebTest
+2026-10-02T02:09:26.543-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:26.565-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.portal.identidad.SeguridadWebTest  : Starting SeguridadWebTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:26.565-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.portal.identidad.SeguridadWebTest  : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:26.565-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.portal.identidad.SeguridadWebTest  : The following 1 profile is active: "dev"
+2026-10-02T02:09:27.010-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:27.145-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 161c6707-5d52-40cd-b991-651204ee7fde
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:27.149-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:27.149-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:27.150-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-02T02:09:27.156-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.portal.identidad.SeguridadWebTest  : Started SeguridadWebTest in 0.613 seconds (process running for 14.34)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.765 s -- in co.edu.uts.portal.identidad.SeguridadWebTest
+[INFO] Running co.edu.uts.portal.identidad.UsuarioAdminControllerTest
+2026-10-02T02:09:27.262-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.identidad.UsuarioAdminControllerTest]: UsuarioAdminControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:27.271-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.identidad.UsuarioAdminControllerTest
+2026-10-02T02:09:27.275-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:27.301-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.i.UsuarioAdminControllerTest     : Starting UsuarioAdminControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:27.301-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.i.UsuarioAdminControllerTest     : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:27.301-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.i.UsuarioAdminControllerTest     : The following 1 profile is active: "dev"
+2026-10-02T02:09:27.532-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:27.658-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 57eb58ac-5d93-41d3-8277-4c355045b9e2
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:27.662-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:27.662-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:27.662-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-02T02:09:27.667-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.i.UsuarioAdminControllerTest     : Started UsuarioAdminControllerTest in 0.392 seconds (process running for 14.852)
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.474 s -- in co.edu.uts.portal.identidad.UsuarioAdminControllerTest
+[INFO] Running co.edu.uts.portal.identidad.UsuarioServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.077 s -- in co.edu.uts.portal.identidad.UsuarioServiceTest
+[INFO] Running co.edu.uts.portal.parametros.ParametroAdminControllerTest
+2026-10-02T02:09:27.815-05:00  INFO 29396 --- [portal-uts] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.edu.uts.portal.parametros.ParametroAdminControllerTest]: ParametroAdminControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T02:09:27.847-05:00  INFO 29396 --- [portal-uts] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.edu.uts.portal.PortalUtsApplication for test class co.edu.uts.portal.parametros.ParametroAdminControllerTest
+2026-10-02T02:09:27.849-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-02T02:09:27.869-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.p.ParametroAdminControllerTest   : Starting ParametroAdminControllerTest using Java 21.0.12.1 with PID 29396 (started by Juan in C:\Users\Juan\portal-uts)
+2026-10-02T02:09:27.869-05:00 DEBUG 29396 --- [portal-uts] [           main] c.e.u.p.p.ParametroAdminControllerTest   : Running with Spring Boot v3.5.5, Spring v6.2.10
+2026-10-02T02:09:27.869-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.p.ParametroAdminControllerTest   : The following 1 profile is active: "dev"
+2026-10-02T02:09:28.079-05:00  WARN 29396 --- [portal-uts] [           main] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [inMemoryUserDetailsManager, co.edu.uts.portal.identidad.service.DetalleUsuarioService#0]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2026-10-02T02:09:28.173-05:00  WARN 29396 --- [portal-uts] [           main] .s.s.UserDetailsServiceAutoConfiguration :
+
+Using generated security password: 36e0c2fa-b209-4d6d-9007-e9dfc7c5f334
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-10-02T02:09:28.177-05:00  INFO 29396 --- [portal-uts] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T02:09:28.177-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T02:09:28.179-05:00  INFO 29396 --- [portal-uts] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-02T02:09:28.183-05:00  INFO 29396 --- [portal-uts] [           main] c.e.u.p.p.ParametroAdminControllerTest   : Started ParametroAdminControllerTest in 0.334 seconds (process running for 15.368)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.408 s -- in co.edu.uts.portal.parametros.ParametroAdminControllerTest
+[INFO] Running co.edu.uts.portal.parametros.ParametroServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s -- in co.edu.uts.portal.parametros.ParametroServiceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 176, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  18.034 s
+[INFO] Finished at: 2026-10-02T02:09:28-05:00
+[INFO] ------------------------------------------------------------------------
