@@ -37,7 +37,7 @@
     <div class="contenido-cuerpo" style="white-space: pre-line" th:text="${contenido.cuerpo}">Cuerpo del contenido.</div>
 
     <div class="alert alert-success py-2 mt-4" th:if="${gracias}">¡Gracias por tu opinión!</div>
-    <div th:replace="~{fragments/tarjetas :: valorar(${contenido})}"></div>
+    <!--/* HU-25 (valoracion de utilidad) trasladada a trabajo futuro el 26/9/2026: control oculto. El fragmento "valorar" se conserva en fragments/tarjetas.html. */-->
 
     <hr class="mt-4">
     <div class="d-flex flex-wrap gap-2">

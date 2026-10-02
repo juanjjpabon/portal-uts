@@ -84,7 +84,7 @@
            th:text="'Última revisión: ' + ${#temporals.format(r.actualizadoEn, 'dd/MM/yyyy', 'America/Bogota')}">
             Última revisión
         </p>
-        <div th:replace="~{fragments/tarjetas :: valorar(${r})}"></div>
+        <!--/* HU-25 (valoracion de utilidad) trasladada a trabajo futuro el 26/9/2026: control oculto. El fragmento "valorar" se conserva abajo. */-->
     </div>
 </article>
 
